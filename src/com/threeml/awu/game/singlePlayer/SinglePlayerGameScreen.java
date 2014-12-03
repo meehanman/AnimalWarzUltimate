@@ -1,21 +1,18 @@
 package com.threeml.awu.game.singlePlayer;
 
-import java.util.List;
-
 import android.graphics.Rect;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
-import com.threeml.awu.engine.input.Input;
-import com.threeml.awu.engine.input.TouchEvent;
 import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.world.GameObject;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.BackgroundObject.Control;
+import com.threeml.awu.world.BackgroundObject.Terrain;
 import com.threeml.awu.world.InteractiveObject.Item;
 import com.threeml.awu.world.InteractiveObject.Player;
 
@@ -31,10 +28,10 @@ public class SinglePlayerGameScreen extends GameScreen {
 	// /////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Width and height of the level 
+	 * Width and height of the level (Changed later by width/height of backgroundimage)
 	 */
-	private final float LEVEL_WIDTH = 1000.0f;
-	private final float LEVEL_HEIGHT = 1000.0f;
+	private float LEVEL_WIDTH = 1000.0f;
+	private float LEVEL_HEIGHT = 1000.0f;
 
 	/**
 	 * Define viewports for this layer and the associated screen projection
@@ -47,9 +44,10 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 * Define game objects used within game
 	 */
 	private GameObject mBackground;
+	private GameObject mTerrain;
 	private Player mPlayer;
 	private Item healthPack;
-	//private Terrain mTerrain;
+	
 	
 	/**
 	 * Define a control for the level
@@ -90,31 +88,44 @@ public class SinglePlayerGameScreen extends GameScreen {
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
 		assetManager.loadAndAddBitmap("Arrow", "img/arrow.png");
-				
+		
+		//Set the level width and height to that of the background image
+		LEVEL_WIDTH = getGame().getAssetManager().getBitmap("Background").getWidth();
+		LEVEL_HEIGHT = getGame().getAssetManager().getBitmap("Background").getHeight();
+		
 		// Create the screen viewport
 		mScreenViewport = new ScreenViewport(0, 0, game.getScreenWidth(),
 				game.getScreenHeight());
 		
 		// Create the layer viewport, taking into account the orientation
 		// and aspect ratio of the screen.
-		if (mScreenViewport.width > mScreenViewport.height)
+		if (mScreenViewport.width > mScreenViewport.height){
 			mBackgroundViewport = new LayerViewport(240.0f, 240.0f
 					* mScreenViewport.height / mScreenViewport.width, 240,
 					240.0f * mScreenViewport.height / mScreenViewport.width);
-		else
+			mTerrainViewport = new LayerViewport(240.0f, 240.0f
+				* mScreenViewport.height / mScreenViewport.width, 240,
+				240.0f * mScreenViewport.height / mScreenViewport.width);
+		}else{
 			mBackgroundViewport = new LayerViewport(240.0f * mScreenViewport.height
 					/ mScreenViewport.width, 240.0f, 240.0f
 					* mScreenViewport.height / mScreenViewport.width, 240);
-
-		// Create the space background
+			mTerrainViewport = new LayerViewport(240.0f * mScreenViewport.height
+					/ mScreenViewport.width, 240.0f, 240.0f
+					* mScreenViewport.height / mScreenViewport.width, 240);
+		}
+		
+		// Create the background
 		mBackground = new GameObject(LEVEL_WIDTH / 2.0f,
 				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
 						.getAssetManager().getBitmap("Background"), this);
+		mTerrain = new GameObject(LEVEL_WIDTH / 2.0f,
+				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
+						.getAssetManager().getBitmap("Terrain"), this);
 		
-		//Get Layers Ready
 
 		// Create the objects
-		mPlayer = new Player(500, 500, this);
+		mPlayer = new Player(100, 100, this);
 		healthPack = new Item(100,200,this);
 		
 		
@@ -216,6 +227,10 @@ public class SinglePlayerGameScreen extends GameScreen {
 		else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
 			mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
 		
+		//Until we have a paralex effect, lets position forground and background together
+		mTerrainViewport.x = mBackgroundViewport.x;
+		mTerrainViewport.y = mBackgroundViewport.y;
+		
 		/*
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
@@ -265,6 +280,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 		// Draw the background first of all
 		mBackground.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
+		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
 		
 		mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
