@@ -114,7 +114,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		//Get Layers Ready
 
 		// Create the objects
-		mPlayer = new Player(100, 100, this);
+		mPlayer = new Player(500, 500, this);
 		healthPack = new Item(100,200,this);
 		
 		
@@ -216,7 +216,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
 			mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
 		
-		
+		/*
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
 		
@@ -233,6 +233,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 			if (mBackgroundViewport.x > mBackgroundViewport.halfWidth*2)
 				mBackgroundViewport.x = mBackgroundViewport.halfWidth*2;
 		}
+		*/
 					
 					
 		/*
