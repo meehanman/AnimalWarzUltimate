@@ -1,6 +1,6 @@
 package com.threeml.awu.game.singlePlayer;
 
-import android.graphics.Rect;
+import android.graphics.Bitmap;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
@@ -12,7 +12,6 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.BackgroundObject.Control;
-import com.threeml.awu.world.BackgroundObject.Terrain;
 import com.threeml.awu.world.InteractiveObject.Item;
 import com.threeml.awu.world.InteractiveObject.Player;
 
@@ -53,7 +52,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 * Define a control for the level
 	 */
 	private Control [] arrows;
-	private Rect movementButtonArea;	//MJ - touch area for arrow control
+	//private Rect movementButtonArea;	//MJ - touch area for arrow control
 	
 	/*
 	private GameObject mBackground;
@@ -96,6 +95,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Create the screen viewport
 		mScreenViewport = new ScreenViewport(0, 0, game.getScreenWidth(),
 				game.getScreenHeight());
+		mDashboardViewport = new LayerViewport(0, 0, game.getScreenWidth(),
+				game.getScreenHeight());
 		
 		// Create the layer viewport, taking into account the orientation
 		// and aspect ratio of the screen.
@@ -127,6 +128,12 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Create the objects
 		mPlayer = new Player(100, 100, this);
 		healthPack = new Item(100,200,this);
+		
+		Bitmap arrowBitmap = getGame().getAssetManager().getBitmap("Arrow");
+		
+		arrows = new Control [2];
+		arrows[0] = new Control(300, 60, 3, 0, arrowBitmap.getWidth()/2, arrowBitmap.getHeight()/2, arrowBitmap, this, mPlayer);
+		arrows[1] = new Control(60, 60, -3, 0, arrowBitmap.getWidth()/2, arrowBitmap.getHeight()/2, arrowBitmap, this, mPlayer);
 		
 		
 		/*
@@ -231,6 +238,10 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mTerrainViewport.x = mBackgroundViewport.x;
 		mTerrainViewport.y = mBackgroundViewport.y;
 		
+		for(Control c : arrows){
+			c.movePlayer(this);
+		}
+		
 		/*
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
@@ -284,6 +295,12 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 		mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+		
+		for(Control c : arrows) {
+			c.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
+		}
+		
+		
 		/*
 		// Draw each of the asteroids
 		for (Asteroid asteroid : mAsteroids)
