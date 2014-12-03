@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Generic Android Game Engine (GAGE))</string>
+    <string name="app_name">Animal Warz: Ultimate</string>
     <string name="hello_world">Hello world!</string>
 
-    <string name="ERROR_TAG">Gage Error: </string>
-	<string name="WARNING_TAG">Gage Warning:</string>
+    <string name="ERROR_TAG">Error at war: </string>
+	<string name="WARNING_TAG">Warning at war:</string>
+	<string name="descPlaceholder">We don\'t have descriptions at war!</string>
     
 </resources>
