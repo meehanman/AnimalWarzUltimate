@@ -56,6 +56,10 @@ public class CanvasGraphics2D implements IGraphics2D {
 		mWidth = canvas.getWidth();
 		mHeight = canvas.getHeight();
 	}
+	
+	public void setMatrix(Matrix matrix) {
+		mCanvas.setMatrix(matrix);
+	}
 
 	/*
 	 * (non-Javadoc)
