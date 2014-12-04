@@ -29,8 +29,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 	/**
 	 * Width and height of the level (Changed later by width/height of backgroundimage)
 	 */
-	private float LEVEL_WIDTH = 1000.0f;
-	private float LEVEL_HEIGHT = 1000.0f;
+	private float LEVEL_WIDTH = 2000.0f;
+	private float LEVEL_HEIGHT = 2000.0f;
 
 	/**
 	 * Define viewports for this layer and the associated screen projection
@@ -89,8 +89,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		assetManager.loadAndAddBitmap("Arrow", "img/arrow.png");
 		
 		//Set the level width and height to that of the background image
-		LEVEL_WIDTH = getGame().getAssetManager().getBitmap("Background").getWidth();
-		LEVEL_HEIGHT = getGame().getAssetManager().getBitmap("Background").getHeight();
+		LEVEL_WIDTH = getGame().getAssetManager().getBitmap("Terrain").getWidth()/2;
+		LEVEL_HEIGHT = getGame().getAssetManager().getBitmap("Terrain").getHeight()/2;
 		
 		// Create the screen viewport
 		mScreenViewport = new ScreenViewport(0, 0, game.getScreenWidth(),
@@ -126,8 +126,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 
 		// Create the objects
-		mPlayer = new Player(100, 100, this);
-		healthPack = new Item(100,200,this);
+		mPlayer = new Player(100, 300, this);
+		healthPack = new Item(200, 300,this); //So we can easily walk on it?
 		
 		Bitmap arrowBitmap = getGame().getAssetManager().getBitmap("Arrow");
 		
@@ -296,9 +296,10 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		
-		for(Control c : arrows) {
-			c.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
-		}
+		//Draw the 
+		arrows[0].draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport,"right");
+		arrows[1].draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport,"left");
+
 		
 		
 		/*
