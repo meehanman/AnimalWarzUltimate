@@ -3,9 +3,9 @@ package com.threeml.awu.world.BackgroundObject;
 import java.util.List;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.util.DisplayMetrics;
 
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
@@ -64,7 +64,7 @@ public class Control extends Sprite {
 		mXVelocity = xVelocity;
 		mYVelocity = yVelocity;
 			
-		mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Arrow");
+		mBitmap = bitmap;
 		
 		mBound.halfWidth = 50.0f;
 		mBound.halfHeight = 50.0f;
@@ -134,7 +134,7 @@ public class Control extends Sprite {
 	
 	
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2d,
-			LayerViewport layerViewport, ScreenViewport screenViewport) {
+			LayerViewport layerViewport, ScreenViewport screenViewport, String direction) {
 		
 		if (mTouchArea == null) {
 			int left = (int) position.x;
@@ -145,19 +145,19 @@ public class Control extends Sprite {
 		
 			if(GraphicsHelper.getSourceAndScreenRect(
 					this, layerViewport, screenViewport, drawSourceRect, drawScreenRect)) {
-				Canvas canvas = new Canvas();
-				canvas.scale(-1, 1);
-				canvas.translate(-canvas.getWidth(), 0);
-				/*canvas.scale(0,-1,mBound.halfWidth,mBound.halfHeight);
 				
-				Matrix matrix = new Matrix();
-				matrix.preScale(-1.0f, 1.0f);*/
+				if(direction == "left"){
+					 Matrix matrix = new Matrix();
+					 matrix.preScale(-1, 1);
+					 Bitmap dst = Bitmap.createBitmap(mBitmap, 0, 0, 
+							 mBitmap.getWidth(), mBitmap.getHeight(), matrix, false);
+				    graphics2d.drawBitmap(dst, drawSourceRect, mTouchArea, null);
+				}else{
+					//Do noth
+					graphics2d.drawBitmap(mBitmap, drawSourceRect, mTouchArea, null);
+				}
 				
 				
-				//
-				graphics2d.drawBitmap(mBitmap, drawSourceRect, mTouchArea, null);
-				graphics2d.setCanvas(canvas);
-				graphics2d.setMatrix(null);
 			}
 		
 	}
