@@ -205,4 +205,24 @@ public class Sprite extends GameObject {
 			graphics2D.drawBitmap(mBitmap, drawMatrix, null);
 		}
 	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	// GETX and Y
+	////////////////////////////////////////////////////////////////////////////
+	/*
+	 * Gets the X position of the sprint bound
+	 * 
+	 * Used in Collision Detection
+	 * */
+	public float getX(){
+		return this.mBound.x;
+	}
+	/*
+	 * Gets the Y position of the sprint bound
+	 * 
+	 * Used in Collision Detection
+	 * */
+	public float getY(){
+		return this.mBound.y;
+	}
 }
