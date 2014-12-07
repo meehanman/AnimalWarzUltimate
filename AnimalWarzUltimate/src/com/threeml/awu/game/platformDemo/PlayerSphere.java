@@ -1,7 +1,5 @@
 package com.threeml.awu.game.platformDemo;
 
-import java.util.Random;
-
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.util.CollisionDetector;
 import com.threeml.awu.util.CollisionDetector.CollisionType;

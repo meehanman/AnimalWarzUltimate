@@ -1,6 +1,7 @@
 package com.threeml.awu.game.singlePlayer;
 
-import android.graphics.Bitmap;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
@@ -12,6 +13,7 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.BackgroundObject.Control;
+import com.threeml.awu.world.BackgroundObject.Terrain;
 import com.threeml.awu.world.InteractiveObject.Item;
 import com.threeml.awu.world.InteractiveObject.Player;
 
@@ -29,29 +31,31 @@ public class SinglePlayerGameScreen extends GameScreen {
 	/**
 	 * Width and height of the level (Changed later by width/height of backgroundimage)
 	 */
-	private float LEVEL_WIDTH = 2000.0f;
-	private float LEVEL_HEIGHT = 2000.0f;
+	private float LEVEL_WIDTH = 0.0f;
+	private float LEVEL_HEIGHT = 0.0f;
 
 	/**
 	 * Define viewports for this layer and the associated screen projection
 	 */
 	private ScreenViewport mScreenViewport;
 	private LayerViewport mTerrainViewport;
-	private LayerViewport mBackgroundViewport;
+	private LayerViewport mBackgroundViewport; 
 	private LayerViewport mDashboardViewport;
 	/**
 	 * Define game objects used within game
 	 */
 	private GameObject mBackground;
-	private GameObject mTerrain;
+	private Terrain mTerrain;
 	private Player mPlayer;
 	private Item healthPack;
 	
 	
 	/**
-	 * Define a control for the level
+	 * Create touch controls for player input
 	 */
-	private Control [] arrows;
+	private Control moveLeft, moveRight, jumpUp;
+	private List<Control> mControls = new ArrayList<Control>();
+	
 	//private Rect movementButtonArea;	//MJ - touch area for arrow control
 	
 	/*
@@ -88,15 +92,19 @@ public class SinglePlayerGameScreen extends GameScreen {
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
 		assetManager.loadAndAddBitmap("Arrow", "img/arrow.png");
 		
+		//Get Camera/Screen Width and Height
+		int screenWidth = game.getScreenWidth();
+		int screenHeight = game.getScreenHeight();
+		
 		//Set the level width and height to that of the background image
 		LEVEL_WIDTH = getGame().getAssetManager().getBitmap("Terrain").getWidth()/2;
 		LEVEL_HEIGHT = getGame().getAssetManager().getBitmap("Terrain").getHeight()/2;
-		
+				
 		// Create the screen viewport
-		mScreenViewport = new ScreenViewport(0, 0, game.getScreenWidth(),
-				game.getScreenHeight());
-		mDashboardViewport = new LayerViewport(0, 0, game.getScreenWidth(),
-				game.getScreenHeight());
+		mScreenViewport = new ScreenViewport(0, 0, screenWidth,
+				screenHeight);
+		mDashboardViewport = new LayerViewport(0, 0, screenWidth,
+				screenHeight);
 		
 		// Create the layer viewport, taking into account the orientation
 		// and aspect ratio of the screen.
@@ -120,20 +128,27 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mBackground = new GameObject(LEVEL_WIDTH / 2.0f,
 				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
 						.getAssetManager().getBitmap("Background"), this);
-		mTerrain = new GameObject(LEVEL_WIDTH / 2.0f,
+		mTerrain = new Terrain(LEVEL_WIDTH / 2.0f,
 				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
 						.getAssetManager().getBitmap("Terrain"), this);
 		
 
 		// Create the objects
-		mPlayer = new Player(100, 300, this);
-		healthPack = new Item(200, 300,this); //So we can easily walk on it?
+		mPlayer = new Player(500, 400, this);
+		healthPack = new Item(500, 300,this); //So we can easily walk on it?
 		
-		Bitmap arrowBitmap = getGame().getAssetManager().getBitmap("Arrow");
-		
-		arrows = new Control [2];
-		arrows[0] = new Control(300, 60, 3, 0, arrowBitmap.getWidth()/2, arrowBitmap.getHeight()/2, arrowBitmap, this, mPlayer);
-		arrows[1] = new Control(60, 60, -3, 0, arrowBitmap.getWidth()/2, arrowBitmap.getHeight()/2, arrowBitmap, this, mPlayer);
+		//Create Controls for game
+		moveLeft = new Control(
+				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "Arrow", this);
+		mControls.add(moveLeft);
+
+		moveRight = new Control(
+				225.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "Arrow", this);
+		mControls.add(moveRight);
+
+		jumpUp = new Control(
+				(screenWidth - 125.0f), (screenHeight - 100.0f), 100.0f, 100.0f, "Arrow", this);
+		mControls.add(jumpUp);
 		
 		
 		/*
@@ -203,10 +218,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	@Override
 	public void update(ElapsedTime elapsedTime) {
 
-		// Update the player spaceship
-		mPlayer.update(elapsedTime);
-		healthPack.update(elapsedTime);
-
+		
 		// Ensure the player cannot leave the confines of the world
 		BoundingBox playerBound = mPlayer.getBound();
 		if (playerBound.getLeft() < 0)
@@ -218,7 +230,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 			mPlayer.position.y -= playerBound.getBottom();
 		else if (playerBound.getTop() > LEVEL_HEIGHT)
 			mPlayer.position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
-
+		
 		// Focus the layer viewport on the player
 		mBackgroundViewport.x = mPlayer.position.x;
 		mBackgroundViewport.y = mPlayer.position.y;
@@ -237,10 +249,13 @@ public class SinglePlayerGameScreen extends GameScreen {
 		//Until we have a paralex effect, lets position forground and background together
 		mTerrainViewport.x = mBackgroundViewport.x;
 		mTerrainViewport.y = mBackgroundViewport.y;
-		
-		for(Control c : arrows){
-			c.movePlayer(this);
-		}
+
+		//Update Items
+		healthPack.update(elapsedTime);
+		// Update the player
+		mPlayer.update(elapsedTime, moveLeft.isActivated(),
+			moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
+	
 		
 		/*
 		// Process any touch events occurring since the update
@@ -296,9 +311,11 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		
-		//Draw the 
-		arrows[0].draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport,"right");
-		arrows[1].draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport,"left");
+		// Draw the controls last so they appear at the top
+		for (Control Control : mControls){
+			Control.draw(elapsedTime, graphics2D, mDashboardViewport,
+					mScreenViewport);
+		}
 
 		
 		
@@ -313,8 +330,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 			aiSpaceship.draw(elapsedTime, graphics2D, mBackgroundViewport,
 					mScreenViewport);
 		*/
-		// Draw the player
-		mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport,
-				mScreenViewport);
+
 	}
 }

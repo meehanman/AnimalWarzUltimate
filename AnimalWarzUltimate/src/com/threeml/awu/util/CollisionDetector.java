@@ -31,7 +31,6 @@ public class CollisionDetector {
 				&& one.y - one.halfHeight < two.y + two.halfHeight && one.y
 				+ one.halfHeight > two.y - two.halfHeight);
 	}
-
 	/**
 	 * Determine the type of collision between the two bounding boxes.
 	 * CollisionType.None is returned if there are no collisions.
@@ -160,5 +159,27 @@ public class CollisionDetector {
 		}
 
 		return collisionType;
+	}	
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//3 Methods
+	//determineAndResolveCollision
+	//determineCollisionType
+	//isCollision
+	
+	//TODO
+	//Some notes on collision detection
+	//http://gamedev.stackexchange.com/questions/6721/implementing-a-2d-destructible-landscape-like-worms
+	public static CollisionType determineAndResolvePixelPerfectCollision(
+			GameObject gameObjectOne, GameObject gameObjectTwo) {
+		
+		
+		
+		return CollisionType.Bottom;
 	}
+	public void isCollision(){
+		
+	}
+	
 }

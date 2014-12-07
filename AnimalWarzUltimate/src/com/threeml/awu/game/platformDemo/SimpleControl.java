@@ -42,8 +42,13 @@ public class SimpleControl extends GameObject {
 	 */
 	public SimpleControl(float x, float y, float width, float height,
 			String bitmapName, GameScreen gameScreen) {
+		
+		//Change images depending on orietatino
+		
 		super(x, y, width, height, gameScreen.getGame().getAssetManager()
 				.getBitmap(bitmapName), gameScreen);
+		
+		
 	}
 
 	// /////////////////////////////////////////////////////////////////////////
