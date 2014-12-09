@@ -1,10 +1,16 @@
 package com.threeml.awu.world.InteractiveObject;
 
+import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
 
 public class Item extends Sprite {
+	
+	/**
+	 * Strength of gravity to apply along the y-axis
+	 */
+	private float GRAVITY = -10.0f;
 	
 	/**
 	 * Centre of the screen (used to determine the offset of touch events)
@@ -16,8 +22,17 @@ public class Item extends Sprite {
 				.getAssetManager().getBitmap("Health"), gameScreen);
 		
 		// Store the centre of the screen
-		screenCentre.x = gameScreen.getGame().getScreenWidth() / 2;
-		screenCentre.y = gameScreen.getGame().getScreenHeight() / 2;
+	//	screenCentre.x = gameScreen.getGame().getScreenWidth() / 2;
+	//	screenCentre.y = gameScreen.getGame().getScreenHeight() / 2;
 	}
 	
+	public void update(ElapsedTime elapsedTime, Sprite gameSprite) {
+		
+		// apply acceleration to the item
+		acceleration.y = GRAVITY;
+		
+		// call the sprites update method to provide a new orientation
+		super.update(elapsedTime);
+	}
+
 }

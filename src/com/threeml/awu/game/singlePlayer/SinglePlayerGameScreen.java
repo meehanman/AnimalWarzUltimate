@@ -218,7 +218,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 	@Override
 	public void update(ElapsedTime elapsedTime) {
 
-		
 		// Ensure the player cannot leave the confines of the world
 		BoundingBox playerBound = mPlayer.getBound();
 		if (playerBound.getLeft() < 0)
@@ -230,6 +229,11 @@ public class SinglePlayerGameScreen extends GameScreen {
 			mPlayer.position.y -= playerBound.getBottom();
 		else if (playerBound.getTop() > LEVEL_HEIGHT)
 			mPlayer.position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
+		
+		// Ensure the healthpack cannot leave the confines of the world
+		BoundingBox healthBound = healthPack.getBound();
+		if (healthBound.getBottom() < 0)
+			healthPack.position.y -= healthBound.getBottom();
 		
 		// Focus the layer viewport on the player
 		mBackgroundViewport.x = mPlayer.position.x;
@@ -251,7 +255,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mTerrainViewport.y = mBackgroundViewport.y;
 
 		//Update Items
-		healthPack.update(elapsedTime);
+		healthPack.update(elapsedTime, mTerrain);
 		// Update the player
 		mPlayer.update(elapsedTime, moveLeft.isActivated(),
 			moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
