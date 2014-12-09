@@ -10,7 +10,7 @@ public class Item extends Sprite {
 	/**
 	 * Strength of gravity to apply along the y-axis
 	 */
-	private float GRAVITY = -10.0f;
+	private float GRAVITY = -4.0f;
 	
 	/**
 	 * Centre of the screen (used to determine the offset of touch events)

@@ -259,7 +259,14 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Update the player
 		mPlayer.update(elapsedTime, moveLeft.isActivated(),
 			moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
-	
+		
+		// Temporary solution to make the health pack appear
+		// to be collected by the user
+		if(playerBound.intersects(healthBound))
+		{
+			healthPack.setPosition(0, 0);
+		}
+
 		
 		/*
 		// Process any touch events occurring since the update
