@@ -178,8 +178,6 @@ public class CollisionDetector {
 		
 		return CollisionType.Bottom;
 	}
-	public void isCollision(){
-		
-	}
+
 	
 }

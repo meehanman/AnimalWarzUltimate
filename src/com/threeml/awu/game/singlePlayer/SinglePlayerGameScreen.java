@@ -91,6 +91,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
 		assetManager.loadAndAddBitmap("Arrow", "img/arrow.png");
+		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
 		
 		//Get Camera/Screen Width and Height
 		int screenWidth = game.getScreenWidth();
