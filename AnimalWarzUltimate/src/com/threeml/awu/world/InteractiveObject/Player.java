@@ -1,9 +1,13 @@
 package com.threeml.awu.world.InteractiveObject;
 
 import com.threeml.awu.engine.ElapsedTime;
+import com.threeml.awu.engine.graphics.IGraphics2D;
+import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.CollisionDetector;
 import com.threeml.awu.util.CollisionDetector.CollisionType;
 import com.threeml.awu.world.GameScreen;
+import com.threeml.awu.world.LayerViewport;
+import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 
 
@@ -51,7 +55,11 @@ public class Player extends Sprite {
 	 * that the sphere is rotating as the player moves.
 	 */
 	private float ANGULAR_VELOCITY_SCALE = 1.5f;
-
+	
+	//HealthFont
+	public float health = 100f;
+	private BitmapFont healthText;
+	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -69,6 +77,8 @@ public class Player extends Sprite {
 	public Player(float startX, float startY, GameScreen gameScreen) {
 		super(startX, startY, 50.0f, 50.0f, gameScreen.getGame()
 				.getAssetManager().getBitmap("Player"), gameScreen);
+		
+		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
 	}
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -129,6 +139,9 @@ public class Player extends Sprite {
 		if (Math.abs(velocity.x) > MAX_X_VELOCITY)
 			velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
 		
+		healthText.update(elapsedTime,this.acceleration,this.velocity);
+		
+		
 		// Check that our new position has not collided by one of the
 		// defined platforms. If so, then removing any overlap and
 		// ensure a valid velocity.
@@ -168,5 +181,18 @@ public class Player extends Sprite {
 				break;
 			}
 			
+	}
+	
+	/**
+	 * 
+	 * Draw Method Override to encapculate draw methods connecte to player i.e
+	 * Player Health
+	 * **/
+	@Override
+	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
+			LayerViewport layerViewport, ScreenViewport screenViewport) {
+		
+		super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 }
