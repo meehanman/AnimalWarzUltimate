@@ -1,6 +1,11 @@
 package com.threeml.awu.util;
 
+import java.lang.reflect.Array;
+
+import android.util.Log;
+
 import com.threeml.awu.world.GameObject;
+import com.threeml.awu.world.BackgroundObject.Terrain;
 
 /**
  * Collision Detector Helper Library
@@ -99,11 +104,11 @@ public class CollisionDetector {
 	 * @return Collision type
 	 */
 	public static CollisionType determineAndResolveCollision(
-			GameObject gameObjectOne, GameObject gameObjectTwo) {
+			BoundingBox gameBoundingBoxOne, BoundingBox gameBoundingBoxTwo) {
 		CollisionType collisionType = CollisionType.None;
 
-		BoundingBox one = gameObjectOne.getBound();
-		BoundingBox two = gameObjectTwo.getBound();
+		BoundingBox one = gameBoundingBoxOne;
+		BoundingBox two = gameBoundingBoxTwo;
 
 		if (isCollision(one, two)) {
 			// Determine the side of *least intersection*
@@ -139,45 +144,39 @@ public class CollisionDetector {
 				collisionDepth = lOverlap;
 			}
 
+			
 			// Separate if needed
 			switch (collisionType) {
 			case Top:
-				gameObjectOne.position.y += collisionDepth;
+				gameBoundingBoxOne.y += collisionDepth;
 				break;
 			case Bottom:
-				gameObjectOne.position.y -= collisionDepth;
+				gameBoundingBoxOne.y -= collisionDepth;
 				break;
 			case Right:
-				gameObjectOne.position.x -= collisionDepth;
+				gameBoundingBoxOne.x -= collisionDepth;
 				break;
 			case Left:
-				gameObjectOne.position.x += collisionDepth;
+				gameBoundingBoxOne.x += collisionDepth;
 				break;
 			case None:
 				break;
 			}
 		}
-
+		
+		Log.v("CollisionDetected","Type: " + collisionType.name());
+		
 		return collisionType;
 	}	
 	
-	
-	/////////////////////////////////////////////////////////////////////////////////////////////
-	//3 Methods
-	//determineAndResolveCollision
-	//determineCollisionType
-	//isCollision
-	
-	//TODO
-	//Some notes on collision detection
-	//http://gamedev.stackexchange.com/questions/6721/implementing-a-2d-destructible-landscape-like-worms
-	public static CollisionType determineAndResolvePixelPerfectCollision(
-			GameObject gameObjectOne, GameObject gameObjectTwo) {
+	public static CollisionType determineAndResolveCollision(GameObject gameObjectOne, GameObject gameObjectTwo) {
+			
+		BoundingBox one = gameObjectOne.getBound();
+		BoundingBox two = gameObjectTwo.getBound();
 		
+		return determineAndResolveCollision(one,two);
 		
-		
-		return CollisionType.Bottom;
 	}
-
+	
 	
 }
