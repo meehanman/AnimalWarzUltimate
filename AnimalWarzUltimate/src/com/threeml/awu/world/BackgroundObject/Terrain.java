@@ -14,6 +14,8 @@ import com.threeml.awu.world.Sprite;
 
 public class Terrain extends Sprite {
 	
+	private List<BoundingBox> TerrainBlocks = new ArrayList<BoundingBox>();
+	
 	public Terrain(GameScreen gameScreen) {
 		super(gameScreen);
 		mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Terrain");
@@ -46,47 +48,54 @@ public class Terrain extends Sprite {
 		this.CreateTerrainPhysics();
 	}
 	
-	List<BoundingBox> TerrainBlocks = new ArrayList<BoundingBox>();
-	
-	public List<BoundingBox> getTerrainBlocks(){
-		return TerrainBlocks;
-	}
+
 	public void CreateTerrainPhysics(){
 		int rectWidth = 0;
 		int rectHeight = 5;
 		
 		int rectsCreated = 0;
 		
-		for (int yPos = 0; yPos <= this.getBound().getHeight(); yPos += rectHeight)
+		for (int yPos = 0; yPos <= this.getBound().getHeight(); yPos += 5)
         {
             rectWidth = 0;
 
             for (int xPos = 0; xPos <= this.getBound().getWidth(); xPos += 4)
             {
-
-                //if (data[xPos + (yPos * width) + theAlphaByte] == 255) //if not alpha pixel
-                if(Color.alpha(mBitmap.getPixel(xPos, yPos)) > 200){
+                if(Color.alpha(mBitmap.getPixel(xPos, yPos)) == 255){ //If the current Pixel is non-Alpha
                 	
-                    rectWidth++;
-
+                	rectWidth = rectWidth + 4; //Increase the size of the box
+                	
+                	//When the rect starts (less that 5px wide)
+            		if(rectWidth < 5){
+            			Log.v("lc","StartRect: ("+xPos+","+yPos+") rectWidth?"+rectWidth);
+            		}
+            		
                     //Check if the box spans the full width of the image.
                     if (rectWidth >= this.mBitmap.getWidth())
                     {
-
+                        Log.v("lc","EndRect: ("+xPos+","+yPos+") [w:"+rectWidth+",h:"+rectHeight+"]");
                         // if so make the box and reset for the next line
                         makeBlock(rectWidth, rectHeight, xPos, yPos);
+                        rectsCreated++;                        
                         rectWidth = 0; //reset rect
                     }
 
                 }
+                //If it is an alpha pixel and the width is greater than 1
                 else if (rectWidth > 1)
                     {
-                	
+                    Log.v("lc","EI EndRect: ("+xPos+","+yPos+") [w:"+rectWidth+",h:"+rectHeight+"]");
+                    // if so make the box and reset for the next line
                     makeBlock(rectWidth, rectHeight, xPos, yPos);
                     rectsCreated++;
                     rectWidth = 0; //reset rect
 
                 }
+                
+                
+                
+                
+              
             }
         }
 		
@@ -95,16 +104,22 @@ public class Terrain extends Sprite {
 	private void makeBlock(int width, int height, int x, int y) {
 		// TODO check this is right?
 		//Create a new rect with the properties
-		BoundingBox aabBlock = new BoundingBox(width, height, x + width, y + height);
+		BoundingBox aabBlock = new BoundingBox(x,y,width/2, height/2);
 		//Add to list of rect's for the current map
 		TerrainBlocks.add(aabBlock);
 		
-		Log.v("makeBlock", 	"Rect {width: " + width + 
-							" height: " + height + 
-							" x: " + x + 
-							" y: " + y + "}");
+		Log.v("makeBlock", 	"BoundingBox{x: " + x + 
+								" y: " + y + 
+								" width: " + width + 
+								" height: " + height+"}");
 
 	}
+	
+	
+	public List<BoundingBox> getTerrainBlocks(){
+		return TerrainBlocks;
+	}
+	
 	
 	public String toString(int i){
 		
