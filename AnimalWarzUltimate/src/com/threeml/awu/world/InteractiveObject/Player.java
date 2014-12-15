@@ -1,14 +1,18 @@
 package com.threeml.awu.world.InteractiveObject;
 
+import android.util.Log;
+
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
+import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.CollisionDetector;
 import com.threeml.awu.util.CollisionDetector.CollisionType;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
+import com.threeml.awu.world.BackgroundObject.Terrain;
 
 
 /**
@@ -75,7 +79,7 @@ public class Player extends Sprite {
 	 *            Gamescreen to which sphere belongs
 	 */
 	public Player(float startX, float startY, GameScreen gameScreen) {
-		super(startX, startY, 50.0f, 50.0f, gameScreen.getGame()
+		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
 				.getAssetManager().getBitmap("Player"), gameScreen);
 		
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
@@ -100,7 +104,7 @@ public class Player extends Sprite {
 	 *            Array of platforms in the world
 	 */
 	public void update(ElapsedTime elapsedTime, boolean moveLeft,
-			boolean moveRight, boolean jumpUp, Sprite gameSprite) {
+			boolean moveRight, boolean jumpUp, Terrain TerrainObj) {
 
 		// Apply gravity to the y-axis acceleration
 		acceleration.y = GRAVITY;
@@ -127,7 +131,7 @@ public class Player extends Sprite {
 		// We want the player's sphere to rotate to give the appearance
 		// that the sphere is rolling as the player moves. The faster
 		// the player is moving the faster the angular velocity.
-		angularVelocity = ANGULAR_VELOCITY_SCALE * velocity.x;
+		//angularVelocity = ANGULAR_VELOCITY_SCALE * velocity.x;
 
 		// Call the sprite's update method to apply the defined 
 		// accelerations and velocities to provide a new position
@@ -142,28 +146,20 @@ public class Player extends Sprite {
 		healthText.update(elapsedTime,this.acceleration,this.velocity);
 		
 		
-		// Check that our new position has not collided by one of the
-		// defined platforms. If so, then removing any overlap and
-		// ensure a valid velocity.
-		checkForAndResolveCollisions(gameSprite);		
+		checkForAndResolveTerrainCollisions(TerrainObj);
+			
 	}
 
-	/**
-	 * Check for and then resolve any collision between the sphere and the
-	 * platforms.
-	 * 
-	 * @param platforms
-	 *            Array of platforms to test for collision against
-	 */
-	private void checkForAndResolveCollisions(Sprite map) {
+	private void checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 
 		CollisionType collisionType;
 		
-		// Consider each platform for a collision
-		collisionType = CollisionDetector.determineAndResolvePixelPerfectCollision(this, map);
+		for (BoundingBox bb : TerrainObj.getTerrainBlocks()) {
 			
+			collisionType = CollisionDetector.determineCollisionType(this.getBound(), bb);
 			
-			
+		
+
 			switch (collisionType) {
 			case Top:
 				velocity.y = 0.0f;
@@ -172,15 +168,16 @@ public class Player extends Sprite {
 				velocity.y = 0.0f;
 				break;
 			case Left:
-				 velocity.x = 0.0f;
+				 //velocity.x = 0.0f;
 				break;
 			case Right:
-				 velocity.x = 0.0f;
+				 //velocity.x = 0.0f;
 				break;
 			case None:
 				break;
 			}
-			
+			Log.v("collisionDetected", collisionType.name());
+		}
 	}
 	
 	/**

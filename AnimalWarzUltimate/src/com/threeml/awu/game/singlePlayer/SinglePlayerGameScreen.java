@@ -8,6 +8,7 @@ import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BoundingBox;
+import com.threeml.awu.util.CollisionDetector;
 import com.threeml.awu.world.GameObject;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
@@ -87,7 +88,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Load in the assets used by this layer
 		AssetStore assetManager = mGame.getAssetManager();
 		assetManager.loadAndAddBitmap("Player", "img/player/mark.png");
-		assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
+		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
+		//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
 		assetManager.loadAndAddBitmap("Arrow", "img/arrow.png");
@@ -267,8 +269,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 		{
 			healthPack.setPosition(0, 0);
 		}
-
-		
 		/*
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
