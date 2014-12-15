@@ -18,7 +18,7 @@ public class Item extends Sprite {
 	private Vector2 screenCentre = new Vector2();
 
 	public Item(float startX, float startY, GameScreen gameScreen) {
-		super(startX, startY, 50.0f, 50.0f, gameScreen.getGame()
+		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
 				.getAssetManager().getBitmap("Health"), gameScreen);
 		
 		// Store the centre of the screen

@@ -46,7 +46,7 @@ public class Player extends Sprite {
 	 * Scale factor that is applied to the x-velocity when
 	 * the player is not moving left or right
 	 */
-	private float RUN_DECAY = 0.95f;
+	private float RUN_DECAY = 0.8f;
 
 	/**
 	 * Instantaneous velocity with which the player jumps up
@@ -145,7 +145,7 @@ public class Player extends Sprite {
 		
 		healthText.update(elapsedTime,this.acceleration,this.velocity);
 		
-		
+		//Check for the terrain colliding with the player
 		checkForAndResolveTerrainCollisions(TerrainObj);
 			
 	}
@@ -155,10 +155,16 @@ public class Player extends Sprite {
 		CollisionType collisionType;
 		
 		for (BoundingBox bb : TerrainObj.getTerrainBlocks()) {
-			
+			/*
+			CollisionDetector.determineAndResolveCollisionPlayerVsTerrain(this, bb);
+			*/
 			collisionType = CollisionDetector.determineCollisionType(this.getBound(), bb);
 			
-		
+			if(collisionType == collisionType.None){
+				Log.v("collisionDetected", "xxxxxxxxxxxxxxxxxx");
+			}else{
+				Log.v("collisionDetected", "oooooooooooooooooo");
+			}
 
 			switch (collisionType) {
 			case Top:
@@ -171,12 +177,12 @@ public class Player extends Sprite {
 				 //velocity.x = 0.0f;
 				break;
 			case Right:
-				 //velocity.x = 0.0f;
+				//velocity.x = 0.0f;
 				break;
 			case None:
 				break;
 			}
-			Log.v("collisionDetected", collisionType.name());
+
 		}
 	}
 	
@@ -190,6 +196,7 @@ public class Player extends Sprite {
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
 		
 		super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
-		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		Log.v("playerLoc","("+this.getX()+","+this.getY()+")");
+		//healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 }

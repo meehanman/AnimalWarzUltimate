@@ -1,11 +1,9 @@
 package com.threeml.awu.util;
 
-import java.lang.reflect.Array;
-
 import android.util.Log;
 
 import com.threeml.awu.world.GameObject;
-import com.threeml.awu.world.BackgroundObject.Terrain;
+import com.threeml.awu.world.InteractiveObject.Player;
 
 /**
  * Collision Detector Helper Library
@@ -176,6 +174,74 @@ public class CollisionDetector {
 		
 		return determineAndResolveCollision(one,two);
 		
+	}
+	
+	
+	public static CollisionType determineAndResolveCollisionPlayerVsTerrain(Player P, BoundingBox T) {
+		CollisionType collisionType = CollisionType.None;
+
+		BoundingBox one = P.getBound();
+		BoundingBox two = T;
+
+		if (isCollision(one, two)) {
+			// Determine the side of *least intersection*
+			float collisionDepth = Float.MAX_VALUE;
+
+			// Check the top side
+			float tOverlap = (two.y + two.halfHeight)
+					- (one.y - one.halfHeight);
+			if (tOverlap > 0.0f && tOverlap < collisionDepth) {
+				collisionType = CollisionType.Top;
+				collisionDepth = tOverlap;
+			}
+
+			// Check the bottom side
+			float bOverlap = (one.y + one.halfHeight)
+					- (two.y - two.halfHeight);
+			if (bOverlap > 0.0f && bOverlap < collisionDepth) {
+				collisionType = CollisionType.Bottom;
+				collisionDepth = bOverlap;
+			}
+
+			// Check the right overlap
+			float rOverlap = (one.x + one.halfWidth) - (two.x - two.halfWidth);
+			if (rOverlap > 0.0f && rOverlap < collisionDepth) {
+				collisionType = CollisionType.Right;
+				collisionDepth = rOverlap;
+			}
+
+			// Check the left overlap
+			float lOverlap = (two.x + two.halfWidth) - (one.x - one.halfWidth);
+			if (lOverlap > 0.0f && lOverlap < collisionDepth) {
+				collisionType = CollisionType.Left;
+				collisionDepth = lOverlap;
+			}
+
+			
+			// Separate if needed
+			switch (collisionType) {
+			case Top:
+				one.y += collisionDepth;
+				P.velocity.x = 0f;
+				break;
+			case Bottom:
+				one.y -= collisionDepth;
+				P.velocity.x = 0f;
+				break;
+			case Right:
+				one.x -= collisionDepth;
+				break;
+			case Left:
+				one.x += collisionDepth;
+				break;
+			case None:
+				break;
+			}
+		}
+		
+		//Log.v("CollisionDetected","Type: " + collisionType.name());
+		
+		return collisionType;
 	}
 	
 	
