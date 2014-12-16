@@ -149,4 +149,10 @@ public class BoundingBox {
 				this.y - this.halfHeight < other.y + other.halfHeight && 
 				this.y + this.halfHeight > other.y - other.halfHeight);
 	}
+	
+	@Override
+	public String toString(){
+		return "("+this.x + "," + this.y + ") w:" + this.getWidth() + " h:" + this.getHeight();
+	}
+	
 }
