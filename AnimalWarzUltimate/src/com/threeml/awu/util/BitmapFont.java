@@ -6,7 +6,10 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
+import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.world.GameScreen;
+import com.threeml.awu.world.LayerViewport;
+import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 
 /**
@@ -96,6 +99,47 @@ public class BitmapFont extends Sprite {
 		this.velocity = objectVelocity;
 		super.update(elapsedTime);
 		
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * uk.ac.qub.eeecs.gage.world.GameObject#draw(uk.ac.qub.eeecs.gage.engine
+	 * .ElapsedTime, uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D,
+	 * uk.ac.qub.eeecs.gage.world.LayerViewport,
+	 * uk.ac.qub.eeecs.gage.world.ScreenViewport)
+	 */
+	@Override
+	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
+			LayerViewport layerViewport, ScreenViewport screenViewport) {
+		
+		if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
+				screenViewport, drawSourceRect, drawScreenRect)) {
+
+			float scaleX = 
+					(float) drawScreenRect.width() 
+						/ (float) drawSourceRect.width();
+			float scaleY = 
+					(float) drawScreenRect.height() 
+						/ (float) drawSourceRect.height();
+
+			// Build an appropriate transformation matrix
+			drawMatrix.reset();
+			drawMatrix.postScale(scaleX, scaleY);
+			drawMatrix.postRotate(orientation, scaleX * mBitmap.getWidth()
+					/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
+			drawMatrix.postTranslate(drawScreenRect.left, drawScreenRect.top);
+
+			int distance = 0;
+			// Draw the image
+			for(int i = 0; i<BitmapList.size();i++){
+				graphics2D.drawBitmap(BitmapList.get(i), drawMatrix, null);
+				this.getBound().x += distance;
+				Log.v("bbf",i+" "+this.getBound());
+			}
+			
+		}
 	}
 
 }

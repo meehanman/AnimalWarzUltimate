@@ -35,4 +35,9 @@ public class Item extends Sprite {
 		super.update(elapsedTime);
 	}
 
+	public int getHealthValue() {
+		// TODO Auto-generated method stub
+		return 50;
+	}
+
 }

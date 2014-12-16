@@ -51,15 +51,15 @@ public class Terrain extends Sprite {
 
 	public void CreateTerrainPhysics(){
 		int rectWidth = 0;
-		int rectHeight = 5;
+		int rectHeight = 20;
 		
 		int rectsCreated = 0;
 		
-		for (int yPos = 0; yPos <= this.getBound().getHeight(); yPos += 5)
+		for (int yPos = 0; yPos <= this.getBound().getHeight(); yPos += rectHeight)
         {
             rectWidth = 0;
 
-            for (int xPos = 0; xPos <= this.getBound().getWidth(); xPos += 4)
+            for (int xPos = 0; xPos <= this.getBound().getWidth(); xPos += 10)
             {
                 if(Color.alpha(mBitmap.getPixel(xPos, yPos)) == 255){ //If the current Pixel is non-Alpha
                 	
@@ -91,27 +91,21 @@ public class Terrain extends Sprite {
                     rectWidth = 0; //reset rect
 
                 }
-                
-                
-                
-                
-              
             }
         }
 		
 		Log.v("CreateTerrainPhysics","Recs Created: "+rectsCreated);
 	}
 	private void makeBlock(int width, int height, int x, int y) {
-		// TODO check this is right?
-		//Create a new rect with the properties
-		BoundingBox aabBlock = new BoundingBox(x,y,width/2, height/2);
+		//Create a new rect with the properties       
+		BoundingBox aabBlock = new BoundingBox(x+width,(height+y),width/2, height/2);
 		//Add to list of rect's for the current map
 		TerrainBlocks.add(aabBlock);
 		
 		Log.v("makeBlock", 	"BoundingBox{x: " + x + 
-								" y: " + y + 
-								" width: " + width + 
-								" height: " + height+"}");
+										" y: " + y + 
+										" width: " + width + 
+										" height: " + height+"}");
 
 	}
 	

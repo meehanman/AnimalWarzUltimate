@@ -25,11 +25,12 @@ public class Player extends Sprite {
 	// /////////////////////////////////////////////////////////////////////////
 	// Properties
 	// /////////////////////////////////////////////////////////////////////////
-
+	
+	private int health = 20;
 	/**
 	 * Strength of gravity to apply along the y-axis
 	 */
-	private float GRAVITY = -800.0f;
+	private float GRAVITY = -80.0f;
 	
 	/**
 	 * Acceleration with which the player can move along
@@ -61,7 +62,6 @@ public class Player extends Sprite {
 	private float ANGULAR_VELOCITY_SCALE = 1.5f;
 	
 	//HealthFont
-	public float health = 100f;
 	private BitmapFont healthText;
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ public class Player extends Sprite {
 		healthText.update(elapsedTime,this.acceleration,this.velocity);
 		
 		//Check for the terrain colliding with the player
-		checkForAndResolveTerrainCollisions(TerrainObj);
+		//checkForAndResolveTerrainCollisions(TerrainObj);
 			
 	}
 
@@ -159,19 +159,15 @@ public class Player extends Sprite {
 			CollisionDetector.determineAndResolveCollisionPlayerVsTerrain(this, bb);
 			*/
 			collisionType = CollisionDetector.determineCollisionType(this.getBound(), bb);
-			
-			if(collisionType == collisionType.None){
-				Log.v("collisionDetected", "xxxxxxxxxxxxxxxxxx");
-			}else{
-				Log.v("collisionDetected", "oooooooooooooooooo");
-			}
 
 			switch (collisionType) {
 			case Top:
 				velocity.y = 0.0f;
+				GRAVITY = 0;
 				break;
 			case Bottom:
 				velocity.y = 0.0f;
+				GRAVITY = 0;
 				break;
 			case Left:
 				 //velocity.x = 0.0f;
@@ -180,6 +176,7 @@ public class Player extends Sprite {
 				//velocity.x = 0.0f;
 				break;
 			case None:
+				GRAVITY = -800.0F; 
 				break;
 			}
 
@@ -197,6 +194,21 @@ public class Player extends Sprite {
 		
 		super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		Log.v("playerLoc","("+this.getX()+","+this.getY()+")");
-		//healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+	}
+	
+	public void setHealth(int value)
+	{
+		if (health < 100) {
+			if (health + value <= 100)
+				health = health + value;
+			else 
+				health = 100;
+		}
+	}
+	
+	public int getHealth() 
+	{
+		return health;
 	}
 }

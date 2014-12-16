@@ -3,6 +3,8 @@ package com.threeml.awu.game.singlePlayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
@@ -88,8 +90,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Load in the assets used by this layer
 		AssetStore assetManager = mGame.getAssetManager();
 		assetManager.loadAndAddBitmap("Player", "img/player/mark.png");
-		//assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
-		assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
+		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
+		//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
 		assetManager.loadAndAddBitmap("Arrow", "img/arrow.png");
@@ -268,10 +270,16 @@ public class SinglePlayerGameScreen extends GameScreen {
 		if(playerBound.intersects(healthBound))
 		{
 			healthPack.setPosition(-999, -999);
+			mPlayer.setHealth(healthPack.getHealthValue());
+			Log.v("Player Stats", "Health: " + mPlayer.getHealth());
 		}
-		/*
+		
+		 for (BoundingBox bb : mTerrain.getTerrainBlocks()) {
+			
+			CollisionDetector.determineAndResolveCollisionPlayerVsTerrain(mPlayer, bb);
+		 }
 		// Process any touch events occurring since the update
-		Input input = mGame.getInput();
+		/*Input input = mGame.getInput();
 		
 		List <TouchEvent> touchEvents = input.getTouchEvents();
 		if (touchEvents.size() > 0) {
@@ -319,7 +327,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Draw the background first of all
 		mBackground.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
-		
+		mTerrain.CreateTerrainPhysics();
 		mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		

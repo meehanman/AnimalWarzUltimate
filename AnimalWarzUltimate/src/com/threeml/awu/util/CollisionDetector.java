@@ -48,6 +48,11 @@ public class CollisionDetector {
 		if (!isCollision(one, two)) {
 			return CollisionType.None;
 		} else {
+			
+			
+			Log.v("dct","CollisionDetected: " + one.toString() +" "+ two.toString());
+			
+			
 			CollisionType collisionType = CollisionType.None;
 
 			// Determine the side of *least intersection*
