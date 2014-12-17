@@ -17,6 +17,7 @@ import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.BackgroundObject.Control;
 import com.threeml.awu.world.BackgroundObject.Terrain;
+import com.threeml.awu.world.InteractiveObject.Healthkit;
 import com.threeml.awu.world.InteractiveObject.Item;
 import com.threeml.awu.world.InteractiveObject.Player;
 
@@ -50,7 +51,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	private GameObject mBackground;
 	private Terrain mTerrain;
 	private Player mPlayer;
-	private Item healthPack;
+	private Healthkit healthPack;
 	
 	
 	/**
@@ -90,6 +91,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Load in the assets used by this layer
 		AssetStore assetManager = mGame.getAssetManager();
 		assetManager.loadAndAddBitmap("Player", "img/player/mark.png");
+		//assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
 		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
 		//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
@@ -139,8 +141,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 
 		// Create the objects
-		mPlayer = new Player(500, 400, this);
-		healthPack = new Item(500, 300,this); //So we can easily walk on it?
+		mPlayer = new Player(500, 400, 1, 1, this);
+		healthPack = new Healthkit(500, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
 		
 		//Create Controls for game
 		//TODO Create different directions for the controls

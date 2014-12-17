@@ -1,6 +1,9 @@
 package com.threeml.awu.world.InteractiveObject;
 
+import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.util.Log;
+
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
@@ -26,6 +29,11 @@ public class Player extends Sprite {
 	// /////////////////////////////////////////////////////////////////////////
 	private int MaxHealth = 200;
 	private int health = 100;
+	
+	private int currentFrame = 0;
+	private int mRows = 0;
+	private int mColumns = 0;
+	
 	/**
 	 * Strength of gravity to apply along the y-axis
 	 */
@@ -77,11 +85,32 @@ public class Player extends Sprite {
 	 * @param gameScreen
 	 *            Gamescreen to which sphere belongs
 	 */
-	public Player(float startX, float startY, GameScreen gameScreen) {
+	public Player(float startX, float startY, int columns, int rows, GameScreen gameScreen) {
 		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
 				.getAssetManager().getBitmap("Player"), gameScreen);
 		
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
+		
+		mColumns = columns;
+		mRows = rows;
+		
+		//for when animation finally works... but for now, just use 20x20 for player size
+		/*Bitmap bitmap = gameScreen.getGame().getAssetManager().getBitmap("Player");
+		
+		this.mBound.halfHeight = (bitmap.getHeight() / mRows) / 2;
+		this.mBound.halfWidth = (bitmap.getWidth() / mColumns) / 2;*/
+		
+		
+		int width = (int) (this.mBound.halfWidth * 2);
+		int height = (int) (this.mBound.halfHeight * 2);
+		int srcY = currentFrame * height;
+		int  srcX = currentFrame * width;
+		Rect src = new Rect(srcX, height, srcX + width, srcY + height);
+		
+		this.drawSourceRect.set(src);
+		
+		//this.mBound.halfHeight = bitmap.getHeight() / 2;
+		//this.mBound.halfWidth = bitmap.getWidth() / 2;
 	}
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -114,6 +143,7 @@ public class Player extends Sprite {
 		// and the velocity decays towards zero.
 		if (moveLeft && !moveRight) {
 			acceleration.x = -RUN_ACCELERATION;
+			this.nextFrame();
 		} else if (moveRight && !moveLeft) {
 			acceleration.x = RUN_ACCELERATION;
 		} else {
@@ -147,6 +177,14 @@ public class Player extends Sprite {
 		//Check for the terrain colliding with the player
 		//checkForAndResolveTerrainCollisions(TerrainObj);
 			
+	}
+	/*
+	 * skips to the next frame of the image
+	 */
+	private void nextFrame(){
+		if(mColumns > 0){
+			currentFrame = ++currentFrame % mColumns;
+		}
 	}
 
 	private void checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
@@ -183,7 +221,7 @@ public class Player extends Sprite {
 	}
 	
 	/**
-	 * Draw Method Override to encapculate draw methods connecte to player i.e
+	 * Draw Method Override to encapsulate draw methods connected to player i.e
 	 * Player Health
 	 * **/
 	@Override
@@ -202,7 +240,7 @@ public class Player extends Sprite {
 	{
 		health += value;
 		if(health <= MaxHealth){
-			health=MaxHealth;
+			health = MaxHealth;
 		}
 	}
 	
