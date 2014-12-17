@@ -5,15 +5,42 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.util.Log;
 
 import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
 
+/**
+ * 
+ * @author Dean
+ *
+ * Terrain holds the location of the walkable terrain
+ * By scanning on create of the terrain, we are able to draw boxes
+ * to represent the walkable location on the map allowing for AABB 
+ * collision detection. The "walkable" rectangles then can be updated
+ * only when the terrain bitmap changes (destructible).
+ * 
+ * AABB can then be easily detected by checking any collisions between
+ * the bounding boxes and another boundingBox i.e. player, Healthpack etc
+ * 
+ */
+
+/*
+ Example of how the code works                                                                              
+ +----------------------------+              +----------------------------+   
+ | 			                  |              |                            |   
+ |   XXXXX                    | +------------+   +---+                    |   
+ | XXXXXXXXX        XXXXXXX   | BitMap       | +-------+        +-----+   |   
+ |XXXXXXXXXXX     XXXXXXXXXXXX|     to       +----------+     +-----------+   
+ |XXXXXXXXXXXXXXXXXXXXXXXXXXXX|       BBoxes |----------------------------|   
+ |XXXXXXXXXXXXXXXXXXXXXXXXXXXX| +--------->  |----------------------------|   
+ +----------------------------+              +----------------------------+  
+ 			  i:	Each BBox is at least 4px wide and every one is 5px height
+ */
 public class Terrain extends Sprite {
 	
+	//Holds the locations of all the boxes
 	private List<BoundingBox> TerrainBlocks = new ArrayList<BoundingBox>();
 	
 	public Terrain(GameScreen gameScreen) {
@@ -23,8 +50,8 @@ public class Terrain extends Sprite {
 		mBound.halfWidth = 1000.0f;
 		mBound.halfHeight = 300.0f;
 		
+		//Initially create AABB bounding boxes for the terrain
 		this.CreateTerrainPhysics();
-		
 	}
 	/**
 	 * Create a new Terrain object
@@ -45,10 +72,14 @@ public class Terrain extends Sprite {
 	public Terrain(float x, float y, float width, float height,
 			Bitmap bitmap, GameScreen gameScreen) {
 		super(x,y,width,height,bitmap,gameScreen);
+		
+		//Initially create AABB bounding boxes for the terrain
 		this.CreateTerrainPhysics();
 	}
 	
-
+	/* Loops through each row and column 4px at a time across and 5px down
+	 *  then calls makeBlock() to add a new boundingBox to the array 
+	*/
 	public void CreateTerrainPhysics(){
 		int rectWidth = 0;
 		int rectHeight = 20;
@@ -96,6 +127,14 @@ public class Terrain extends Sprite {
 		
 		Log.v("CreateTerrainPhysics","Recs Created: "+rectsCreated);
 	}
+	
+	/**
+	 * Creates a boundingBox and adds to the TerrainBlocks ArrayList
+	 * @param width
+	 * @param height
+	 * @param x
+	 * @param y
+	 */
 	private void makeBlock(int width, int height, int x, int y) {
 		//Create a new rect with the properties       
 		BoundingBox aabBlock = new BoundingBox(x+width,(height+y),width/2, height/2);
@@ -110,13 +149,18 @@ public class Terrain extends Sprite {
 	}
 	
 	
+	/**
+	 * Returns List of Bounding Boxes that represent Terrain boundaries
+	 */
 	public List<BoundingBox> getTerrainBlocks(){
 		return TerrainBlocks;
 	}
 	
-	
+	/**
+	 * ToString Method that outputs the BB details at a position in 
+	 * the TerrainBlocks List
+	 */
 	public String toString(int i){
-		
 		BoundingBox bb = getTerrainBlocks().get(i);
 		return "width: " + bb.getWidth() + " height: " + bb.getHeight() + " x: " + bb.x + " y: " + bb.y + "}";
 	}

@@ -143,6 +143,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		healthPack = new Item(500, 300,this); //So we can easily walk on it?
 		
 		//Create Controls for game
+		//TODO Create different directions for the controls
 		moveLeft = new Control(
 				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "Arrow", this);
 		mControls.add(moveLeft);

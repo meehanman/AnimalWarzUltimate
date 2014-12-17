@@ -2,6 +2,7 @@ package com.threeml.awu.util;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -13,14 +14,18 @@ import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 
 /**
- * BitmapFont class (Draw Text)s 
+ * BitmapFont class Draw Text on Screen 
+ * 
  * @author Dean
+ *
  *
  */
 
 public class BitmapFont extends Sprite {
 	
 	List<Bitmap> BitmapList = new ArrayList<Bitmap>();
+	private int textCellwidth = 12;
+	private int textCellheight = 16;
 	
 	public BitmapFont(float x, float y, GameScreen gameScreen, String str) {
 		super(x, y, 50.0f, 50.0f, gameScreen.getGame()
@@ -43,8 +48,7 @@ public class BitmapFont extends Sprite {
 	}
 	//Return a bitmap of the char
 	private Bitmap drawLetter(char c){
-		int width = 12;
-		int height = 16;
+
 		int locationx = 0,locationy = 0;
 		char[] special = {'.', ':',',',';','\'','"','(','!','?',')','+','-','*','/','='}; //Special Chars in order on Bitmap
 		
@@ -57,37 +61,34 @@ public class BitmapFont extends Sprite {
 		*/
 		//Logic to get location of letter using ASCII location of chars
 		if(c >= 'a' && c <= 'z'){ //97 - 122
-			locationx = ((int)c-97)*width;
+			locationx = ((int)c-97)*textCellwidth;
 			locationy = 0; 
 		}else if(c >= 'A' && c <= 'Z'){ //65 - 90
-			locationx = 324 + (((int)c-65)*width);
+			locationx = 324 + (((int)c-65)*textCellwidth);
 			locationy = 0; 
 		}else if((int)c >=0 && (int)c <=9){ //48-57
-			locationx = ((int)c-48)*width;;
+			locationx = ((int)c-48)*textCellwidth;;
 			locationy = 19; 
 		}else{
 			boolean found = false;
 			for(int i = 0;i<special.length;i++){
 				if(special[i]==c){
 					found = true;
-					locationx = 120+(i)*width;
+					locationx = 120+(i)*textCellwidth;
 					locationy = 19; 
 					break;
 				}
 			}
 			if(!found){ //If not found, output space which is between z and A
-				locationx = 324 - width;
+				locationx = 324 - textCellwidth;
 				locationy = 0; 
 			}
 		}
 		
 		Log.v("bitmap?",mBitmap.getWidth()+"");
-		return Bitmap.createBitmap(mBitmap, locationx, locationy, width, height);
+		return Bitmap.createBitmap(mBitmap, locationx, locationy, textCellwidth, textCellheight);
 	}
 	
-	public void update(ElapsedTime elapsedTime, float x, float y) {
-		
-	}
 	/**
 	 ** Update method that will follow an object like player (for health etc)
 	 **	@author Dean 
@@ -101,14 +102,11 @@ public class BitmapFont extends Sprite {
 		
 	}
 	
-	/*
-	 * (non-Javadoc)
+	/**
+	 * @author Dean
 	 * 
-	 * @see
-	 * uk.ac.qub.eeecs.gage.world.GameObject#draw(uk.ac.qub.eeecs.gage.engine
-	 * .ElapsedTime, uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D,
-	 * uk.ac.qub.eeecs.gage.world.LayerViewport,
-	 * uk.ac.qub.eeecs.gage.world.ScreenViewport)
+	 * Override Draw method used to display text on screen from the custom
+	 * bitmaps created by drawLetter.  
 	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
@@ -130,14 +128,19 @@ public class BitmapFont extends Sprite {
 			drawMatrix.postRotate(orientation, scaleX * mBitmap.getWidth()
 					/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
 			drawMatrix.postTranslate(drawScreenRect.left, drawScreenRect.top);
-
-			int distance = 0;
+			
+			float BoundXPos = this.getBound().x;
 			// Draw the image
 			for(int i = 0; i<BitmapList.size();i++){
+				//Move the drawlocation over by cellwidth for each letter
+				this.getBound().x += textCellwidth*i;
+				//Draw the bitmap on screen
 				graphics2D.drawBitmap(BitmapList.get(i), drawMatrix, null);
-				this.getBound().x += distance;
 				Log.v("bbf",i+" "+this.getBound());
 			}
+			
+			//Reset the draw location for the images
+			this.getBound().x = BoundXPos;
 			
 		}
 	}

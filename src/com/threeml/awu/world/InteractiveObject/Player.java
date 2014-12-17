@@ -1,7 +1,6 @@
 package com.threeml.awu.world.InteractiveObject;
 
 import android.util.Log;
-
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
@@ -25,8 +24,8 @@ public class Player extends Sprite {
 	// /////////////////////////////////////////////////////////////////////////
 	// Properties
 	// /////////////////////////////////////////////////////////////////////////
-	
-	private int health = 20;
+	private int MaxHealth = 200;
+	private int health = 100;
 	/**
 	 * Strength of gravity to apply along the y-axis
 	 */
@@ -155,7 +154,7 @@ public class Player extends Sprite {
 		CollisionType collisionType;
 		
 		for (BoundingBox bb : TerrainObj.getTerrainBlocks()) {
-			/*
+			/* 
 			CollisionDetector.determineAndResolveCollisionPlayerVsTerrain(this, bb);
 			*/
 			collisionType = CollisionDetector.determineCollisionType(this.getBound(), bb);
@@ -184,7 +183,6 @@ public class Player extends Sprite {
 	}
 	
 	/**
-	 * 
 	 * Draw Method Override to encapculate draw methods connecte to player i.e
 	 * Player Health
 	 * **/
@@ -197,16 +195,20 @@ public class Player extends Sprite {
 		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 	
+	/**
+	 * Sets the health of the player
+	 */
 	public void setHealth(int value)
 	{
-		if (health < 100) {
-			if (health + value <= 100)
-				health = health + value;
-			else 
-				health = 100;
+		health += value;
+		if(health <= MaxHealth){
+			health=MaxHealth;
 		}
 	}
 	
+	/**
+	 * Returns the health of the player
+	 */
 	public int getHealth() 
 	{
 		return health;
