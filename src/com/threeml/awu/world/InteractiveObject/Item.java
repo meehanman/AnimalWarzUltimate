@@ -1,5 +1,7 @@
 package com.threeml.awu.world.InteractiveObject;
 
+import android.graphics.Bitmap;
+
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
@@ -26,6 +28,12 @@ public class Item extends Sprite {
 	//	screenCentre.y = gameScreen.getGame().getScreenHeight() / 2;
 	}
 	
+	public Item(float startX, float startY, float f, float g, Bitmap bitmap,
+			GameScreen gameScreen) {
+		super(startX, startY, f, g, bitmap, gameScreen);
+		// TODO Auto-generated constructor stub
+	}
+
 	public void update(ElapsedTime elapsedTime, Sprite gameSprite) {
 		
 		// apply acceleration to the item
@@ -35,9 +43,5 @@ public class Item extends Sprite {
 		super.update(elapsedTime);
 	}
 
-	public int getHealthValue() {
-		// TODO Auto-generated method stub
-		return 50;
-	}
 
 }
