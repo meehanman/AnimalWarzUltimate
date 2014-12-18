@@ -37,7 +37,7 @@ public class Item extends Sprite {
 	public void update(ElapsedTime elapsedTime, Sprite gameSprite) {
 		
 		// apply acceleration to the item
-		acceleration.y = GRAVITY;
+		//acceleration.y = GRAVITY;
 		
 		// call the sprites update method to provide a new orientation
 		super.update(elapsedTime);

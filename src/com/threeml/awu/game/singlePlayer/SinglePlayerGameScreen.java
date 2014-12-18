@@ -10,7 +10,6 @@ import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BoundingBox;
-import com.threeml.awu.util.CollisionDetector;
 import com.threeml.awu.world.GameObject;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
@@ -89,8 +88,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 		// Load in the assets used by this layer
 		AssetStore assetManager = mGame.getAssetManager();
-		assetManager.loadAndAddBitmap("Player", "img/player/mark.png");
-		//assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
+		//assetManager.loadAndAddBitmap("Player", "img/player/mark.png");
+		assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
 		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
 		//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
@@ -140,7 +139,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 
 		// Create the objects
-		mPlayer = new Player(500, 400, 1, 1, this);
+		mPlayer = new Player(500, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this);
 		healthPack = new Healthkit(500, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
 		
 		//Create Controls for game
