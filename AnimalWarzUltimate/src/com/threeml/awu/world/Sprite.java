@@ -1,12 +1,15 @@
 package com.threeml.awu.world;
 
-import com.threeml.awu.engine.ElapsedTime;
-import com.threeml.awu.engine.graphics.IGraphics2D;
-import com.threeml.awu.util.GraphicsHelper;
-import com.threeml.awu.util.Vector2;
-
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+
+import com.threeml.awu.engine.ElapsedTime;
+import com.threeml.awu.engine.graphics.IGraphics2D;
+import com.threeml.awu.util.BoundingBox;
+import com.threeml.awu.util.GraphicsHelper;
+import com.threeml.awu.util.Vector2;
+import com.threeml.awu.world.BackgroundObject.Terrain;
+import com.threeml.awu.world.BackgroundObject.Terrain.CollisionDirection;
 
 /**
  * Simple sprite class (supporting rotation)
@@ -44,7 +47,10 @@ public class Sprite extends GameObject {
 
 	public float maxAcceleration = DEFAULT_MAX_ACCELERATION;
 	public float maxVelocity = DEFAULT_MAX_VELOCITY;
-
+	/**
+	 * Strength of gravity to apply along the y-axis
+	 */
+	public float GRAVITY = -400.0f;
 	/**
 	 * Orientation alongside angular velocity and acceleration, with maximum
 	 * values.
@@ -116,7 +122,42 @@ public class Sprite extends GameObject {
 	// /////////////////////////////////////////////////////////////////////////
 	// Configuration Methods
 	// /////////////////////////////////////////////////////////////////////////
-
+	
+	
+	// /////////////////////////////////////////////////////////////////////////
+	// Collision Detection
+	////////////////////////////////////////////////////////////////////////////
+	public Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
+		Boolean collisionResolved = false;
+		BoundingBox SpriteBB = this.getBound();
+		
+		if(acceleration.x > 0){ //Travelling Right
+			if(TerrainObj.isPixelSolid(SpriteBB.x + SpriteBB.halfWidth,SpriteBB.y,CollisionDirection.Right,this)){
+				collisionResolved=true;
+			}
+		}
+		
+		if(acceleration.x < 0){ //Travelling Left
+			if(TerrainObj.isPixelSolid(SpriteBB.x - SpriteBB.halfWidth,SpriteBB.y,CollisionDirection.Left,this)){
+				collisionResolved=true;
+			}
+		}
+		
+		if(acceleration.y > 0){ //Travelling Up
+			if(TerrainObj.isPixelSolid(SpriteBB.x,SpriteBB.y - SpriteBB.halfHeight,CollisionDirection.Up,this)){
+				collisionResolved=true;
+			}
+		}
+		
+		//Always check downwards for collisions
+		if(TerrainObj.isPixelSolid(SpriteBB.x,SpriteBB.y + SpriteBB.halfHeight,CollisionDirection.Down,this)){
+			collisionResolved=true;
+		}
+		
+		return collisionResolved;
+		
+		
+	}
 	// /////////////////////////////////////////////////////////////////////////
 	// Update and Draw
 	// /////////////////////////////////////////////////////////////////////////

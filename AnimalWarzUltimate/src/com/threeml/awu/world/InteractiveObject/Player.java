@@ -6,14 +6,12 @@ import android.util.Log;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
-import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.BackgroundObject.Terrain;
-import com.threeml.awu.world.BackgroundObject.Terrain.CollisionDirection;
 
 
 /**
@@ -137,16 +135,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public void update(ElapsedTime elapsedTime, boolean moveLeft,
 			boolean moveRight, boolean jumpUp, Terrain TerrainObj) {
 
-		float playerGRAVITY = GRAVITY;
-		
-		if(checkForAndResolveTerrainCollisions(TerrainObj)){
-			playerGRAVITY = 0f;
-		}
-		
-		
-		// Apply gravity to the y-axis acceleration
-		acceleration.y = playerGRAVITY;
-
 		// Depending upon the left and right movement touch controls
 		// set an appropriate x-acceleration. If the user does not
 		// want to move left or right, then the x-acceleration is zero
@@ -202,38 +190,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}
 	}
 
-
-	private Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
-		Boolean collisionResolved = false;
-		BoundingBox PlayerBB = this.getBound();
-		
-		if(acceleration.x > 0){ //Travelling Right
-			if(TerrainObj.isPixelSolid(PlayerBB.x + PlayerBB.halfWidth,PlayerBB.y,CollisionDirection.Right,this)){
-				collisionResolved=true;
-			}
-		}
-		
-		if(acceleration.x < 0){ //Travelling Left
-			if(TerrainObj.isPixelSolid(PlayerBB.x - PlayerBB.halfWidth,PlayerBB.y,CollisionDirection.Left,this)){
-				collisionResolved=true;
-			}
-		}
-		
-		if(acceleration.y > 0){ //Travelling Up
-			if(TerrainObj.isPixelSolid(PlayerBB.x,PlayerBB.y - PlayerBB.halfHeight,CollisionDirection.Up,this)){
-				collisionResolved=true;
-			}
-		}
-		
-		//Always check downwards for collisions
-		if(TerrainObj.isPixelSolid(PlayerBB.x,PlayerBB.y + PlayerBB.halfHeight,CollisionDirection.Down,this)){
-			collisionResolved=true;
-		}
-		
-		return collisionResolved;
-		
-		
-	}
 	
 	/**
 	 * Draw Method Override to encapsulate draw methods connected to player i.e

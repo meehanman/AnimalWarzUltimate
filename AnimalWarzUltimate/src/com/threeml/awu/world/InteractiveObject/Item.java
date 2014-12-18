@@ -3,21 +3,12 @@ package com.threeml.awu.world.InteractiveObject;
 import android.graphics.Bitmap;
 
 import com.threeml.awu.engine.ElapsedTime;
-import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
+import com.threeml.awu.world.BackgroundObject.Terrain;
 
 public class Item extends Sprite {
 	
-	/**
-	 * Strength of gravity to apply along the y-axis
-	 */
-	private float GRAVITY = -4.0f;
-	
-	/**
-	 * Centre of the screen (used to determine the offset of touch events)
-	 */
-	private Vector2 screenCentre = new Vector2();
 
 	public Item(float startX, float startY, GameScreen gameScreen) {
 		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
@@ -34,14 +25,24 @@ public class Item extends Sprite {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void update(ElapsedTime elapsedTime, Sprite gameSprite) {
+	public void update(ElapsedTime elapsedTime,  Terrain TerrainObj) {
+
+		//Save Gravity Value
+		float playerGRAVITY = GRAVITY;
 		
-		// apply acceleration to the item
-		//acceleration.y = GRAVITY;
+		//Check for collisions, if they are detected then turn off gravity
+		if(checkForAndResolveTerrainCollisions(TerrainObj)){
+			playerGRAVITY = 0f;
+		}
+				
+		// Apply gravity to the y-axis acceleration
+		acceleration.y = playerGRAVITY;
 		
 		// call the sprites update method to provide a new orientation
 		super.update(elapsedTime);
 	}
+	
+
 
 
 }
