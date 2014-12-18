@@ -2,7 +2,9 @@ package com.threeml.awu.world.InteractiveObject;
 
 import android.graphics.Bitmap;
 
+import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.world.GameScreen;
+import com.threeml.awu.world.Sprite;
 
 public class Healthkit extends Item{
 
@@ -20,5 +22,14 @@ public class Healthkit extends Item{
 	public int getHealthValue() {
 		// TODO Auto-generated method stub
 		return 50;
+	}
+	
+	public void update(ElapsedTime elapsedTime, Sprite gameSprite) {
+		
+		// apply acceleration to the item
+		acceleration.y = GRAVITY;
+		
+		// call the sprites update method to provide a new orientation
+		super.update(elapsedTime);
 	}
 }

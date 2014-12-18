@@ -1,11 +1,13 @@
 package com.threeml.awu.world.InteractiveObject;
 
-import android.graphics.Rect;
+import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.BoundingBox;
+import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -27,6 +29,8 @@ public class Player extends Sprite {
 	/**
 	 * Health the player has and Maximum that can be
 	 */
+	private Bitmap fullImage;
+	
 	private int MaxHealth = 200;
 	private int health = 100;
 	
@@ -84,9 +88,10 @@ public class Player extends Sprite {
 	 * @param gameScreen
 	 *            Gamescreen to which sphere belongs
 	 */
-public Player(float startX, float startY, int columns, int rows, GameScreen gameScreen) {		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
-				.getAssetManager().getBitmap("Player"), gameScreen);
+public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen) {		
+	super(startX, startY, 60.0f, 60.0f, bitmap, gameScreen);
 		
+		fullImage = bitmap;
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
 		
 		mColumns = columns;
@@ -99,13 +104,13 @@ public Player(float startX, float startY, int columns, int rows, GameScreen game
 		this.mBound.halfWidth = (bitmap.getWidth() / mColumns) / 2;*/
 		
 		
-		int width = (int) (this.mBound.halfWidth * 2);
+		/*int width = (int) (this.mBound.halfWidth * 2);
 		int height = (int) (this.mBound.halfHeight * 2);
 		int srcY = currentFrame * height;
 		int  srcX = currentFrame * width;
 		Rect src = new Rect(srcX, height, srcX + width, srcY + height);
 		
-		this.drawSourceRect.set(src);
+		this.drawSourceRect.set(src);*/
 		
 		//this.mBound.halfHeight = bitmap.getHeight() / 2;
 		//this.mBound.halfWidth = bitmap.getWidth() / 2;
@@ -177,12 +182,23 @@ public Player(float startX, float startY, int columns, int rows, GameScreen game
 		
 	}
 
-	/*
+	/**
 	 * skips to the next frame of the image
 	 */
 	private void nextFrame(){
+		/*if(mColumns > 0){
+			currentFrame = currentFrame++ % mColumns;
+			Log.v("CurrentFrame", currentFrame + "");
+		}*/
 		if(mColumns > 0){
-			currentFrame = ++currentFrame % mColumns;
+			if(currentFrame < mColumns){
+				currentFrame = currentFrame + 1;
+				Log.v("CurrentFrame", currentFrame + "");
+			} else {
+				currentFrame = 0;
+			}
+			currentFrame = 0;
+			
 		}
 	}
 
@@ -226,9 +242,34 @@ public Player(float startX, float startY, int columns, int rows, GameScreen game
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
-		
-		super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		try {
+		//super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
+				screenViewport, drawSourceRect, drawScreenRect)) {
+
+			// Draw the image
+			//graphics2D.drawBitmap(mBitmap, drawMatrix, null);
+			graphics2D.drawBitmap(getImageFrame(), drawSourceRect, drawScreenRect, null);
+		}
+		}
+		catch (Exception e){
+			Log.v("CustomError", e + "");
+		}
 		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+	}
+	
+	public Bitmap getImageFrame(){
+		int width = (int) (this.mBound.halfWidth * 2);
+		int height = (int) (this.mBound.halfHeight * 2);
+		int srcY = 0;
+		int  srcX = currentFrame * width;
+		Log.v("currentframe", "getImageFrame() called");
+		Log.v("currentframe", 	" y : " + srcY +
+								" x : " + srcX +
+								" width : " + width +
+								" height : " + height);
+		
+		return Bitmap.createBitmap(fullImage, srcY, srcX, width, height);
 	}
 	
 	/**
