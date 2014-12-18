@@ -18,7 +18,6 @@ import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.BackgroundObject.Control;
 import com.threeml.awu.world.BackgroundObject.Terrain;
 import com.threeml.awu.world.InteractiveObject.Healthkit;
-import com.threeml.awu.world.InteractiveObject.Item;
 import com.threeml.awu.world.InteractiveObject.Player;
 
 /**
@@ -276,11 +275,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 			mPlayer.setHealth(healthPack.getHealthValue());
 			Log.v("Player Stats", "Health: " + mPlayer.getHealth());
 		}
-		
-		 for (BoundingBox bb : mTerrain.getTerrainBlocks()) {
-			
-			CollisionDetector.determineAndResolveCollisionPlayerVsTerrain(mPlayer, bb);
-		 }
+
 		// Process any touch events occurring since the update
 		/*Input input = mGame.getInput();
 		
@@ -330,7 +325,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Draw the background first of all
 		mBackground.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
-		mTerrain.CreateTerrainPhysics();
 		mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		

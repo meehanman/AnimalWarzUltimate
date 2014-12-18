@@ -244,7 +244,6 @@ public class CollisionDetector {
 			}
 		}
 		
-		//Log.v("CollisionDetected","Type: " + collisionType.name());
 		
 		return collisionType;
 	}

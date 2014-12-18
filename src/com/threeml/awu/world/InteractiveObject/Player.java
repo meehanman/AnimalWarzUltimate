@@ -1,20 +1,17 @@
 package com.threeml.awu.world.InteractiveObject;
 
-import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.BoundingBox;
-import com.threeml.awu.util.CollisionDetector;
-import com.threeml.awu.util.CollisionDetector.CollisionType;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.BackgroundObject.Terrain;
+import com.threeml.awu.world.BackgroundObject.Terrain.CollisionDirection;
 
 
 /**
@@ -27,13 +24,15 @@ public class Player extends Sprite {
 	// /////////////////////////////////////////////////////////////////////////
 	// Properties
 	// /////////////////////////////////////////////////////////////////////////
+	/**
+	 * Health the player has and Maximum that can be
+	 */
 	private int MaxHealth = 200;
 	private int health = 100;
 	
 	private int currentFrame = 0;
 	private int mRows = 0;
 	private int mColumns = 0;
-	
 	/**
 	 * Strength of gravity to apply along the y-axis
 	 */
@@ -59,7 +58,7 @@ public class Player extends Sprite {
 	/**
 	 * Instantaneous velocity with which the player jumps up
 	 */
-	private float JUMP_VELOCITY = 450.0f;
+	private float JUMP_VELOCITY = 100.0f;
 	
 	/**
 	 * Scale factor that is used to turn the x-velocity into
@@ -85,8 +84,7 @@ public class Player extends Sprite {
 	 * @param gameScreen
 	 *            Gamescreen to which sphere belongs
 	 */
-	public Player(float startX, float startY, int columns, int rows, GameScreen gameScreen) {
-		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
+public Player(float startX, float startY, int columns, int rows, GameScreen gameScreen) {		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
 				.getAssetManager().getBitmap("Player"), gameScreen);
 		
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
@@ -157,11 +155,6 @@ public class Player extends Sprite {
 			velocity.y = JUMP_VELOCITY;
 		}
 
-		// We want the player's sphere to rotate to give the appearance
-		// that the sphere is rolling as the player moves. The faster
-		// the player is moving the faster the angular velocity.
-		//angularVelocity = ANGULAR_VELOCITY_SCALE * velocity.x;
-
 		// Call the sprite's update method to apply the defined 
 		// accelerations and velocities to provide a new position
 		// and orientation.
@@ -171,13 +164,13 @@ public class Player extends Sprite {
 		// but not a y-velocity. Make sure we have not exceeded this.
 		if (Math.abs(velocity.x) > MAX_X_VELOCITY)
 			velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
+
+		healthText.update(elapsedTime,this);
 		
-		healthText.update(elapsedTime,this.acceleration,this.velocity);
 		
-		//Check for the terrain colliding with the player
-		//checkForAndResolveTerrainCollisions(TerrainObj);
-			
+		checkForAndResolveTerrainCollisions(TerrainObj);
 	}
+
 	/*
 	 * skips to the next frame of the image
 	 */
@@ -187,37 +180,35 @@ public class Player extends Sprite {
 		}
 	}
 
-	private void checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 
-		CollisionType collisionType;
+	private Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
+		Boolean collisionResolved = false;
+		BoundingBox PlayerBB = this.getBound();
 		
-		for (BoundingBox bb : TerrainObj.getTerrainBlocks()) {
-			/* 
-			CollisionDetector.determineAndResolveCollisionPlayerVsTerrain(this, bb);
-			*/
-			collisionType = CollisionDetector.determineCollisionType(this.getBound(), bb);
-
-			switch (collisionType) {
-			case Top:
-				velocity.y = 0.0f;
-				GRAVITY = 0;
-				break;
-			case Bottom:
-				velocity.y = 0.0f;
-				GRAVITY = 0;
-				break;
-			case Left:
-				 //velocity.x = 0.0f;
-				break;
-			case Right:
-				//velocity.x = 0.0f;
-				break;
-			case None:
-				GRAVITY = -800.0F; 
-				break;
+		if(acceleration.x > 0){ //Travelling Right
+			if(TerrainObj.isPixelSolid(PlayerBB.x + PlayerBB.halfWidth,PlayerBB.y,CollisionDirection.Right,this)){
+				collisionResolved=true;
 			}
-
+		}else if(acceleration.x < 0){ //Travelling Left
+			if(TerrainObj.isPixelSolid(PlayerBB.x - PlayerBB.halfWidth,PlayerBB.y,CollisionDirection.Left,this)){
+				collisionResolved=true;
+			}
 		}
+		
+		if(acceleration.y > 0){ //Travelling Up
+			if(TerrainObj.isPixelSolid(PlayerBB.x,PlayerBB.y - PlayerBB.halfHeight,CollisionDirection.Up,this)){
+				collisionResolved=true;
+			}
+		}
+		
+		//Always check downwards for collisions
+		if(TerrainObj.isPixelSolid(PlayerBB.x,PlayerBB.y + PlayerBB.halfHeight,CollisionDirection.Down,this)){
+			collisionResolved=true;
+		}
+		
+		return collisionResolved;
+		
+		
 	}
 	
 	/**
@@ -229,7 +220,6 @@ public class Player extends Sprite {
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
 		
 		super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
-		Log.v("playerLoc","("+this.getX()+","+this.getY()+")");
 		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 	

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
+import com.threeml.awu.world.GameObject;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -42,7 +43,6 @@ public class BitmapFont extends Sprite {
 		for(int i=0;i<letterArray.length;i++){
 			//Returns a bitmap of the letter
 			BitmapList.add(drawLetter(letterArray[i]));	
-			break;
 		}
 
 	}
@@ -93,11 +93,11 @@ public class BitmapFont extends Sprite {
 	 ** Update method that will follow an object like player (for health etc)
 	 **	@author Dean 
 	 **/
-	public void update(ElapsedTime elapsedTime, Vector2 objectAcceleration,
-			Vector2 objectVelocity) {
+	public void update(ElapsedTime elapsedTime, GameObject GameObj) {
 		
-		this.acceleration = objectAcceleration;
-		this.velocity = objectVelocity;
+		this.position = GameObj.position;
+		this.setY(GameObj.getBound().y + 5f);
+
 		super.update(elapsedTime);
 		
 	}
@@ -133,10 +133,9 @@ public class BitmapFont extends Sprite {
 			// Draw the image
 			for(int i = 0; i<BitmapList.size();i++){
 				//Move the drawlocation over by cellwidth for each letter
-				this.getBound().x += textCellwidth*i;
+				this.setX(this.getBound().x += textCellwidth*i);
 				//Draw the bitmap on screen
 				graphics2D.drawBitmap(BitmapList.get(i), drawMatrix, null);
-				Log.v("bbf",i+" "+this.getBound());
 			}
 			
 			//Reset the draw location for the images

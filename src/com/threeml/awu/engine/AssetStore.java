@@ -128,13 +128,15 @@ public class AssetStore {
 	 *            Name given to the asset
 	 * @param bitmapFile
 	 *            Location of the bitmap asset
+	 * @param inMutable
+	 * 		DM -  When true, the bitmap is then editable (see docs) 
 	 * @return boolean true if the asset could be loaded and added, false if not
 	 */
-	public boolean loadAndAddBitmap(String assetName, String bitmapFile) {
+	public boolean loadAndAddBitmap(String assetName, String bitmapFile, Boolean inMutable) {
 
 		boolean success = true;
 		try {
-			Bitmap bitmap = mFileIO.loadBitmap(bitmapFile, null);
+			Bitmap bitmap = mFileIO.loadBitmap(bitmapFile, null,inMutable);
 			success = add(assetName, bitmap);
 		} catch (IOException e) {
 			Log.e("Gage", "AssetStore.loadAndAddBitmap: Cannot load ["
@@ -143,6 +145,22 @@ public class AssetStore {
 		}
 
 		return success;
+	}
+	/**
+	 * @author Dean
+	 * Load and add the specified bitmap asset to the store
+	 * 
+	 * @param assetName
+	 *            Name given to the asset
+	 * @param bitmapFile
+	 *            Location of the bitmap asset
+	 * @return boolean true if the asset could be loaded and added, false if not
+	 */
+	public boolean loadAndAddBitmap(String assetName, String bitmapFile) {
+		
+		//DM - Allows old params to be passed through the stack with the default FASLE
+		// Always will be imutable
+		return loadAndAddBitmap(assetName, bitmapFile, false);
 	}
 	
 	/**
