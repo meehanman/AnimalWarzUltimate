@@ -61,7 +61,7 @@ public class Terrain extends Sprite {
 	
 	public boolean isPixelSolid(float xPos, float yPos, CollisionDirection cd, Sprite p){
 		//Valadation
-		if(xPos < 0 || yPos < 0) {Log.v("ise","IPS Returning");return false;}
+		if(xPos <= 0 || yPos >= 0) {Log.v("ise","IPS Returning");return false;}
 		
 		//Variables for changing the search location
 		int xloc =0,yloc =0;
