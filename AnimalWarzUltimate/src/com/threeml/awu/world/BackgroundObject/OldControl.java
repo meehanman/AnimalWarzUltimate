@@ -5,7 +5,6 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.DisplayMetrics;
 
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;

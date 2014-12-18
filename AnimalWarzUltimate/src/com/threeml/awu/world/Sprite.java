@@ -217,6 +217,9 @@ public class Sprite extends GameObject {
 	public float getX(){
 		return this.mBound.x;
 	}
+	public void setX(float x){
+		this.mBound.x = x;
+	}
 	/*
 	 * Gets the Y position of the sprint bound
 	 * 
@@ -224,5 +227,8 @@ public class Sprite extends GameObject {
 	 * */
 	public float getY(){
 		return this.mBound.y;
+	}
+	public void setY(float y){
+		this.mBound.y = y;
 	}
 }

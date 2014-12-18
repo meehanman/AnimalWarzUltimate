@@ -7,10 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.threeml.awu.R;
-import com.threeml.awu.engine.audio.Music;
-import com.threeml.awu.engine.audio.Sound;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
@@ -21,6 +17,11 @@ import android.graphics.BitmapFactory.Options;
 import android.media.SoundPool;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.threeml.awu.R;
+import com.threeml.awu.engine.audio.Music;
+import com.threeml.awu.engine.audio.Sound;
 
 /**
  * Input support across standard file stores.
@@ -92,10 +93,12 @@ public class FileIO {
 	 * @throws IOException
 	 *             if the asset cannot be opened or read.
 	 */
-	public Bitmap loadBitmap(String fileName, Bitmap.Config format)
+	public Bitmap loadBitmap(String fileName, Bitmap.Config format, Boolean inMutable)
 			throws IOException {
 
 		Options options = new Options();
+		options.inMutable = inMutable;
+		if(inMutable){Log.v("ise","Bitmap Option inMutable set to "+inMutable);}
 		options.inPreferredConfig = format;
 		InputStream in = null;
 		Bitmap bitmap = null;
