@@ -59,7 +59,7 @@ public class Terrain extends Sprite {
 
 	}
 	int DontShowMeEveryLog = 100;
-	public boolean isPixelSolid(float xPos, float yPos, CollisionDirection cd, Sprite p){
+	public boolean isPixelSolid(float xPos, float yPos, CollisionDirection cd, Sprite sprite){
 		
 		//Scale of Terrain image vs Viewport as we are searching Pixels within Viewport after
 		float scaleX = mBitmap.getWidth() / this.getBound().getWidth();
@@ -78,8 +78,9 @@ public class Terrain extends Sprite {
 		//Change y position to accompany Y starting at 0 at the top of the screen  
 		yPos = mBitmap.getHeight() - yPos;
 
-		//Valadation pixels must be within bitmap location
-		if((xPos >= mBitmap.getWidth() || yPos >= mBitmap.getHeight()) && (xPos <= 0 || yPos <= 0)) {
+		//Validation pixels must be within bitmap boundaries. 
+		//This checks if it is !NOT within these boundaries then return false
+		if(!((xPos <= mBitmap.getWidth() && xPos >= 0) && (yPos <= mBitmap.getHeight() &&  yPos >= 0))){
 			Log.v("ise","IPS Returning ("+xPos+","+yPos+")");
 			return false;
 		}
@@ -89,9 +90,9 @@ public class Terrain extends Sprite {
 		if(Color.alpha(mBitmap.getPixel((int)xPos, (int)yPos)) > 150){
 			
 			if(cd==CollisionDirection.Down || cd==CollisionDirection.Up){
-				p.velocity.y = 0f;
+				sprite.velocity.y = 0f;
 			}else{
-				p.velocity.x = 0f;
+				sprite.velocity.x = 0f;
 			}	
 			//Return true if collision detected
 			return true;
