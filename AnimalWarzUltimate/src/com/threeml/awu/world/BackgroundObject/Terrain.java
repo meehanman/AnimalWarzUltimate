@@ -58,32 +58,43 @@ public class Terrain extends Sprite {
 		super(x,y,width,height,bitmap,gameScreen);
 
 	}
-	
+	int DontShowMeEveryLog = 100;
 	public boolean isPixelSolid(float xPos, float yPos, CollisionDirection cd, Sprite p){
-		//Valadation
-		if(xPos <= 0 || yPos >= 0) {Log.v("ise","IPS Returning");return false;}
 		
 		//Variables for changing the search location
 		int xloc =0,yloc =0;
 		
+		/*
 		//Depending on direction, amend the search location Left Down Right Up
 		if(cd==CollisionDirection.Right){		xloc = 1;}
 		else if(cd==CollisionDirection.Down){	yloc = -1;}
 		else if(cd==CollisionDirection.Left){	xloc = -1;}
 		else{									yloc = 1;}
+		*/
+		/*
+		//Valadation pixels must be within bitmap location
+		if((xPos+xloc <= mBitmap.getWidth() || yPos+yloc <= mBitmap.getHeight()) && (xPos+xloc >= 0 || yPos+yloc >= 0)) {
+			Log.v("ise","IPS Returning");
+			return false;
+		}
+		*/
 		
 		//Checks if the color below the object is non-Alpha this walkable
 		if(Color.alpha(mBitmap.getPixel((int)xPos+xloc, (int)yPos+yloc)) > 150){
+			/*
+			if(DontShowMeEveryLog == 100){
+				Log.v("cd","Bitmap c:"+mBitmap.getPixel((int)xPos+xloc, (int)yPos+yloc)+" Player c:"+p.getBitmap().getPixel((int)xPos+xloc, (int)yPos+yloc));
+			}
+			//Iterate
+			if(DontShowMeEveryLog >= 100){
+				DontShowMeEveryLog = 0;
+			}else{
+				DontShowMeEveryLog++;
+			}
+			*/
+			
 			if(cd==CollisionDirection.Down || cd==CollisionDirection.Up){
 				p.velocity.y = 0f;
-				/*//Trying to draw a dot when there is a collision
-				try{
-				mBitmap.eraseColor(Color.GREEN);
-				mBitmap.setPixel((int)xPos+xloc, (int)yPos+yloc,Color.RED);
-				}catch(IllegalStateException ise){
-					Log.v("ise","isMutable = "+mBitmap.isMutable());
-				}
-				*/
 			}else{
 				p.velocity.x = 0f;
 			}	

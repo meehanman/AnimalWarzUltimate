@@ -36,7 +36,7 @@ public class Player extends Sprite {
 	/**
 	 * Strength of gravity to apply along the y-axis
 	 */
-	private float GRAVITY = -80.0f;
+	private float GRAVITY = -800.0f;
 	
 	/**
 	 * Acceleration with which the player can move along
@@ -58,7 +58,7 @@ public class Player extends Sprite {
 	/**
 	 * Instantaneous velocity with which the player jumps up
 	 */
-	private float JUMP_VELOCITY = 100.0f;
+	private float JUMP_VELOCITY = 200.0f;
 	
 	/**
 	 * Scale factor that is used to turn the x-velocity into
@@ -132,8 +132,15 @@ public Player(float startX, float startY, int columns, int rows, GameScreen game
 	public void update(ElapsedTime elapsedTime, boolean moveLeft,
 			boolean moveRight, boolean jumpUp, Terrain TerrainObj) {
 
+		float playerGRAVITY = GRAVITY;
+		
+		if(checkForAndResolveTerrainCollisions(TerrainObj)){
+			playerGRAVITY = 0f;
+		}
+		
+		
 		// Apply gravity to the y-axis acceleration
-		acceleration.y = GRAVITY;
+		acceleration.y = playerGRAVITY;
 
 		// Depending upon the left and right movement touch controls
 		// set an appropriate x-acceleration. If the user does not
@@ -168,7 +175,6 @@ public Player(float startX, float startY, int columns, int rows, GameScreen game
 		healthText.update(elapsedTime,this);
 		
 		
-		checkForAndResolveTerrainCollisions(TerrainObj);
 	}
 
 	/*
