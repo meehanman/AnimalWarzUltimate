@@ -195,7 +195,9 @@ public Player(float startX, float startY, int columns, int rows, GameScreen game
 			if(TerrainObj.isPixelSolid(PlayerBB.x + PlayerBB.halfWidth,PlayerBB.y,CollisionDirection.Right,this)){
 				collisionResolved=true;
 			}
-		}else if(acceleration.x < 0){ //Travelling Left
+		}
+		
+		if(acceleration.x < 0){ //Travelling Left
 			if(TerrainObj.isPixelSolid(PlayerBB.x - PlayerBB.halfWidth,PlayerBB.y,CollisionDirection.Left,this)){
 				collisionResolved=true;
 			}

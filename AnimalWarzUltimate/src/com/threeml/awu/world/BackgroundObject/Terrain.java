@@ -61,37 +61,32 @@ public class Terrain extends Sprite {
 	int DontShowMeEveryLog = 100;
 	public boolean isPixelSolid(float xPos, float yPos, CollisionDirection cd, Sprite p){
 		
-		//Variables for changing the search location
-		int xloc =0,yloc =0;
+		//Scale of Terrain image vs Viewport as we are searching Pixels within Viewport after
+		float scaleX = mBitmap.getWidth() / this.getBound().getWidth();
+		float scaleY = mBitmap.getHeight() / this.getBound().getHeight();
 		
-		/*
 		//Depending on direction, amend the search location Left Down Right Up
-		if(cd==CollisionDirection.Right){		xloc = 1;}
-		else if(cd==CollisionDirection.Down){	yloc = -1;}
-		else if(cd==CollisionDirection.Left){	xloc = -1;}
-		else{									yloc = 1;}
-		*/
-		/*
+		if(cd==CollisionDirection.Right){		xPos += 1;}
+		else if(cd==CollisionDirection.Down){	yPos -= 1;}
+		else if(cd==CollisionDirection.Left){	xPos -= 1;}
+		else{									yPos += 1;}
+		
+		//Apply Scaling
+		xPos *= scaleX;
+		yPos *= scaleY;
+		
+		//Change y position to accompany Y starting at 0 at the top of the screen  
+		yPos = mBitmap.getHeight() - yPos;
+
 		//Valadation pixels must be within bitmap location
-		if((xPos+xloc <= mBitmap.getWidth() || yPos+yloc <= mBitmap.getHeight()) && (xPos+xloc >= 0 || yPos+yloc >= 0)) {
-			Log.v("ise","IPS Returning");
+		if((xPos >= mBitmap.getWidth() || yPos >= mBitmap.getHeight()) && (xPos <= 0 || yPos <= 0)) {
+			Log.v("ise","IPS Returning ("+xPos+","+yPos+")");
 			return false;
 		}
-		*/
+		
 		
 		//Checks if the color below the object is non-Alpha this walkable
-		if(Color.alpha(mBitmap.getPixel((int)xPos+xloc, (int)yPos+yloc)) > 150){
-			/*
-			if(DontShowMeEveryLog == 100){
-				Log.v("cd","Bitmap c:"+mBitmap.getPixel((int)xPos+xloc, (int)yPos+yloc)+" Player c:"+p.getBitmap().getPixel((int)xPos+xloc, (int)yPos+yloc));
-			}
-			//Iterate
-			if(DontShowMeEveryLog >= 100){
-				DontShowMeEveryLog = 0;
-			}else{
-				DontShowMeEveryLog++;
-			}
-			*/
+		if(Color.alpha(mBitmap.getPixel((int)xPos, (int)yPos)) > 150){
 			
 			if(cd==CollisionDirection.Down || cd==CollisionDirection.Up){
 				p.velocity.y = 0f;
