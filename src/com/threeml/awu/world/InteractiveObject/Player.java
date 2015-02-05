@@ -190,6 +190,39 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}
 	}
 
+<<<<<<< .mine
+
+	private Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
+		Boolean collisionResolved = false;
+		BoundingBox PlayerBB = this.getBound();
+		
+		if(acceleration.x > 0){ //Travelling Right
+			if(TerrainObj.isPixelSolid(PlayerBB.x + PlayerBB.halfWidth,PlayerBB.y,CollisionDirection.Right,this)){
+				collisionResolved=true;
+			}
+		}else if(acceleration.x < 0){ //Travelling Left
+			if(TerrainObj.isPixelSolid(PlayerBB.x - PlayerBB.halfWidth,PlayerBB.y,CollisionDirection.Left,this)){
+				collisionResolved=true;
+			}
+		}
+		
+		if(acceleration.y > 0){ //Travelling Up
+			if(TerrainObj.isPixelSolid(PlayerBB.x,PlayerBB.y - PlayerBB.halfHeight,CollisionDirection.Up,this)){
+				collisionResolved=true;
+			}
+		}
+		
+		//Always check downwards for collisions
+		if(TerrainObj.isPixelSolid(PlayerBB.x,PlayerBB.y + PlayerBB.halfHeight,CollisionDirection.Down,this)){
+			collisionResolved=true;
+		}
+		
+		return collisionResolved;
+		
+		
+	}
+=======
+>>>>>>> .r75
 	
 	/**
 	 * Draw Method Override to encapsulate draw methods connected to player i.e
