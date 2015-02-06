@@ -8,8 +8,8 @@ import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.util.Vector2;
-import com.threeml.awu.world.gameobject.Terrain;
-import com.threeml.awu.world.gameobject.Terrain.CollisionDirection;
+import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.map.Terrain.CollisionDirection;
 
 /**
  * Simple sprite class (supporting rotation)
