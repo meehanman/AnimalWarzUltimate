@@ -6,12 +6,14 @@ import android.util.Log;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
+import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.BackgroundObject.Terrain;
+import com.threeml.awu.world.BackgroundObject.Terrain.CollisionDirection;
 
 
 /**
@@ -190,9 +192,9 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}
 	}
 
-<<<<<<< .mine
 
-	private Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
+
+	/*private Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 		Boolean collisionResolved = false;
 		BoundingBox PlayerBB = this.getBound();
 		
@@ -220,9 +222,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		return collisionResolved;
 		
 		
-	}
-=======
->>>>>>> .r75
+	}*/
+
 	
 	/**
 	 * Draw Method Override to encapsulate draw methods connected to player i.e
