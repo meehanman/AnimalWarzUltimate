@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
-import com.threeml.awu.world.BackgroundObject.Terrain;
+import com.threeml.awu.world.gameobject.Terrain;
 
 public class Item extends Sprite {
 	

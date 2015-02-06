@@ -14,10 +14,10 @@ import com.threeml.awu.world.GameObject;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
-import com.threeml.awu.world.BackgroundObject.Control;
-import com.threeml.awu.world.BackgroundObject.Terrain;
-import com.threeml.awu.world.InteractiveObject.Healthkit;
-import com.threeml.awu.world.InteractiveObject.Player;
+import com.threeml.awu.world.dashboardobject.Control;
+import com.threeml.awu.world.gameobject.Terrain;
+import com.threeml.awu.world.gameobject.Healthkit;
+import com.threeml.awu.world.gameobject.Player;
 
 /**
  * Simple steering game world 
