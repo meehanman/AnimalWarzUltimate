@@ -3,7 +3,7 @@ package com.threeml.awu.util;
 import android.util.Log;
 
 import com.threeml.awu.world.GameObject;
-import com.threeml.awu.world.gameobject.Player;
+import com.threeml.awu.world.gameobject.player.Player;
 
 /**
  * Collision Detector Helper Library

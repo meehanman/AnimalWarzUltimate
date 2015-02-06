@@ -15,9 +15,9 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.dashboardobject.Control;
-import com.threeml.awu.world.gameobject.Terrain;
-import com.threeml.awu.world.gameobject.Healthkit;
-import com.threeml.awu.world.gameobject.Player;
+import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.droppable.Healthkit;
+import com.threeml.awu.world.gameobject.player.Player;
 
 /**
  * Simple steering game world 

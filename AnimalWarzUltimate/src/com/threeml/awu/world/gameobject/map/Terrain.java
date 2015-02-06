@@ -1,4 +1,4 @@
-package com.threeml.awu.world.gameobject;
+package com.threeml.awu.world.gameobject.map;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;

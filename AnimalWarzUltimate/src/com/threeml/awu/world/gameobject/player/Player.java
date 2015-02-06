@@ -12,8 +12,8 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
-import com.threeml.awu.world.gameobject.Terrain;
-import com.threeml.awu.world.gameobject.Terrain.CollisionDirection;
+import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.map.Terrain.CollisionDirection;
 
 
 /**
