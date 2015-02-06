@@ -6,14 +6,14 @@ import android.util.Log;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
-import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.GraphicsHelper;
+import com.threeml.awu.world.Animation;
+import com.threeml.awu.world.FrameHandler;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.map.Terrain;
-import com.threeml.awu.world.gameobject.map.Terrain.CollisionDirection;
 
 
 /**
@@ -37,6 +37,10 @@ public class Player extends Sprite {
 	private int currentFrame = 0;
 	private int mRows = 0;
 	private int mColumns = 0;
+	
+	private FrameHandler mFrameHandler;
+	private Animation mAnimation;
+	
 	/**
 	 * Strength of gravity to apply along the y-axis
 	 */
@@ -97,6 +101,11 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mColumns = columns;
 		mRows = rows;
 		
+		mFrameHandler = new FrameHandler(fullImage, mRows, mColumns);
+		//mFrameHandler.enableAnimation(mColumns > 0 ? true : false);	
+		//disabling animation (it doesn't work right now) for the sake of maintaining a running game for now
+		mFrameHandler.enableAnimation(false);
+		
 		//for when animation finally works... but for now, just use 20x20 for player size
 		/*Bitmap bitmap = gameScreen.getGame().getAssetManager().getBitmap("Player");
 		
@@ -143,7 +152,13 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		// and the velocity decays towards zero.
 		if (moveLeft && !moveRight) {
 			acceleration.x = -RUN_ACCELERATION;
-			this.nextFrame();
+			
+			if(this.mFrameHandler != null && this.mFrameHandler.getAnimation() != null){
+				if(this.mFrameHandler.getAnimation().enabled()){
+					this.mFrameHandler.getAnimation().nextFrame();
+				}
+			}
+			
 		} else if (moveRight && !moveLeft) {
 			acceleration.x = RUN_ACCELERATION;
 		} else {
@@ -175,22 +190,20 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	/**
 	 * skips to the next frame of the image
 	 */
-	private void nextFrame(){
-		/*if(mColumns > 0){
-			currentFrame = currentFrame++ % mColumns;
-			Log.v("CurrentFrame", currentFrame + "");
-		}*/
+	/*private void nextFrame(){
 		if(mColumns > 0){
+			currentFrame = currentFrame++ % mColumns;
+		}*/
+		/*if(mColumns > 0){
 			if(currentFrame < mColumns){
 				currentFrame = currentFrame + 1;
-				Log.v("CurrentFrame", currentFrame + "");
 			} else {
 				currentFrame = 0;
 			}
 			currentFrame = 0;
 			
 		}
-	}
+	}*/
 
 
 
@@ -239,7 +252,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 
 			// Draw the image
 			//graphics2D.drawBitmap(mBitmap, drawMatrix, null);
-			graphics2D.drawBitmap(getImageFrame(), drawSourceRect, drawScreenRect, null);
+			graphics2D.drawBitmap(mFrameHandler.getFrameImage(), drawSourceRect, drawScreenRect, null);
 		}
 		}
 		catch (Exception e){
@@ -248,19 +261,14 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 	
-	public Bitmap getImageFrame(){
+	/*public Bitmap getImageFrame(){
 		int width = (int) (this.mBound.halfWidth * 2);
 		int height = (int) (this.mBound.halfHeight * 2);
 		int srcY = 0;
 		int  srcX = currentFrame * width;
-		Log.v("currentframe", "getImageFrame() called");
-		Log.v("currentframe", 	" y : " + srcY +
-								" x : " + srcX +
-								" width : " + width +
-								" height : " + height);
 		
 		return Bitmap.createBitmap(fullImage, srcY, srcX, width, height);
-	}
+	}*/
 	
 	/**
 	 * Sets the health of the player

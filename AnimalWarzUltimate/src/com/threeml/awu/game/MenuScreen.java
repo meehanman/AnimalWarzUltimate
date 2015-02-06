@@ -40,7 +40,7 @@ public class MenuScreen extends GameScreen {
 	private boolean mMediaAvailable = false;
 	
 	private float volume = 1;
-	private float speed = 0.05f;
+	private float speed = 0.005f;
 	
 	/**
 	 * Define the trigger touch region for playing the 'games'
@@ -184,8 +184,9 @@ public class MenuScreen extends GameScreen {
 			mMediaPlayer.pause();
 			
 			if(mGame.getActivity().isFinishing()){
-				mMediaPlayer.stop();
-				mMediaPlayer.release();
+				//mMediaPlayer.stop();
+				//mMediaPlayer.release();
+				this.FadeOut(1.0f);
 				mSoundPool.release();
 			}
 		}
@@ -198,6 +199,8 @@ public class MenuScreen extends GameScreen {
 	{
 	    mMediaPlayer.setVolume(volume, volume);
 	    volume -= speed* deltaTime;
+	    mMediaPlayer.stop();
+		mMediaPlayer.release();
 
 	}
 	private void FadeIn(float deltaTime)
