@@ -2,17 +2,40 @@ package com.threeml.awu.world;
 
 import android.graphics.Bitmap;
 import android.util.Log;
-
+/**
+ * FrameHandler class, handles large images with small sub-images
+ * 
+ * @author Mary-Jane
+ *
+ */
 public class FrameHandler {
 	
-	/**
+	/*
 	 * Variables
 	 */
+	/**
+	 * Bitmap Full Image
+	 */
 	Bitmap mFullImage;
+	/**
+	 * int No. of rows in image
+	 */
 	int mRows;
+	/**
+	 * int No. of columns in image
+	 */
 	int mColumns;
+	/**
+	 * int Current column in use
+	 */
 	int mCurrentColumn;
+	/**
+	 * int Current row in use
+	 */
 	int mCurrentRow;
+	/**
+	 * Animation Animation class for use in animated sprites
+	 */
 	Animation mAnimation;
 	
 	/**
@@ -83,8 +106,6 @@ public class FrameHandler {
 									" height : " + height);*/
 			
 			return Bitmap.createBitmap(mFullImage, srcY, srcX, width, height);
-		//}
-		//return mFullImage;
 	}
 	/**
 	 * Get Full Image

@@ -1,5 +1,10 @@
 package com.threeml.awu.world;
-
+/**
+ * Animation Class, used in conjuction with frame handler to create illusion of movement
+ * 
+ * @author Mary-Jane
+ *
+ */
 public class Animation {
 	
 	/**
@@ -52,17 +57,4 @@ public class Animation {
 	public void enabled(boolean enable){
 		mEnabled = enable;
 	}
-	/*public Bitmap getImageFrame(){
-		int width = (int) (this.mBound.halfWidth * 2);
-		int height = (int) (this.mBound.halfHeight * 2);
-		int srcY = 0;
-		int  srcX = currentFrame * width;
-		Log.v("currentframe", "getImageFrame() called");
-		Log.v("currentframe", 	" y : " + srcY +
-								" x : " + srcX +
-								" width : " + width +
-								" height : " + height);
-		
-		return Bitmap.createBitmap(fullImage, srcY, srcX, width, height);
-	}*/
 }

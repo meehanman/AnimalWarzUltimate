@@ -7,7 +7,7 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.GraphicsHelper;
-import com.threeml.awu.world.Animation;
+import com.threeml.awu.world.Constants.PlayerSpec;
 import com.threeml.awu.world.FrameHandler;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
@@ -31,49 +31,9 @@ public class Player extends Sprite {
 	 */
 	private Bitmap fullImage;
 	
-	private int MaxHealth = 200;
 	private int health = 100;
 	
-	private int currentFrame = 0;
-	private int mRows = 0;
-	private int mColumns = 0;
-	
 	private FrameHandler mFrameHandler;
-	private Animation mAnimation;
-	
-	/**
-	 * Strength of gravity to apply along the y-axis
-	 */
-	private float GRAVITY = -800.0f;
-	
-	/**
-	 * Acceleration with which the player can move along
-	 * the x-axis
-	 */
-	private float RUN_ACCELERATION = 150.0f;
-	
-	/**
-	 * Maximum velocity of the player along the x-axis
-	 */
-	private float MAX_X_VELOCITY = 200.0f;
-	
-	/**
-	 * Scale factor that is applied to the x-velocity when
-	 * the player is not moving left or right
-	 */
-	private float RUN_DECAY = 0.8f;
-
-	/**
-	 * Instantaneous velocity with which the player jumps up
-	 */
-	private float JUMP_VELOCITY = 200.0f;
-	
-	/**
-	 * Scale factor that is used to turn the x-velocity into
-	 * an angular velocity to give the visual appearance
-	 * that the sphere is rotating as the player moves.
-	 */
-	private float ANGULAR_VELOCITY_SCALE = 1.5f;
 	
 	//HealthFont
 	private BitmapFont healthText;
@@ -98,10 +58,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		fullImage = bitmap;
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
 		
-		mColumns = columns;
-		mRows = rows;
-		
-		mFrameHandler = new FrameHandler(fullImage, mRows, mColumns);
+		mFrameHandler = new FrameHandler(fullImage, rows, columns);
 		//mFrameHandler.enableAnimation(mColumns > 0 ? true : false);	
 		//disabling animation (it doesn't work right now) for the sake of maintaining a running game for now
 		mFrameHandler.enableAnimation(false);
@@ -151,7 +108,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		// want to move left or right, then the x-acceleration is zero
 		// and the velocity decays towards zero.
 		if (moveLeft && !moveRight) {
-			acceleration.x = -RUN_ACCELERATION;
+			acceleration.x = -PlayerSpec.RunAcceleration.getValue();
 			
 			if(this.mFrameHandler != null && this.mFrameHandler.getAnimation() != null){
 				if(this.mFrameHandler.getAnimation().enabled()){
@@ -160,16 +117,16 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			}
 			
 		} else if (moveRight && !moveLeft) {
-			acceleration.x = RUN_ACCELERATION;
+			acceleration.x = PlayerSpec.RunAcceleration.getValue();
 		} else {
 			acceleration.x = 0.0f;
-			velocity.x *= RUN_DECAY;
+			velocity.x *= PlayerSpec.RunDecay.getValue();
 		}
 
 		// If the user wants to jump up then providing an immediate
 		// boost to the y velocity.
 		if (jumpUp && velocity.y == 0.0f) {
-			velocity.y = JUMP_VELOCITY;
+			velocity.y = PlayerSpec.JumpVelocity.getValue();
 		}
 
 		// Call the sprite's update method to apply the defined 
@@ -179,33 +136,13 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 
 		// The player's sphere is constrained by a maximum x-velocity,
 		// but not a y-velocity. Make sure we have not exceeded this.
-		if (Math.abs(velocity.x) > MAX_X_VELOCITY)
-			velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
+		if (Math.abs(velocity.x) > PlayerSpec.MaxXVelocity.getValue())
+			velocity.x = Math.signum(velocity.x) * PlayerSpec.MaxXVelocity.getValue();
 
 		healthText.update(elapsedTime,this);
 		
 		
 	}
-
-	/**
-	 * skips to the next frame of the image
-	 */
-	/*private void nextFrame(){
-		if(mColumns > 0){
-			currentFrame = currentFrame++ % mColumns;
-		}*/
-		/*if(mColumns > 0){
-			if(currentFrame < mColumns){
-				currentFrame = currentFrame + 1;
-			} else {
-				currentFrame = 0;
-			}
-			currentFrame = 0;
-			
-		}
-	}*/
-
-
 
 	/*private Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 		Boolean collisionResolved = false;
@@ -251,7 +188,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 				screenViewport, drawSourceRect, drawScreenRect)) {
 
 			// Draw the image
-			//graphics2D.drawBitmap(mBitmap, drawMatrix, null);
 			graphics2D.drawBitmap(mFrameHandler.getFrameImage(), drawSourceRect, drawScreenRect, null);
 		}
 		}
@@ -261,23 +197,14 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 	
-	/*public Bitmap getImageFrame(){
-		int width = (int) (this.mBound.halfWidth * 2);
-		int height = (int) (this.mBound.halfHeight * 2);
-		int srcY = 0;
-		int  srcX = currentFrame * width;
-		
-		return Bitmap.createBitmap(fullImage, srcY, srcX, width, height);
-	}*/
-	
 	/**
 	 * Sets the health of the player
 	 */
 	public void setHealth(int value)
 	{
 		health += value;
-		if(health <= MaxHealth){
-			health = MaxHealth;
+		if(health <= (int)PlayerSpec.MaxHealth.getValue()){
+			health = (int)PlayerSpec.MaxHealth.getValue();
 		}
 	}
 	
