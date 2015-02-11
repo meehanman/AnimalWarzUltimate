@@ -94,7 +94,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 		//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
-		assetManager.loadAndAddBitmap("Arrow", "img/arrow.png");
+		assetManager.loadAndAddBitmap("RightArrow", "img/rightarrow.png");
+		assetManager.loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
+		assetManager.loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
 		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
 		
 		//Get Camera/Screen Width and Height
@@ -145,15 +147,15 @@ public class SinglePlayerGameScreen extends GameScreen {
 		//Create Controls for game
 		//TODO Create different directions for the controls
 		moveLeft = new Control(
-				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "Arrow", this);
+				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
 		mControls.add(moveLeft);
 
 		moveRight = new Control(
-				225.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "Arrow", this);
+				225.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "RightArrow", this);
 		mControls.add(moveRight);
 
 		jumpUp = new Control(
-				(screenWidth - 125.0f), (screenHeight - 100.0f), 100.0f, 100.0f, "Arrow", this);
+				(screenWidth - 125.0f), (screenHeight - 100.0f), 100.0f, 100.0f, "JumpArrow", this);
 		mControls.add(jumpUp);
 		
 		
