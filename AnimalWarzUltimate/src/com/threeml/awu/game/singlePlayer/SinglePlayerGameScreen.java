@@ -49,7 +49,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 	private GameObject mBackground;
 	private Terrain mTerrain;
 	private Player mPlayer;
+	private Player mPlayer2;
 	private Healthkit healthPack;
+	private List<Player> mPlayers = new ArrayList<Player>();
 	
 	
 	/**
@@ -141,21 +143,27 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 
 		// Create the objects
-		mPlayer = new Player(500, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this);
+		mPlayer = new Player(500, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
+		mPlayers.add(mPlayer);
+		
+		mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 2);
+		mPlayers.add(mPlayer2);
+		
 		healthPack = new Healthkit(500, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
 		
 		//Create Controls for game
 		//TODO Create different directions for the controls
 		moveLeft = new Control(
-				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
+				100.0f, (screenHeight - 100.0f), 150.0f, 150.0f, "LeftArrow", this);
 		mControls.add(moveLeft);
 
 		moveRight = new Control(
-				225.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "RightArrow", this);
+				350.0f, (screenHeight - 100.0f), 150.0f, 150.0f, "RightArrow", this);
 		mControls.add(moveRight);
 
 		jumpUp = new Control(
-				(screenWidth - 125.0f), (screenHeight - 100.0f), 100.0f, 100.0f, "JumpArrow", this);
+				//(screenWidth - 125.0f), (screenHeight - 100.0f), 100.0f, 100.0f, "JumpArrow", this);
+				225.5f, (screenHeight - 250.0f), 150.0f, 150.0f, "JumpArrow", this);
 		mControls.add(jumpUp);
 		
 		
@@ -186,12 +194,17 @@ public class SinglePlayerGameScreen extends GameScreen {
 	// /////////////////////////////////////////////////////////////////////////
 
 	/**	
-	 * Return the player 
+	 * Return the active player 
 	 * 
-	 * @return Player spaceship
+	 * @return Player Active player object
 	 */
-	public Player getPlayer() {
-		return mPlayer;
+	private Player getActivePlayer() {
+		for(Player p : mPlayers){
+			if(p.getActive()){
+				return p;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -225,56 +238,75 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-
-		// Ensure the player cannot leave the confines of the world
-		BoundingBox playerBound = mPlayer.getBound();
-		if (playerBound.getLeft() < 0)
-			mPlayer.position.x -= playerBound.getLeft();
-		else if (playerBound.getRight() > LEVEL_WIDTH)
-			mPlayer.position.x -= (playerBound.getRight() - LEVEL_WIDTH);
-
-		if (playerBound.getBottom() < 0)
-			mPlayer.position.y -= playerBound.getBottom();
-		else if (playerBound.getTop() > LEVEL_HEIGHT)
-			mPlayer.position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
 		
+		mPlayers.get(1).setActive(true);
+		
+		
+		if(getActivePlayer() != null){
+			// Ensure the player cannot leave the confines of the world
+			BoundingBox playerBound = getActivePlayer().getBound();
+			if (playerBound.getLeft() < 0)
+				getActivePlayer().position.x -= playerBound.getLeft();
+			else if (playerBound.getRight() > LEVEL_WIDTH)
+				getActivePlayer().position.x -= (playerBound.getRight() - LEVEL_WIDTH);
+	
+			if (playerBound.getBottom() < 0)
+				getActivePlayer().position.y -= playerBound.getBottom();
+			else if (playerBound.getTop() > LEVEL_HEIGHT)
+				getActivePlayer().position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
+			
+			
+			
+			// Focus the layer viewport on the player
+			mBackgroundViewport.x = getActivePlayer().position.x;
+			mBackgroundViewport.y = getActivePlayer().position.y;
+	
+			// Ensure the viewport cannot leave the confines of the world
+			if (mBackgroundViewport.getLeft() < 0)
+				mBackgroundViewport.x -= mBackgroundViewport.getLeft();
+			else if (mBackgroundViewport.getRight() > LEVEL_WIDTH)
+				mBackgroundViewport.x -= (mBackgroundViewport.getRight() - LEVEL_WIDTH);
+	
+			if (mBackgroundViewport.getBottom() < 0)
+				mBackgroundViewport.y -= mBackgroundViewport.getBottom();
+			else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
+				mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
+			
+			
+	
+			// Update the player
+			//getActivePlayer().update(elapsedTime, moveLeft.isActivated(),
+				//moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
+			
+		}
+		else{
+			Log.v("Error", "Error occurred in SinglePlayerGameScreen: update method. No active player");
+		}
 		// Ensure the healthpack cannot leave the confines of the world
 		BoundingBox healthBound = healthPack.getBound();
-		if (healthBound.getBottom() < 0)
+		if (healthBound.getBottom() < 0){
 			healthPack.position.y -= healthBound.getBottom();
-		
-		// Focus the layer viewport on the player
-		mBackgroundViewport.x = mPlayer.position.x;
-		mBackgroundViewport.y = mPlayer.position.y;
-
-		// Ensure the viewport cannot leave the confines of the world
-		if (mBackgroundViewport.getLeft() < 0)
-			mBackgroundViewport.x -= mBackgroundViewport.getLeft();
-		else if (mBackgroundViewport.getRight() > LEVEL_WIDTH)
-			mBackgroundViewport.x -= (mBackgroundViewport.getRight() - LEVEL_WIDTH);
-
-		if (mBackgroundViewport.getBottom() < 0)
-			mBackgroundViewport.y -= mBackgroundViewport.getBottom();
-		else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
-			mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
-		
+		}
 		//Until we have a paralex effect, lets position forground and background together
 		mTerrainViewport.x = mBackgroundViewport.x;
 		mTerrainViewport.y = mBackgroundViewport.y;
-
+		
 		//Update Items
 		healthPack.update(elapsedTime, mTerrain);
-		// Update the player
-		mPlayer.update(elapsedTime, moveLeft.isActivated(),
-			moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
 		
+		for(Player p : mPlayers){
 		// Temporary solution to make the health pack appear
 		// to be collected by the user
-		if(playerBound.intersects(healthBound))
-		{
-			healthPack.setPosition(-999, -999);
-			mPlayer.setHealth(healthPack.getHealthValue());
-			Log.v("Player Stats", "Health: " + mPlayer.getHealth());
+			p.update(elapsedTime, moveLeft.isActivated(),
+					moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
+			Log.v("UpdateMethod", "Player ID : " + p.getId());
+			
+			if(p.getBound().intersects(healthBound))
+			{
+				healthPack.setPosition(-999, -999);
+				p.setHealth(healthPack.getHealthValue());
+				Log.v("Player Stats", "Health: " + p.getHealth());
+			}
 		}
 
 		// Process any touch events occurring since the update
@@ -326,12 +358,17 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Draw the background first of all
 		mBackground.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
-		mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+		
+		for(Player p : mPlayers){
+			p.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+		}
+		
+		//mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		
 		// Draw the controls last so they appear at the top
-		for (Control Control : mControls){
-			Control.draw(elapsedTime, graphics2D, mDashboardViewport,
+		for (Control c : mControls){
+			c.draw(elapsedTime, graphics2D, mDashboardViewport,
 					mScreenViewport);
 		}
 
