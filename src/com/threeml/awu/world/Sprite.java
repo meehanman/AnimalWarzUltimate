@@ -128,8 +128,9 @@ public class Sprite extends GameObject {
 	// Collision Detection
 	////////////////////////////////////////////////////////////////////////////
 	public Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
+		
 		Boolean collisionResolved = false;
-		/*BoundingBox SpriteBB = this.getBound();
+		BoundingBox SpriteBB = this.getBound();
 		
 		if(acceleration.x > 0){ //Travelling Right
 			if(TerrainObj.isPixelSolid(SpriteBB.x + SpriteBB.halfWidth,SpriteBB.y,CollisionDirection.Right,this)){
@@ -153,10 +154,9 @@ public class Sprite extends GameObject {
 		if(TerrainObj.isPixelSolid(SpriteBB.x,SpriteBB.y + SpriteBB.halfHeight,CollisionDirection.Down,this)){
 			collisionResolved=true;
 		}
-		*/
+		
 		return collisionResolved;
-		
-		
+	
 	}
 	// /////////////////////////////////////////////////////////////////////////
 	// Update and Draw
