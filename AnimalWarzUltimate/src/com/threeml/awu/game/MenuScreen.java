@@ -161,9 +161,9 @@ public class MenuScreen extends GameScreen {
 			//Background Game Logo
 			scaling = BackgroundLogo.getWidth() / BackgroundLogo.getHeight();
 			left = pageColumns*3; 
-			top = (graphics2D.getSurfaceHeight() - BackgroundLogo.getHeight()) / 20;
+			top = (graphics2D.getSurfaceHeight() - BackgroundLogo.getHeight()) / 30;
 			right = left + pageColumns*6;
-			bottom = top + ((pageColumns*9)/scaling);
+			bottom = top + ((pageColumns*6)/scaling);
 			mBackgroundLogoBound = new Rect(left, top, right, bottom);
 		}
 		
