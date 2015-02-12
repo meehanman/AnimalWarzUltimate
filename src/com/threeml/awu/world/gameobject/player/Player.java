@@ -38,6 +38,10 @@ public class Player extends Sprite {
 	//HealthFont
 	private BitmapFont healthText;
 	
+	private boolean mActive = false;
+	
+	private int mId;
+	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -52,9 +56,9 @@ public class Player extends Sprite {
 	 * @param gameScreen
 	 *            Gamescreen to which sphere belongs
 	 */
-public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen) {		
+public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, int id) {		
 	super(startX, startY, 60.0f, 60.0f, bitmap, gameScreen);
-		
+		mId = id;
 		fullImage = bitmap;
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
 		
@@ -183,5 +187,25 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public int getHealth() 
 	{
 		return health;
+	}
+	
+	/**
+	 * Set Active Player
+	 * @param boolean active
+	 */
+	public void setActive(boolean a) {
+		mActive = a;
+	}
+	
+	/**
+	 * Get if Player is Active
+	 * @return boolean active
+	 */
+	public boolean getActive() {
+		return mActive;
+	}
+	
+	public int getId() {
+		return mId;
 	}
 }
