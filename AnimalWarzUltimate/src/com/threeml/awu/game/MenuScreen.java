@@ -46,7 +46,7 @@ public class MenuScreen extends GameScreen {
 	 * Define the trigger touch region for playing the 'games'
 	 */
 	private Rect mPlayGameBound;
-	private Rect mBackgroundBound;
+	private Rect mBackgroundBound, mBackgroundLogoBound;
 
 	/**
 	 * Create a simple menu screen
@@ -59,8 +59,9 @@ public class MenuScreen extends GameScreen {
 
 		// Load in the bitmap used on the menu screen
 		AssetStore assetManager = mGame.getAssetManager();
-		//Load in BG Image TODO
-		assetManager.loadAndAddBitmap("MainMenuBackground", "img/background/lostKingdom.png");
+		//Load in BG Image and assets
+		assetManager.loadAndAddBitmap("MainMenuBackground", "img/MainMenu/MenuBackground.jpg");
+		assetManager.loadAndAddBitmap("MainMenuLogo", "img/MainMenu/menulogo.png");
 		//Load in button images
 		assetManager.loadAndAddBitmap("NewGameButton", "img/MainMenu/newGameButton.png");
 		
@@ -72,11 +73,11 @@ public class MenuScreen extends GameScreen {
 		} catch (IOException e) {
 			Log.v("Error", "Couldn't load sfx");
 		}
-		
+
 		game.getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		
 		mMediaPlayer = new MediaPlayer();
 		try {
+			
 			AssetFileDescriptor musicDescriptior = am.openFd("music/Video_Dungeon_Boss.mp3");
 			mMediaPlayer.setDataSource(musicDescriptior.getFileDescriptor(),
 					musicDescriptior.getStartOffset(),
@@ -88,14 +89,6 @@ public class MenuScreen extends GameScreen {
 		} catch (IOException e) {
 			Log.v("Error", "Couldn't load music");
 		}
-		
-		/*//Default GAGE CODE
-		// Define the rects what will be used to 'hold' the images
-		int spacingX = game.getScreenWidth() / 6;
-		int spacingY = game.getScreenHeight() / 3;
-		mSpaceShipDemoBound = new Rect(spacingX, spacingY, 2 * spacingX, 2 * spacingY);
-		mPlatformDemoBound = new Rect(4 * spacingX, spacingY, 5 * spacingX, 2 * spacingY);
-		*/
 	}
 
 	/*
@@ -145,14 +138,33 @@ public class MenuScreen extends GameScreen {
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
 
 		Bitmap Background = mGame.getAssetManager().getBitmap("MainMenuBackground");
+		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap("MainMenuLogo"); 
 		Bitmap playGame = mGame.getAssetManager().getBitmap("NewGameButton");
 		
 		// Determine a center location of the play region
 		if (mPlayGameBound == null) {
-			int left = (graphics2D.getSurfaceWidth() - playGame.getWidth()) / 2;
-			int top = (graphics2D.getSurfaceHeight() - playGame.getHeight()) / 2;
-			mPlayGameBound = new Rect(left, top, left + playGame.getWidth(),
-					top + playGame.getHeight());
+			
+			//Initialise initial variables
+			int left, top, right, bottom, scaling;
+
+			//DM - Break page into columns
+			int pageColumns = graphics2D.getSurfaceWidth() / 12;
+			
+			//Play Button
+			scaling = playGame.getWidth() / playGame.getHeight();
+			left = pageColumns*8; 
+			top = (graphics2D.getSurfaceHeight() - playGame.getHeight()) / 2;
+			right = left + pageColumns*3;
+			bottom = top + ((pageColumns*3)/scaling);
+			mPlayGameBound = new Rect(left, top, right, bottom);
+			
+			//Background Game Logo
+			scaling = BackgroundLogo.getWidth() / BackgroundLogo.getHeight();
+			left = pageColumns*3; 
+			top = (graphics2D.getSurfaceHeight() - BackgroundLogo.getHeight()) / 20;
+			right = left + pageColumns*6;
+			bottom = top + ((pageColumns*9)/scaling);
+			mBackgroundLogoBound = new Rect(left, top, right, bottom);
 		}
 		
 		// Create a background bound for the image and sets the size to fullscreen.
@@ -163,8 +175,10 @@ public class MenuScreen extends GameScreen {
 
 		graphics2D.clear(Color.WHITE);
 		graphics2D.drawBitmap(Background, null, mBackgroundBound, null);
+		graphics2D.drawBitmap(BackgroundLogo, null, mBackgroundLogoBound, null);
 		graphics2D.drawBitmap(playGame, null, mPlayGameBound, null);
 	}
+	
 	@Override
 	public void resume() {
 		super.resume();
@@ -193,7 +207,7 @@ public class MenuScreen extends GameScreen {
 	}
 	
 	
-	//this stuff needs work.
+	//MJ - This stuff needs work
 	//src: http://stackoverflow.com/questions/6884590/android-how-to-create-fade-in-fade-out-sound-effects-for-any-music-file-that-my
 	private void FadeOut(float deltaTime)
 	{
