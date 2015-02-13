@@ -297,8 +297,14 @@ public class SinglePlayerGameScreen extends GameScreen {
 		for(Player p : mPlayers){
 		// Temporary solution to make the health pack appear
 		// to be collected by the user
-			p.update(elapsedTime, moveLeft.isActivated(),
+			if(p.getActive()){
+				p.update(elapsedTime, moveLeft.isActivated(),
 					moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
+			}
+			else {
+				p.update(elapsedTime, false,
+						false, false, mTerrain);
+			}
 			Log.v("UpdateMethod", "Player ID : " + p.getId());
 			
 			if(p.getBound().intersects(healthBound))
