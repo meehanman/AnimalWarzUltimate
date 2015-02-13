@@ -10,6 +10,8 @@ import com.threeml.awu.world.gameobject.map.Terrain;
 public class Item extends Sprite {
 	
 
+	//TODO DM - This Class needs lots of work
+	
 	public Item(float startX, float startY, GameScreen gameScreen) {
 		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
 				.getAssetManager().getBitmap("Health"), gameScreen);
@@ -27,6 +29,7 @@ public class Item extends Sprite {
 
 	public void update(ElapsedTime elapsedTime,  Terrain TerrainObj) {
 
+		/*
 		//Save Gravity Value
 		float playerGRAVITY = GRAVITY;
 		
@@ -39,6 +42,8 @@ public class Item extends Sprite {
 		acceleration.y = playerGRAVITY;
 		
 		// call the sprites update method to provide a new orientation
+		 * 
+		 */
 		super.update(elapsedTime);
 	}
 	

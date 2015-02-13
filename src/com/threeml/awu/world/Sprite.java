@@ -2,6 +2,7 @@ package com.threeml.awu.world;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
@@ -127,34 +128,27 @@ public class Sprite extends GameObject {
 	// /////////////////////////////////////////////////////////////////////////
 	// Collision Detection
 	////////////////////////////////////////////////////////////////////////////
+	/**
+	 * @author Dean
+	 * @param TerrainObj
+	 * @return Returns if a collision was resolved
+	 */
 	public Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 		
 		Boolean collisionResolved = false;
 		BoundingBox SpriteBB = this.getBound();
 		
-		if(acceleration.x > 0){ //Travelling Right
-			if(TerrainObj.isPixelSolid(SpriteBB.x + SpriteBB.halfWidth,SpriteBB.y,CollisionDirection.Right,this)){
-				collisionResolved=true;
-			}
+		//TODO Need to work out the maths behind resolving a collision and refactor code
+		if(TerrainObj.isPixelSolid(SpriteBB, velocity)){
+			//True if solid pixel detected
+			this.velocity.x = 0;
+			this.velocity.y = 0;
+			collisionResolved = true;
+		}else{
+			//False if no collision detected
+			this.velocity.y = GRAVITY;
 		}
-		
-		if(acceleration.x < 0){ //Travelling Left
-			if(TerrainObj.isPixelSolid(SpriteBB.x - SpriteBB.halfWidth,SpriteBB.y,CollisionDirection.Left,this)){
-				collisionResolved=true;
-			}
-		}
-		
-		if(acceleration.y > 0){ //Travelling Up
-			if(TerrainObj.isPixelSolid(SpriteBB.x,SpriteBB.y - SpriteBB.halfHeight,CollisionDirection.Up,this)){
-				collisionResolved=true;
-			}
-		}
-		
-		//Always check downwards for collisions
-		if(TerrainObj.isPixelSolid(SpriteBB.x,SpriteBB.y + SpriteBB.halfHeight,CollisionDirection.Down,this)){
-			collisionResolved=true;
-		}
-		
+			
 		return collisionResolved;
 	
 	}
@@ -210,6 +204,17 @@ public class Sprite extends GameObject {
 
 		// Update the orientation using the angular velocity
 		orientation += angularVelocity * dt;
+		
+
+			
+	}
+	//DM - update method that takes in TerrainObject to resolve collisions
+	public void update(ElapsedTime elapsedTime, Terrain TerrainObj) {
+		//Check and Resolve Collisions
+		checkForAndResolveTerrainCollisions(TerrainObj);
+		
+		//Update
+		update(elapsedTime);
 	}
 
 	/*
