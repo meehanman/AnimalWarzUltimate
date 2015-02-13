@@ -57,7 +57,7 @@ public class Player extends Sprite {
 	 *            Gamescreen to which sphere belongs
 	 */
 public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, int id) {		
-	super(startX, startY, 60.0f, 60.0f, bitmap, gameScreen);
+	super(startX, startY, 30.0f, 30.0f, bitmap, gameScreen);
 		mId = id;
 		fullImage = bitmap;
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
@@ -136,7 +136,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		// Call the sprite's update method to apply the defined 
 		// accelerations and velocities to provide a new position
 		// and orientation.
-		super.update(elapsedTime);
+		super.update(elapsedTime,TerrainObj);
 
 		// The player's sphere is constrained by a maximum x-velocity,
 		// but not a y-velocity. Make sure we have not exceeded this.

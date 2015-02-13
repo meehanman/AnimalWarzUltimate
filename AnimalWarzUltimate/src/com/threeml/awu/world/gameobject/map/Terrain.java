@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.threeml.awu.util.BoundingBox;
+import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
 
@@ -58,43 +60,53 @@ public class Terrain extends Sprite {
 		super(x,y,width,height,bitmap,gameScreen);
 
 	}
-	public boolean isPixelSolid(float xPos, float yPos, CollisionDirection cd, Sprite p){
+	/**
+	 * @author Dean
+	 * @param SpriteBound
+	 * 				The Sprite to check if pixel collides with Terrain
+	 * @param SpriteCD
+	 * 				The direction to check
+	 * @return 
+	 * 				Return if there is a collision at this point
+	 */
+	public boolean isPixelSolid(BoundingBox SpriteBound, Vector2 velocity){
 		
-
-		//Valadation pixels must be within bitmap location
-		if((xPos >= mBitmap.getWidth() || yPos >= mBitmap.getHeight()) || (xPos <= 0 || yPos <= 0)) {
-			return false;
+		//Get the bounding box for the terrain
+		BoundingBox TerrainBoundingBox = this.getBound();
+		
+		//Set up the search location around the BoundingBox Edge from Center X Y Values
+		double spriteXPixel = SpriteBound.x, spriteYPixel = SpriteBound.y;
+		//Change the velocity to an angle of direction in degrees
+		int directionAngle = (int)((Math.atan2(velocity.y,velocity.x))*(180/3.14));
+		
+		/*
+		if(SpriteCD==CollisionDirection.Down){
+			spriteXPixel += SpriteBound.halfWidth;
+		}else if(SpriteCD==CollisionDirection.Up){
+			spriteXPixel -= SpriteBound.halfWidth;
+		}else if(SpriteCD==CollisionDirection.Left){
+			spriteYPixel -= SpriteBound.halfHeight;
+		}else if(SpriteCD==CollisionDirection.Right){
+			spriteYPixel += SpriteBound.halfHeight;
 		}
+		*/
 		
 		//Scale of Terrain image vs Viewport as we are searching Pixels within Viewport after
-		float scaleX = mBitmap.getWidth() / this.getBound().getWidth();
-		float scaleY = mBitmap.getHeight() / this.getBound().getHeight();
-		
-		//Depending on direction, amend the search location Left Down Right Up
-		if(cd==CollisionDirection.Right){		xPos += 1;}
-		else if(cd==CollisionDirection.Down){	yPos -= 1;}
-		else if(cd==CollisionDirection.Left){	xPos -= 1;}
-		else{									yPos += 1;}
-		
-		//Apply Scaling
-		xPos *= scaleX;
-		yPos *= scaleY;
+		spriteXPixel *= mBitmap.getWidth() / TerrainBoundingBox.getWidth();
+		spriteYPixel *= mBitmap.getHeight() / TerrainBoundingBox.getHeight();
 		
 		//Change y position to accompany Y starting at 0 at the top of the screen  
-		yPos = mBitmap.getHeight() - yPos;
+		spriteYPixel = mBitmap.getHeight() - spriteYPixel;
 		
-		//Checks if the color below the object is non-Alpha this walkable
-		if(Color.alpha(mBitmap.getPixel((int)xPos, (int)yPos)) > 150){
-			
-			if(cd==CollisionDirection.Down || cd==CollisionDirection.Up){
-				p.velocity.y = 0f;
-			}else{
-				p.velocity.x = 0f;
-			}	
-			//Return true if collision detected
-			return true;
-		}
-		return false;
+		//Valadation: If Pixel is outside of range then return false
+		if((spriteXPixel<0||spriteYPixel<0)||(spriteXPixel>mBitmap.getWidth()||spriteYPixel>mBitmap.getHeight())){return false;}
+		
+		Log.v("IPSLocation", "x:"+spriteXPixel+"px y:"+spriteYPixel+"px: @:"+directionAngle);
+		Log.v("pixelColor","Alpha:"+Color.alpha(mBitmap.getPixel((int)spriteXPixel, (int)spriteYPixel)));
+		
+		//Return if there is a collision at this point
+		return (Color.alpha(mBitmap.getPixel((int)spriteXPixel, (int)spriteYPixel)) > 150);
+		
 	}
 
 }
