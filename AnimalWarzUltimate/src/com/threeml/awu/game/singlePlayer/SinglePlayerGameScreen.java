@@ -57,7 +57,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	/**
 	 * Create touch controls for player input
 	 */
-	private Control moveLeft, moveRight, jumpUp;
+	private Control mLeft, mRight, mJump, mShoot;
 	private List<Control> mControls = new ArrayList<Control>();
 	
 	//private Rect movementButtonArea;	//MJ - touch area for arrow control
@@ -99,6 +99,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		assetManager.loadAndAddBitmap("RightArrow", "img/rightarrow.png");
 		assetManager.loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
 		assetManager.loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
+		assetManager.loadAndAddBitmap("Shoot", "img/shoot.png");
 		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
 		
 		//Get Camera/Screen Width and Height
@@ -152,20 +153,22 @@ public class SinglePlayerGameScreen extends GameScreen {
 		healthPack = new Healthkit(500, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
 		
 		//Create Controls for game
-		//TODO Create different directions for the controls
-		moveLeft = new Control(
-				100.0f, (screenHeight - 100.0f), 150.0f, 150.0f, "LeftArrow", this);
-		mControls.add(moveLeft);
+		mLeft = new Control(
+				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
+		mControls.add(mLeft);
 
-		moveRight = new Control(
-				350.0f, (screenHeight - 100.0f), 150.0f, 150.0f, "RightArrow", this);
-		mControls.add(moveRight);
+		mRight = new Control(
+				250.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "RightArrow", this);
+		mControls.add(mRight);
 
-		jumpUp = new Control(
+		mJump = new Control(
 				//(screenWidth - 125.0f), (screenHeight - 100.0f), 100.0f, 100.0f, "JumpArrow", this);
-				225.5f, (screenHeight - 250.0f), 150.0f, 150.0f, "JumpArrow", this);
-		mControls.add(jumpUp);
+				175.5f, (screenHeight - 200.0f), 100.0f, 100.0f, "JumpArrow", this);
+		mControls.add(mJump);
 		
+		mShoot = new Control(
+				850.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Shoot", this);
+		mControls.add(mShoot);
 		
 		/*
 		// Create a number of randomly positioned asteroids
@@ -298,8 +301,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		// Temporary solution to make the health pack appear
 		// to be collected by the user
 			if(p.getActive()){
-				p.update(elapsedTime, moveLeft.isActivated(),
-					moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
+				p.update(elapsedTime, mLeft.isActivated(),
+					mRight.isActivated(), mJump.isActivated(), mTerrain);
 			}
 			else {
 				p.update(elapsedTime, false,
