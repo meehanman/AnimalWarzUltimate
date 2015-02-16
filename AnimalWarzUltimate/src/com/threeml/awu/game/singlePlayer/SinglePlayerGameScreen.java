@@ -15,9 +15,10 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.dashboardobject.Control;
-import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.droppable.Healthkit;
+import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
+import com.threeml.awu.world.gameobject.weapon.Gun;
 
 /**
  * Simple steering game world 
@@ -51,13 +52,15 @@ public class SinglePlayerGameScreen extends GameScreen {
 	private Player mPlayer;
 	private Player mPlayer2;
 	private Healthkit healthPack;
+
+	private Gun mGun;
 	private List<Player> mPlayers = new ArrayList<Player>();
 	
 	
 	/**
 	 * Create touch controls for player input
 	 */
-	private Control mLeft, mRight, mJump, mShoot;
+	private Control mLeft, mRight, mJump, mWeapon, mShoot;
 	private List<Control> mControls = new ArrayList<Control>();
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -81,9 +84,11 @@ public class SinglePlayerGameScreen extends GameScreen {
 		//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
+		assetManager.loadAndAddBitmap("Gun", "img/gun.png");
 		assetManager.loadAndAddBitmap("RightArrow", "img/rightarrow.png");
 		assetManager.loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
 		assetManager.loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
+		assetManager.loadAndAddBitmap("Weapons", "img/weapons.png");
 		assetManager.loadAndAddBitmap("Shoot", "img/shoot.png");
 		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
 		
@@ -135,6 +140,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 								.getAssetManager().getBitmap("Terrain"), this);
 				
 
+
 				// Create the objects
 				mPlayer = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
 				mPlayers.add(mPlayer);
@@ -148,18 +154,25 @@ public class SinglePlayerGameScreen extends GameScreen {
 				mLeft = new Control(
 						100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
 				mControls.add(mLeft);
+				
+				mGun = new Gun(500.0f, 100.0f, getGame().getAssetManager().getBitmap("Gun"), this);
 
 				mRight = new Control(
 						250.0f, (screenHeight  - 100.0f), 100.0f, 100.0f, "RightArrow", this);
 				mControls.add(mRight);
-
+				
 				mJump = new Control(
-						175.5f, (screenHeight  - 200.0f), 100.0f, 100.0f, "JumpArrow", this);
+						175.5f, (screenHeight - 200.0f), 100.0f, 100.0f, "JumpArrow", this);
 				mControls.add(mJump);
 				
+				mWeapon = new Control(
+						650.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Weapons", this);
+				mControls.add(mWeapon);
+				
 				mShoot = new Control(
-						850.0f, (screenHeight  - 100.0f), 300.0f, 300.0f, "Shoot", this);
+						850.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Shoot", this);
 				mControls.add(mShoot);
+
 	}
 	
 	
@@ -267,6 +280,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 			}
 			Log.v("UpdateMethod", "Player ID : " + p.getId());
 			
+			if(mWeapon.isActivated())
+				mGun.setPosition(500, 120);
+			
 			if(p.getBound().intersects(healthBound))
 			{
 				healthPack.setPosition(-999, -999);
@@ -323,7 +339,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 		//mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
-		
+		mGun.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+
 		// Draw the controls last so they appear at the top
 		for (Control c : mControls){
 			c.draw(elapsedTime, graphics2D, mDashboardViewport,
