@@ -1,6 +1,6 @@
 package com.threeml.awu.world;
 /**
- * Animation Class, used in conjuction with frame handler to create illusion of movement
+ * Animation Class, used in conjunction with frame handler to create illusion of movement
  * 
  * @author Mary-Jane
  *

@@ -60,21 +60,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 	private Control mLeft, mRight, mJump, mShoot;
 	private List<Control> mControls = new ArrayList<Control>();
 	
-	//private Rect movementButtonArea;	//MJ - touch area for arrow control
-	
-	/*
-	private GameObject mBackground;
-
-	private PlayerSpaceship mPlayer;
-
-	private final int NUM_ASTEROIDS = 20;
-	private List<Asteroid> mAsteroids;
-
-	private final int NUM_SEEKERS = 5;
-	private final int NUM_TURRETS = 5;
-	private List<AISpaceship> mAISpaceships;
-	*/
-	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -134,61 +119,47 @@ public class SinglePlayerGameScreen extends GameScreen {
 					* mScreenViewport.height / mScreenViewport.width, 240);
 		}
 		
+		CreateGameObjects(screenHeight);
+	}
+	
+	/**
+	 * Creates the objects for the game, such as controls, items, players, etc.
+	 */
+	private void CreateGameObjects(int screenHeight) {
 		// Create the background
-		mBackground = new GameObject(LEVEL_WIDTH / 2.0f,
-				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
-						.getAssetManager().getBitmap("Background"), this);
-		mTerrain = new Terrain(LEVEL_WIDTH / 2.0f,
-				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
-						.getAssetManager().getBitmap("Terrain"), this);
-		
+				mBackground = new GameObject(LEVEL_WIDTH / 2.0f,
+						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
+								.getAssetManager().getBitmap("Background"), this);
+				mTerrain = new Terrain(LEVEL_WIDTH / 2.0f,
+						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
+								.getAssetManager().getBitmap("Terrain"), this);
+				
 
-		// Create the objects
-		mPlayer = new Player(500, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
-		mPlayers.add(mPlayer);
-		
-		mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 2);
-		mPlayers.add(mPlayer2);
-		
-		healthPack = new Healthkit(500, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
-		
-		//Create Controls for game
-		mLeft = new Control(
-				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
-		mControls.add(mLeft);
+				// Create the objects
+				mPlayer = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
+				mPlayers.add(mPlayer);
+				
+				mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 2);
+				mPlayers.add(mPlayer2);
+				
+				healthPack = new Healthkit(500, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
+				
+				//Create Controls for game
+				mLeft = new Control(
+						100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
+				mControls.add(mLeft);
 
-		mRight = new Control(
-				250.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "RightArrow", this);
-		mControls.add(mRight);
+				mRight = new Control(
+						250.0f, (screenHeight  - 100.0f), 100.0f, 100.0f, "RightArrow", this);
+				mControls.add(mRight);
 
-		mJump = new Control(
-				//(screenWidth - 125.0f), (screenHeight - 100.0f), 100.0f, 100.0f, "JumpArrow", this);
-				175.5f, (screenHeight - 200.0f), 100.0f, 100.0f, "JumpArrow", this);
-		mControls.add(mJump);
-		
-		mShoot = new Control(
-				850.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Shoot", this);
-		mControls.add(mShoot);
-		
-		/*
-		// Create a number of randomly positioned asteroids
-		Random random = new Random();
-		mAsteroids = new ArrayList<Asteroid>(NUM_ASTEROIDS);
-		for (int idx = 0; idx < NUM_ASTEROIDS; idx++)
-			mAsteroids.add(new Asteroid(random.nextFloat() * LEVEL_WIDTH,
-					random.nextFloat() * LEVEL_HEIGHT, this));
-
-		// Create a number of randomly positioned AI controlled ships
-		mAISpaceships = new ArrayList<AISpaceship>(NUM_SEEKERS + NUM_TURRETS);
-		for (int idx = 0; idx < NUM_SEEKERS; idx++)
-			mAISpaceships.add(new AISpaceship(random.nextFloat() * LEVEL_WIDTH,
-					random.nextFloat() * LEVEL_HEIGHT,
-					AISpaceship.ShipBehaviour.Seeker, this));
-		for (int idx = 0; idx < NUM_TURRETS; idx++)
-			mAISpaceships.add(new AISpaceship(random.nextFloat() * LEVEL_WIDTH,
-					random.nextFloat() * LEVEL_HEIGHT,
-					AISpaceship.ShipBehaviour.Turret, this));
-		*/
+				mJump = new Control(
+						175.5f, (screenHeight  - 200.0f), 100.0f, 100.0f, "JumpArrow", this);
+				mControls.add(mJump);
+				
+				mShoot = new Control(
+						850.0f, (screenHeight  - 100.0f), 300.0f, 300.0f, "Shoot", this);
+				mControls.add(mShoot);
 	}
 	
 	
@@ -209,25 +180,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		}
 		return null;
 	}
-
-	/**
-	 * Return a list of the AI spaceships in the level
-	 * 
-	 * @return List of AI controlled spaceships
-	 
-	public List<AISpaceship> getAISpaceships() {
-		return mAISpaceships;
-	}
-*/
-	/**
-	 * Return a list of asteroids in the the level
-	 * 
-	 * @return List of asteroids in the level
-	 
-	public List<Asteroid> getAsteroids() {
-		return mAsteroids;
-	}
-*/
+	
+	
 	// /////////////////////////////////////////////////////////////////////////
 	// Update and Draw methods
 	// /////////////////////////////////////////////////////////////////////////
@@ -238,6 +192,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 * @see
 	 * uk.ac.qub.eeecs.gage.world.GameScreen#update(uk.ac.qub.eeecs.gage.engine
 	 * .ElapsedTime)
+	 */
+	/**
+	 * Update method
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
@@ -335,17 +292,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 				mBackgroundViewport.x = mBackgroundViewport.halfWidth*2;
 		}
 		*/
-					
-					
-		/*
-		// Update each of the AI controlled spaceships
-		for (AISpaceship aiSpaceship : mAISpaceships)
-			aiSpaceship.update(elapsedTime);
-
-		// Update each of the asteroids
-		for (Asteroid asteroid : mAsteroids)
-			asteroid.update(elapsedTime);
-		*/
 	}
 
 	/*
@@ -354,6 +300,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 * @see
 	 * uk.ac.qub.eeecs.gage.world.GameScreen#draw(uk.ac.qub.eeecs.gage.engine
 	 * .ElapsedTime, uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D)
+	 */
+	/**
+	 * draw method
 	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
@@ -380,20 +329,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 			c.draw(elapsedTime, graphics2D, mDashboardViewport,
 					mScreenViewport);
 		}
-
-		
-		
-		/*
-		// Draw each of the asteroids
-		for (Asteroid asteroid : mAsteroids)
-			asteroid.draw(elapsedTime, graphics2D, mBackgroundViewport,
-					mScreenViewport);
-
-		// Draw each of the AI controlled spaceships
-		for (AISpaceship aiSpaceship : mAISpaceships)
-			aiSpaceship.draw(elapsedTime, graphics2D, mBackgroundViewport,
-					mScreenViewport);
-		*/
 
 	}
 }

@@ -63,28 +63,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
 		
 		mFrameHandler = new FrameHandler(fullImage, rows, columns);
-		//mFrameHandler.enableAnimation(mColumns > 0 ? true : false);	
-		//disabling animation (it doesn't work right now) for the sake of maintaining a running game for now
-		mFrameHandler.enableAnimation(false);
-		
-		//for when animation finally works... but for now, just use 20x20 for player size
-		/*Bitmap bitmap = gameScreen.getGame().getAssetManager().getBitmap("Player");
-		
-		this.mBound.halfHeight = (bitmap.getHeight() / mRows) / 2;
-		this.mBound.halfWidth = (bitmap.getWidth() / mColumns) / 2;*/
-		
-		
-		/*int width = (int) (this.mBound.halfWidth * 2);
-		int height = (int) (this.mBound.halfHeight * 2);
-		int srcY = currentFrame * height;
-		int  srcX = currentFrame * width;
-		Rect src = new Rect(srcX, height, srcX + width, srcY + height);
-		
-		this.drawSourceRect.set(src);*/
-		
-		//this.mBound.halfHeight = bitmap.getHeight() / 2;
-		//this.mBound.halfWidth = bitmap.getWidth() / 2;
-	}
+		mFrameHandler.enableAnimation(mFrameHandler.getColumns() > 0 ? true : false);	
+}
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
@@ -131,6 +111,9 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		// boost to the y velocity.
 		if (jumpUp && velocity.y == 0.0f) {
 			velocity.y = PlayerSpec.JumpVelocity.getValue();
+		}
+		else {
+			velocity.y = PlayerSpec.Gravity.getValue();
 		}
 
 		// Call the sprite's update method to apply the defined 
