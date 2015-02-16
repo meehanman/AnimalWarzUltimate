@@ -6,6 +6,7 @@ import java.util.List;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
@@ -127,17 +128,31 @@ public class SinglePlayerGameScreen extends GameScreen {
 		}
 		
 		CreateGameObjects(screenHeight);
+		//TextView tViewTime;
+		//tViewTime.setText("00:02:00");
+		//final CounterClass Timer= new CounterClass(180000,1000);
 		
-		/* new CountDownTimer(30000, 1000) {
+		//public class CounterClass extends CountDownTimer {
 
-		     public void onTick(long millisUntilFinished) {
-		    	 
-		     }
+			//public CounterClass(long millisInFuture, long countDownInterval) {
+				//super(millisInFuture, countDownInterval);
+				// TODO Auto-generated constructor stub
+			//}
 
-		     public void onFinish() {
-		         changeActivePlayer();
-		     }
-		  }.start();*/
+			@Override
+			//public void onTick(long millisUntilFinished) {
+				// TODO Auto-generated method stub
+				
+			//}
+
+			@Override
+			//public void onFinish() {
+				// TODO Auto-generated method stub
+				//TextViewTime.setText("The Game is Complete");
+			//}
+		}
+		
+
 	}
 	
 	/**
