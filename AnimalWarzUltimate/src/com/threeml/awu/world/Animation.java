@@ -32,10 +32,10 @@ public class Animation {
 		}*/
 		try {
 			if(mFrameHandler.getColumns() > 0){
-				if(mFrameHandler.mCurrentColumn < this.mFrameHandler.getColumns()){
+				if(mFrameHandler.mCurrentColumn < (this.mFrameHandler.getColumns() - 1)){
 					mFrameHandler.setFrame(mFrameHandler.getCurrentRow(), this.mFrameHandler.getCurrentColumn() + 1);
 				} else {
-					mFrameHandler.setFrame(mFrameHandler.getCurrentRow(), mFrameHandler.getCurrentColumn());
+					mFrameHandler.setFrame(mFrameHandler.getCurrentRow(), 0);
 				}
 				
 			}
