@@ -3,6 +3,8 @@ package com.threeml.awu.game.singlePlayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 
 import com.threeml.awu.Game;
@@ -125,6 +127,17 @@ public class SinglePlayerGameScreen extends GameScreen {
 		}
 		
 		CreateGameObjects(screenHeight);
+		
+		/* new CountDownTimer(30000, 1000) {
+
+		     public void onTick(long millisUntilFinished) {
+		    	 
+		     }
+
+		     public void onFinish() {
+		         changeActivePlayer();
+		     }
+		  }.start();*/
 	}
 	
 	/**
@@ -142,10 +155,11 @@ public class SinglePlayerGameScreen extends GameScreen {
 
 
 				// Create the objects
-				mPlayer = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
+				mPlayer = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
+				mPlayer.setActive(true);
 				mPlayers.add(mPlayer);
 				
-				mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 2);
+				mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
 				mPlayers.add(mPlayer2);
 				
 				healthPack = new Healthkit(500, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
@@ -193,6 +207,16 @@ public class SinglePlayerGameScreen extends GameScreen {
 		}
 		return null;
 	}
+	private void changeActivePlayer(){
+		if(getActivePlayer().getId() < mPlayers.size()){
+			mPlayers.get(getActivePlayer().getId()).setActive(false);
+			mPlayers.get(getActivePlayer().getId() + 1).setActive(true);
+		}
+		else{
+			mPlayers.get(getActivePlayer().getId()).setActive(false);
+			mPlayers.get(0).setActive(true);
+		}
+	}
 	
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -211,9 +235,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-		
-		mPlayers.get(1).setActive(true);
-		
 		
 		if(getActivePlayer() != null){
 			// Ensure the player cannot leave the confines of the world
