@@ -139,13 +139,13 @@ public class SinglePlayerGameScreen extends GameScreen {
 				// TODO Auto-generated constructor stub
 			//}
 
-			@Override
+		//	@Override
 			//public void onTick(long millisUntilFinished) {
 				// TODO Auto-generated method stub
 				
 			//}
 
-			@Override
+			//@Override
 			//public void onFinish() {
 				// TODO Auto-generated method stub
 				//TextViewTime.setText("The Game is Complete");
@@ -153,7 +153,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		}
 		
 
-	}
+	//}
 	
 	/**
 	 * Creates the objects for the game, such as controls, items, players, etc.
