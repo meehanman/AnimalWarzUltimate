@@ -63,7 +63,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
 		
 		mFrameHandler = new FrameHandler(fullImage, rows, columns);
-		mFrameHandler.enableAnimation(mFrameHandler.getColumns() > 0 ? true : false);	
+		//mFrameHandler.enableAnimation(mFrameHandler.getColumns() > 0 ? true : false);	
+		mFrameHandler.enableAnimation(false);	
 }
 
 	// /////////////////////////////////////////////////////////////////////////

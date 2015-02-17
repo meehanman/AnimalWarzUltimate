@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.threeml.awu.Game;
+import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
@@ -65,7 +66,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 */
 	private Control mLeft, mRight, mJump, mWeapon, mShoot;
 	private List<Control> mControls = new ArrayList<Control>();
-	
+	private GameCountDownTimer mCountDownTimer;
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -131,7 +132,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 		//TextView tViewTime;
 		//tViewTime.setText("00:02:00");
 		//final CounterClass Timer= new CounterClass(180000,1000);
-		
+		mCountDownTimer = mGame.getPlayerCountDown();
+		mCountDownTimer.start();
+		}
 		//public class CounterClass extends CountDownTimer {
 
 			//public CounterClass(long millisInFuture, long countDownInterval) {
@@ -150,10 +153,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 				// TODO Auto-generated method stub
 				//TextViewTime.setText("The Game is Complete");
 			//}
-		}
-		
-
-	//}
+	
+	
 	
 	/**
 	 * Creates the objects for the game, such as controls, items, players, etc.
@@ -167,7 +168,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
 								.getAssetManager().getBitmap("Terrain"), this);
 				
-
+				
 
 				// Create the objects
 				mPlayer = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
@@ -177,7 +178,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 				mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
 				mPlayers.add(mPlayer2);
 				
-				healthPack = new Healthkit(500, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
+				healthPack = new Healthkit(750, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
 				
 				//Create Controls for game
 				mLeft = new Control(
@@ -223,13 +224,42 @@ public class SinglePlayerGameScreen extends GameScreen {
 		return null;
 	}
 	private void changeActivePlayer(){
-		if(getActivePlayer().getId() < mPlayers.size()){
+		/*if(playerIterator.hasNext()){
+			Log.v("CountDownTimer", "Active Player ID : " + getActivePlayer().getId());
+			Log.v("CountDownTimer", "Next Player ID : " + mPlayers.get(getActivePlayer().getId() + 1).getId());
+			try{
 			mPlayers.get(getActivePlayer().getId()).setActive(false);
-			mPlayers.get(getActivePlayer().getId() + 1).setActive(true);
+			} catch(Exception e){
+				Log.v("CountDownTimer", e + " : active player");
+			}
+			if(playerIterator.hasNext()){
+				try{
+				mPlayers.get(getActivePlayer().getId() + 1).setActive(true);
+				playerIterator.next();
+				} catch(Exception e){
+					Log.v("CountDownTimer", e + " : next player");
+				}
+			}
 		}
 		else{
 			mPlayers.get(getActivePlayer().getId()).setActive(false);
 			mPlayers.get(0).setActive(true);
+			while(playerIterator.hasPrevious()){
+				playerIterator.previous();
+			}
+		}*/
+		//This is really hacked together, I'm gonna fix it to be more scalable
+		if(getActivePlayer().getId() == 0){
+			mPlayers.get(1).setActive(true);
+			mPlayers.get(0).setActive(false);
+			mCountDownTimer.cancel();
+			mCountDownTimer.start();
+		}
+		else{
+			mPlayers.get(0).setActive(true);
+			mPlayers.get(1).setActive(false);
+			mCountDownTimer.cancel();
+			mCountDownTimer.start();
 		}
 	}
 	
@@ -252,6 +282,11 @@ public class SinglePlayerGameScreen extends GameScreen {
 	public void update(ElapsedTime elapsedTime) {
 		
 		if(getActivePlayer() != null){
+
+			
+			if(mCountDownTimer.hasFinished()){
+				changeActivePlayer();
+			}
 			// Ensure the player cannot leave the confines of the world
 			BoundingBox playerBound = getActivePlayer().getBound();
 			if (playerBound.getLeft() < 0)

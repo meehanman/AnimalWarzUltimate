@@ -2,6 +2,7 @@ package com.threeml.awu;
 
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
+import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.ScreenManager;
 import com.threeml.awu.engine.graphics.CanvasRenderSurface;
 import com.threeml.awu.engine.graphics.IRenderSurface;
@@ -12,6 +13,7 @@ import com.threeml.awu.world.GameScreen;
 import android.app.Fragment;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +31,9 @@ public abstract class Game extends Fragment {
 	// /////////////////////////////////////////////////////////////////////////
 	// Properties: Frames per Second
 	// /////////////////////////////////////////////////////////////////////////
-
+	
+	private GameCountDownTimer countDownTimer;
+	
 	/**
 	 * Variable used to record the target number of update/draw iterations in a
 	 * one second interval. The game thread will sleep between iterations if
@@ -213,8 +217,12 @@ public abstract class Game extends Fragment {
 		// Create the screen manager
 		mScreenManager = new ScreenManager();		
 		
+		countDownTimer = new GameCountDownTimer(30000, 1000);
+		
 		// Request control of the volume
-		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);		
+		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		
+		
 	}
 
 	/*
@@ -301,6 +309,10 @@ public abstract class Game extends Fragment {
 	 */
 	public boolean onBackPressed() {
 		return false;
+	}
+	
+	public GameCountDownTimer getPlayerCountDown(){
+		return countDownTimer;
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////
