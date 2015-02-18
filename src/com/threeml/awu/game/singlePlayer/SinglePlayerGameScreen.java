@@ -223,6 +223,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 		}
 		return null;
 	}
+	
+	//MJ ~
 	private void changeActivePlayer(){
 		/*if(playerIterator.hasNext()){
 			Log.v("CountDownTimer", "Active Player ID : " + getActivePlayer().getId());
@@ -361,24 +363,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 				Log.v("Player Stats", "Health: " + p.getHealth());
 			}
 		}
-
-		// Process any touch events occurring since the update
-		/*Input input = mGame.getInput();
-		
-		List <TouchEvent> touchEvents = input.getTouchEvents();
-		if (touchEvents.size() > 0) {
-			// Determine the next movement along the x-axis and update the viewport
-			float moveDistance = touchEvents.get(0).x
-					- touchEvents.get(touchEvents.size() - 1).x;
-			mBackgroundViewport.x += moveDistance;
-			
-			// Check we don't exceed our layer bounds
-			if (mBackgroundViewport.x < mBackgroundViewport.halfWidth)
-				mBackgroundViewport.x = mBackgroundViewport.halfWidth;
-			if (mBackgroundViewport.x > mBackgroundViewport.halfWidth*2)
-				mBackgroundViewport.x = mBackgroundViewport.halfWidth*2;
-		}
-		*/
 	}
 
 	/*
@@ -393,12 +377,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
-
-		/*
-		// Create the screen to black and define a clip based on the viewport
-		graphics2D.clear(Color.BLACK);
-		graphics2D.clipRect(mScreenViewport.toRect());
-		 */
 		
 		// Draw the background first of all
 		mBackground.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
