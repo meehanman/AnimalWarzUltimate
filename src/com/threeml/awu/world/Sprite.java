@@ -10,7 +10,6 @@ import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.gameobject.map.Terrain;
-import com.threeml.awu.world.gameobject.map.Terrain.CollisionDirection;
 
 /**
  * Simple sprite class (supporting rotation)
@@ -146,7 +145,6 @@ public class Sprite extends GameObject {
 		Boolean collisionResolved = false;
 		BoundingBox SpriteBB = this.getBound();
 		
-		//TODO - shouldn't be any constant numbers here?
 		//TODO Need to work out the maths behind resolving a collision and refactor code
 		if(TerrainObj.isPixelSolid(SpriteBB, velocity)){
 			//True if solid pixel detected
@@ -252,7 +250,6 @@ public class Sprite extends GameObject {
 			drawMatrix.reset();
 			drawMatrix.postScale(scaleX, scaleY);
 			
-			//TODO - shouldn't be constant numbers here?
 			drawMatrix.postRotate(orientation, scaleX * mBitmap.getWidth()
 					/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
 			drawMatrix.postTranslate(drawScreenRect.left, drawScreenRect.top);

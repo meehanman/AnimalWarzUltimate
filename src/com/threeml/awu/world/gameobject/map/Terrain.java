@@ -26,10 +26,6 @@ import com.threeml.awu.world.Sprite;
  * 
  */
 public class Terrain extends Sprite {
-	//TODO - remove this if it's not being used
-	public enum CollisionDirection {
-		Up, Down, Left, Right
-	};
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors

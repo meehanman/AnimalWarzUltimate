@@ -11,7 +11,6 @@ public class GameCountDownTimer extends CountDownTimer{
 	private boolean finished = false;
 	public GameCountDownTimer(long millisInFuture, long countDownInterval) {
 		super(millisInFuture, countDownInterval);
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public void onTick(long millisUntilFinished) {

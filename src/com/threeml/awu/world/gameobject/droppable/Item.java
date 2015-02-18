@@ -62,16 +62,7 @@ public class Item extends Sprite {
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
 	
-	//TODO - Is this method needed? If no, get rid of it
-	/**
-	 * @param elapsedTime
-	 * 			Elapsed time information
-	 * @param TerrainObj
-	 * 			
-	 */
-	public void update(ElapsedTime elapsedTime,  Terrain TerrainObj) {
-		super.update(elapsedTime);
-	}
+	
 	
 
 
