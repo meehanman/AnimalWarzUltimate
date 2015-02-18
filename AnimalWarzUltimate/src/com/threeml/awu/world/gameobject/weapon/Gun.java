@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
+import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -15,8 +16,9 @@ import com.threeml.awu.world.Sprite;
  * Gun class
  *
  */
-public class Gun extends Sprite {
-	//TODO - Gun class is in less than early stages, needs work
+public class Gun extends Weapon {
+	
+	
 	
 	// ///////////////////////////////////////////////////////////////////////// 
 	// Constructors 
@@ -41,12 +43,4 @@ public class Gun extends Sprite {
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * @param elapsedTime
-	 * 			Elapsed time information
-	 */
-	public void update(ElapsedTime elapsedTime)
-	{
-		
-	}
 }
