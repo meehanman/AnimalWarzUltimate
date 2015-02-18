@@ -13,6 +13,7 @@ import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.weapon.Weapon;
 
 
 /**
@@ -55,10 +56,10 @@ public class Player extends Sprite {
 	private static float GRAVITY = -100.0f;
 	
 	/** Acceleration with which the player can move along the x-axis */
-	private float RUN_ACCELERATION = 150.0f;
+	private float RUN_ACCELERATION = 250.0f;
 	
 	/** Maximum velocity of the player along the x-axis */
-	private float MAX_X_VELOCITY = 200.0f;
+	private float MAX_X_VELOCITY = 300.0f;
 	
 	/** Scale factor that is applied to the x-velocity when the player is not moving left or right */
 	private float RUN_DECAY = 0.8f;
@@ -69,6 +70,9 @@ public class Player extends Sprite {
 	/** Scale factor that is used to turn the x-velocity into an angular velocity to give the visual appearance
 	 * that the sphere is rotating as the player moves. */
 	private float ANGULAR_VELOCITY_SCALE = 1.5f;
+	
+	/** The current weapon the Player is holding**/
+	private Weapon mCurrentWeapon;
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -236,5 +240,20 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 */
 	public int getId() {
 		return mId;
+	}
+
+	/**
+	 * Returns the current weapon the player is holding
+	 * @return Weapon
+	 */
+	public Weapon getCurrentWeapon() {
+		return mCurrentWeapon;
+	}
+
+	/**
+	 * @param Sets a new weapon for the user to hold
+	 */
+	public void setCurrentWeapon(Weapon mCurrentWeapon) {
+		this.mCurrentWeapon = mCurrentWeapon;
 	}
 }
