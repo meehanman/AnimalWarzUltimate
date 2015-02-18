@@ -145,7 +145,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 				mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
 				mPlayers.add(mPlayer2);
 				
-				healthPack = new Healthkit(50, 750, 300, getGame().getAssetManager().getBitmap("Health"),this); //So we can easily walk on it?
+				//So we can easily walk on it?
+				healthPack = new Healthkit(50, 750, 300, getGame().getAssetManager().getBitmap("Health"),this); 
 				
 				//Create Controls for game
 				mLeft = new Control(

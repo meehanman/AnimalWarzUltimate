@@ -40,20 +40,23 @@ public class Healthkit extends Item{
 	 */
 	public Healthkit(int healthValue, float startX, float startY, Bitmap bitmap,
 			GameScreen gameScreen) {
-		super(startX, startY, 20.0f, 20.0f, bitmap, gameScreen);
+		super(startX, startY, 10.0f, 10.0f, bitmap, gameScreen);
+		
+		//Set the default value for healthValue
+		setHealthValue(healthValue);
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////
+	// Methods
+	// /////////////////////////////////////////////////////////////////////////
+	private void setHealthValue(int healthValue){
 		if(healthValue < 0){
 			mHealthValue = 0;
 		}
 		else{
 			mHealthValue = healthValue;
 		}
-		
 	}
-	
-	// /////////////////////////////////////////////////////////////////////////
-	// Methods
-	// /////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * Gets the Health Value
 	 * @return Health Value

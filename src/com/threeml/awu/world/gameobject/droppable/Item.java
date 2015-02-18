@@ -16,28 +16,12 @@ import com.threeml.awu.world.gameobject.map.Terrain;
  *
  */
 public class Item extends Sprite {
-	//TODO DM - This Class needs lots of work
 	//TODO    - add some attributes that are relevant to all droppable classes
 	//			or ditch this class because it's unnecessary
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * 
-	 * @param startX
-	 * 			The x coordinate of the starting position
-	 * @param startY
-	 * 			The y coordinate of the starting position
-	 * @param gameScreen
-	 * 			Gamescreen to which this control belongs
-	 */
-	public Item(float startX, float startY, GameScreen gameScreen) {
-		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
-				.getAssetManager().getBitmap("Health"), gameScreen);
-		
-	}
 	
 	/**
 	 * 
@@ -62,7 +46,20 @@ public class Item extends Sprite {
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
 	
-	
+	//TODO - Is this method needed? If no, get rid of it
+	/**
+	 * @param elapsedTime
+	 * 			Elapsed time information
+	 * @param TerrainObj
+	 * 			
+	 */
+	public void update(ElapsedTime elapsedTime,  Terrain TerrainObj) {
+		// Call the sprite's update method to apply the defined 
+		// accelerations and velocities to provide a new position
+		// and orientation.
+		super.update(elapsedTime,TerrainObj);
+		
+	}
 	
 
 
