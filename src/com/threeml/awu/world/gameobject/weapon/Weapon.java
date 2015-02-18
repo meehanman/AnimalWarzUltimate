@@ -131,7 +131,7 @@ public class Weapon extends Sprite {
 	/**
 	 * @return Returns if the current weapon is active
 	 */
-	public Boolean getActive() {
+	public Boolean getIsActive() {
 		return mActive;
 	}
 

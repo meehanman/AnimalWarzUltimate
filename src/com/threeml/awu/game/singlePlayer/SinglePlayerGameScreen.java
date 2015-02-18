@@ -83,8 +83,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 	/*
 	 * Create touch controls for player input
 	 */
-	/** Control objects - user interacts with Control objects */
-	private Control mLeft, mRight, mJump, mWeapon, mShoot;
+	private Control mMoveLeftButton, mMoveRightButton, mJumpLeftButton, 
+			mJumpRightButton, mWeaponsCrateButton, mShootButton, mAimUpButton, mAimDownButton;
 	/** List array to handle controls */
 	private List<Control> mControls = new ArrayList<Control>();
 	/** count down timer to change active user after 30 seconds */
@@ -142,7 +142,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 					* mScreenViewport.height / mScreenViewport.width, 240);
 		}
 		
-		CreateGameObjects(screenHeight);
+		CreateGameObjects(screenHeight, screenWidth);
 		mCountDownTimer = game.getPlayerCountDown();
 		mCountDownTimer.start();
 	}
@@ -157,7 +157,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 * @param screenHeight
 	 * 				Height of the screen
 	 */
-	private void CreateGameObjects(int screenHeight) {
+	private void CreateGameObjects(int screenHeight, int screenWidth) {
 		// Create the terrain and background for the game
 		mTerrain = new Terrain(LEVEL_WIDTH / 2.0f,
 				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
@@ -179,31 +179,59 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
 		mPlayers.add(mPlayer2);
 		
-		//So we can easily walk on it?
 		healthPack = new Healthkit(50, 750, 300, getGame().getAssetManager().getBitmap("Health"),this); 
 		
 		//Create Controls for game
-		mLeft = new Control(
-				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
-		mControls.add(mLeft);
+		float x=0,y=0,width=0,height=0;
+		float screenWidthCell = (screenWidth/100);
+		float screenHeightCell = (screenHeight/100);
 		
-		mGun = new Gun(500.0f, 100.0f, getGame().getAssetManager().getBitmap("Gun"), this);
-
-		mRight = new Control(
-				250.0f, (screenHeight  - 100.0f), 100.0f, 100.0f, "RightArrow", this);
-		mControls.add(mRight);
+		height = screenWidthCell*6f;
+		width = height*2f;
 		
-		mJump = new Control(
-				175.5f, (screenHeight - 200.0f), 100.0f, 100.0f, "JumpArrow", this);
-		mControls.add(mJump);
+		x = screenWidthCell*10;
+		y = (screenHeight - (screenHeightCell*21));
+		mMoveLeftButton = new Control(x,y,width,height, "MoveLeft", this);
+		mControls.add(mMoveLeftButton);
 		
-		mWeapon = new Control(
-				650.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Weapons", this);
-		mControls.add(mWeapon);
+		x = screenWidthCell*22.05f;
+		mMoveRightButton = new Control(x,y,width,height, "MoveRight", this);
+		mControls.add(mMoveRightButton);
 		
-		mShoot = new Control(
-				850.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Shoot", this);
-		mControls.add(mShoot);
+		
+		width = screenWidthCell*8.5f;
+		height = width;
+		
+		x = screenWidthCell*16.05f;
+		y = (screenHeight - (screenHeightCell*38.2f));
+		mAimUpButton = new Control(x,y,width,height, "AimUp", this);
+		mControls.add(mAimUpButton);
+		
+		y = (screenHeight - (screenHeightCell*8.6f));
+		mAimDownButton = new Control(x,y,width,height, "AimDown", this);
+		mControls.add(mAimDownButton);	x=0;y=0;width=0;height=0;
+		
+		
+		height = screenWidthCell*12f;
+		width = height*0.95f;
+		
+		x = screenWidthCell*40;
+		y = (screenHeight - (screenHeightCell*15f));
+		
+		mWeaponsCrateButton = new Control(x,y,width,height, "WeaponsCrate", this);
+		mControls.add(mWeaponsCrateButton);
+		
+		x = screenWidthCell*80;
+		mShootButton = new Control(x,y,width,height, "Fireeee", this);
+		mControls.add(mShootButton);	
+		
+		x = screenWidthCell*95;
+		mJumpRightButton = new Control(x,y,width,height, "JumpRight", this);
+		mControls.add(mJumpRightButton);	
+		
+		y = (screenHeight - (screenHeightCell*38.2f));
+		mJumpLeftButton = new Control(x,y,width,height, "JumpLeft", this);
+		mControls.add(mJumpLeftButton);
 
 	}
 	//TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
@@ -230,20 +258,24 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 */
 	public void loadAssets(){
 		// Load in the assets used by this layer
-				mGame.getAssetManager().loadAndAddBitmap("Player2", "img/player/mark.png");
-				mGame.getAssetManager().loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
-				mGame.getAssetManager().loadAndAddBitmap("Terrain", "img/terrain/castles.png");
-				//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
-				mGame.getAssetManager().loadAndAddBitmap("Background", "img/background/lostKingdom.png");
-				mGame.getAssetManager().loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
-				mGame.getAssetManager().loadAndAddBitmap("Gun", "img/gun.png");
-				mGame.getAssetManager().loadAndAddBitmap("RightArrow", "img/rightarrow.png");
-				mGame.getAssetManager().loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
-				mGame.getAssetManager().loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
-				mGame.getAssetManager().loadAndAddBitmap("Weapons", "img/weapons.png");
-				mGame.getAssetManager().loadAndAddBitmap("Shoot", "img/shoot.png");
-				mGame.getAssetManager().loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
 
+		AssetStore assetManager = mGame.getAssetManager();
+		assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
+		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
+		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
+		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
+		assetManager.loadAndAddBitmap("Gun", "img/gun.png");
+		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
+
+		//DashboardControls
+		assetManager.loadAndAddBitmap("MoveLeft","img/dashControls/MoveLeft.png");
+		assetManager.loadAndAddBitmap("MoveRight","img/dashControls/MoveRight.png");
+		assetManager.loadAndAddBitmap("JumpLeft","img/dashControls/JumpLeft.png");
+		assetManager.loadAndAddBitmap("JumpRight","img/dashControls/JumpRight.png");
+		assetManager.loadAndAddBitmap("WeaponsCrate","img/dashControls/WeaponsCrate.png");
+		assetManager.loadAndAddBitmap("Fireeee","img/dashControls/Fireeee.png");
+		assetManager.loadAndAddBitmap("AimUp","img/dashControls/AimUp.png");
+		assetManager.loadAndAddBitmap("AimDown","img/dashControls/AimDown.png");
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -351,29 +383,30 @@ public class SinglePlayerGameScreen extends GameScreen {
 			// Temporary solution to make the health pack appear
 			// to be collected by the user
 				if(p.getActive()){
-					p.update(elapsedTime, mLeft.isActivated(),
-						mRight.isActivated(), mJump.isActivated(), mTerrain);
+					p.update(elapsedTime, mMoveLeftButton.isActivated(),
+						mMoveRightButton.isActivated(), mJumpLeftButton.isActivated(), mTerrain);
 				}
-				else {
-					p.update(elapsedTime, false,
-							false, false, mTerrain);
-				}
-				Log.v("UpdateMethod", "Player ID : " + p.getId());
-				
-				//TODO MP - This was for testing purposes? Can you take it out if it's not needed anymore
-				if(mWeapon.isActivated()){
-					mGun.setPosition(500, 120);
-				}
-				
-				if(p.getBound().intersects(healthBound))
-				{
-					//TODO - Should be a better way to handle healthpacks
-					healthPack.setPosition(-999, -999);
-					p.setHealth(healthPack.getHealthValue());
-					Log.v("Player Stats", "Health: " + p.getHealth());
-				}
+			else {
+				p.update(elapsedTime, false,
+						false, false, mTerrain);
 			}
-		
+				
+				
+			Log.v("UpdateMethod", "Player ID : " + p.getId());
+			
+			if(mWeaponsCrateButton.isActivated()){
+				mGun.setPosition(500, 120);
+			}
+			
+			if(p.getBound().intersects(healthBound))
+			{
+				healthPack.setPosition(-999, -999);
+				p.setHealth(healthPack.getHealthValue());
+				
+				healthPack = null;
+			}
+		}
+
 	}
 
 	/**
@@ -402,7 +435,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		
 		//mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
-		mGun.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+		//mGun.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 
 		// Draw the controls last so they appear at the top
 		for (Control c : mControls){

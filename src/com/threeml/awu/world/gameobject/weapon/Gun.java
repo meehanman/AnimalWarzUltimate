@@ -9,6 +9,7 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
+import com.threeml.awu.world.gameobject.map.Terrain;
 
 //TODO - add JavaDoc Description
 /**
@@ -18,7 +19,17 @@ import com.threeml.awu.world.Sprite;
  */
 public class Gun extends Weapon {
 	
-	
+	// /////////////////////////////////////////////////////////////////////////
+	// Attributes
+	// /////////////////////////////////////////////////////////////////////////
+		
+		/** Gun Damanage to Terrain **/
+		private int mDamanageToTerrainRadius = 30;
+
+		/** Gun Damage to Worm **/
+		private int mdamageToWorm = 30;
+		
+		
 	
 	// ///////////////////////////////////////////////////////////////////////// 
 	// Constructors 
@@ -42,5 +53,33 @@ public class Gun extends Weapon {
 	// ///////////////////////////////////////////////////////////////////////// 
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
-	
+	/**
+	 * Update class for Gun
+	 * @param ElapsedTime 
+	 * 				Time from Update Thread
+	 */
+	public void update(ElapsedTime elapsedTime) {
+		
+		//DM - On Update we need to update any animation
+		//-Work out where we are aiming
+		//-Apply damanage to ground/worms
+		//-Apply Sounds
+		
+		super.update(elapsedTime);
+	}
+
+	/**
+	 * @return the Damage the Shootgun produces when it hits the Terrain
+	 */
+	public int getDamanageToTerrainRadius() {
+		return mDamanageToTerrainRadius;
+	}
+
+	/**
+	 * @return the Damage the Shootgun produces when it hits a worm
+	 */
+	public int getdamageToWorm() {
+		return mdamageToWorm;
+	}
+
 }
