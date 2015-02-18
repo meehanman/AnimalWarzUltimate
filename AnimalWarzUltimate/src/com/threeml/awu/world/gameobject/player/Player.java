@@ -182,12 +182,12 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
 		try {
-		if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
-				screenViewport, drawSourceRect, drawScreenRect)) {
-
-			// Draw the image
-			graphics2D.drawBitmap(mFrameHandler.getFrameImage(), drawSourceRect, drawScreenRect, null);
-		}
+			if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
+					screenViewport, drawSourceRect, drawScreenRect)) {
+	
+				// Draw the image
+				graphics2D.drawBitmap(mFrameHandler.getFrameImage(), drawSourceRect, drawScreenRect, null);
+			}
 		}
 		catch (Exception e){
 			Log.v("CustomError", e + " : Error in Player draw method");
