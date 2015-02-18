@@ -20,6 +20,7 @@ import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.dashboardobject.Control;
 import com.threeml.awu.world.gameobject.droppable.Healthkit;
+import com.threeml.awu.world.gameobject.map.Background;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.weapon.Gun;
@@ -51,7 +52,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	/**
 	 * Define game objects used within game
 	 */
-	private GameObject mBackground;
+	private Background mBackground;
 	private Terrain mTerrain;
 	private Player mPlayer;
 	private Player mPlayer2;
@@ -80,21 +81,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	public SinglePlayerGameScreen(Game game) {
 		super("SinglePlayerGameScreen", game);
 		
-		// Load in the assets used by this layer
-		AssetStore assetManager = mGame.getAssetManager();
-		//assetManager.loadAndAddBitmap("Player", "img/player/mark.png");
-		assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
-		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
-		//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
-		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
-		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
-		assetManager.loadAndAddBitmap("Gun", "img/gun.png");
-		assetManager.loadAndAddBitmap("RightArrow", "img/rightarrow.png");
-		assetManager.loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
-		assetManager.loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
-		assetManager.loadAndAddBitmap("Weapons", "img/weapons.png");
-		assetManager.loadAndAddBitmap("Shoot", "img/shoot.png");
-		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
+		loadAssets();
 		
 		//Get Camera/Screen Width and Height
 		int screenWidth = game.getScreenWidth();
@@ -129,39 +116,19 @@ public class SinglePlayerGameScreen extends GameScreen {
 		}
 		
 		CreateGameObjects(screenHeight);
-		//TextView tViewTime;
-		//tViewTime.setText("00:02:00");
-		//final CounterClass Timer= new CounterClass(180000,1000);
-		mCountDownTimer = mGame.getPlayerCountDown();
+		mCountDownTimer = game.getPlayerCountDown();
 		mCountDownTimer.start();
 		}
-		//public class CounterClass extends CountDownTimer {
-
-			//public CounterClass(long millisInFuture, long countDownInterval) {
-				//super(millisInFuture, countDownInterval);
-				// TODO Auto-generated constructor stub
-			//}
-
-		//	@Override
-			//public void onTick(long millisUntilFinished) {
-				// TODO Auto-generated method stub
-				
-			//}
-
-			//@Override
-			//public void onFinish() {
-				// TODO Auto-generated method stub
-				//TextViewTime.setText("The Game is Complete");
-			//}
-	
-	
 	
 	/**
 	 * Creates the objects for the game, such as controls, items, players, etc.
+	 * 
+	 * @param screenHeight
+	 * 				Height of the screen
 	 */
 	private void CreateGameObjects(int screenHeight) {
 		// Create the background
-				mBackground = new GameObject(LEVEL_WIDTH / 2.0f,
+				mBackground = new Background(LEVEL_WIDTH / 2.0f,
 						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
 								.getAssetManager().getBitmap("Background"), this);
 				mTerrain = new Terrain(LEVEL_WIDTH / 2.0f,
@@ -205,6 +172,26 @@ public class SinglePlayerGameScreen extends GameScreen {
 
 	}
 	
+	/**
+	 * Loads image assets to game
+	 */
+	public void loadAssets(){
+		// Load in the assets used by this layer
+				AssetStore assetManager = mGame.getAssetManager();
+				//assetManager.loadAndAddBitmap("Player", "img/player/mark.png");
+				assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
+				assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
+				//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
+				assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
+				assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
+				assetManager.loadAndAddBitmap("Gun", "img/gun.png");
+				assetManager.loadAndAddBitmap("RightArrow", "img/rightarrow.png");
+				assetManager.loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
+				assetManager.loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
+				assetManager.loadAndAddBitmap("Weapons", "img/weapons.png");
+				assetManager.loadAndAddBitmap("Shoot", "img/shoot.png");
+				assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
+	}
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Support methods

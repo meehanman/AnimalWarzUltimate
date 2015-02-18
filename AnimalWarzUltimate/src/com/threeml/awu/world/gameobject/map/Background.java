@@ -1,5 +1,7 @@
 package com.threeml.awu.world.gameobject.map;
 
+import android.graphics.Bitmap;
+
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
 /**
@@ -11,26 +13,35 @@ import com.threeml.awu.world.Sprite;
  *
  */
 public class Background extends Sprite {
-	//TODO MJ - This class is appalling and needs work
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
-	
+
 	/**
+	 * Creates new Background object
 	 * 
+	 * @param x
+	 *            x location of the object
+	 * @param y
+	 *            y location of the object
+	 * @param width
+	 *            width of the object
+	 * @param height
+	 *            height of the object
+	 * @param bitmap
+	 *            Bitmap used to represent this object
 	 * @param gameScreen
-	 * 				Gamescreen to which this control belongs
+	 *            Gamescreen to which this object belongs
 	 */
-	public Background(GameScreen gameScreen) {
-		super(gameScreen);
-		//TODO - shouldn't be any constants
-		mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Background");
+	public Background(float x, float y, float width, float height, Bitmap bitmap, GameScreen gameScreen){
+		super(x, y, width, height, bitmap, gameScreen);
+		mGameScreen = gameScreen;
 		
-		mBound.halfWidth = mBitmap.getWidth();
-		mBound.halfHeight = mBitmap.getHeight();
-		
+		mBound.x = x;
+		mBound.y = y;
+		mBound.halfWidth = bitmap.getWidth() / 2.0f;
+		mBound.halfHeight = bitmap.getHeight() / 2.0f;
 	}
-	//TODO - needs a more customisable constructor than the above
 
 }
