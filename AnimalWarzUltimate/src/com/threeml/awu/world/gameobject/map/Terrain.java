@@ -40,8 +40,8 @@ public class Terrain extends Sprite {
 		mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Terrain");
 		
 		//TODO - shouldn't be any constants here
-		mBound.halfWidth = 1000.0f;
-		mBound.halfHeight = 300.0f;
+		mBound.halfWidth = mBitmap.getWidth();
+		mBound.halfHeight = mBitmap.getHeight();
 
 	}
 	/**
@@ -76,26 +76,16 @@ public class Terrain extends Sprite {
 	 */
 	public boolean isPixelSolid(BoundingBox SpriteBound, Vector2 velocity){
 		
-		//Get the bounding box for the terrain
+		//Get the bounding box for the terrain for scaling
 		BoundingBox TerrainBoundingBox = this.getBound();
 		
 		//Set up the search location around the BoundingBox Edge from Center X Y Values
-		double spriteXPixel = SpriteBound.x, spriteYPixel = SpriteBound.y;
+		double spriteXPixel = SpriteBound.x;
+		double spriteYPixel = SpriteBound.y - SpriteBound.halfHeight/2;
+		
 		//Change the velocity to an angle of direction in degrees
 		int directionAngle = (int)((Math.atan2(velocity.y,velocity.x))*(180/3.14));
-		
-		/*
-		if(SpriteCD==CollisionDirection.Down){
-			spriteXPixel += SpriteBound.halfWidth;
-		}else if(SpriteCD==CollisionDirection.Up){
-			spriteXPixel -= SpriteBound.halfWidth;
-		}else if(SpriteCD==CollisionDirection.Left){
-			spriteYPixel -= SpriteBound.halfHeight;
-		}else if(SpriteCD==CollisionDirection.Right){
-			spriteYPixel += SpriteBound.halfHeight;
-		}
-		*/
-		
+				
 		//Scale of Terrain image vs Viewport as we are searching Pixels within Viewport after
 		spriteXPixel *= mBitmap.getWidth() / TerrainBoundingBox.getWidth();
 		spriteYPixel *= mBitmap.getHeight() / TerrainBoundingBox.getHeight();
@@ -103,10 +93,12 @@ public class Terrain extends Sprite {
 		//Change y position to accompany Y starting at 0 at the top of the screen  
 		spriteYPixel = mBitmap.getHeight() - spriteYPixel;
 		
-		//Valadation: If Pixel is outside of range then return false
+		//Validation: If Pixel is outside of range then return false
 		if((spriteXPixel<0||spriteYPixel<0)||(spriteXPixel>mBitmap.getWidth()||spriteYPixel>mBitmap.getHeight())){return false;}
 		
-		Log.v("IPSLocation", "x:"+spriteXPixel+"px y:"+spriteYPixel+"px: @:"+directionAngle);
+		//Logging of tests to determine direction and if alpha or not
+		Log.v("IPSLocation", "x:"+(int)spriteXPixel+"px y:"+(int)spriteYPixel+"px: Angle:"+directionAngle);
+		//Log.v("IPSLocation",(int)SpriteBound.y+" "+(int)SpriteBound.x);
 		Log.v("pixelColor","Alpha:"+Color.alpha(mBitmap.getPixel((int)spriteXPixel, (int)spriteYPixel)));
 		
 		//Return if there is a collision at this point

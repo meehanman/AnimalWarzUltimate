@@ -52,7 +52,7 @@ public class Player extends Sprite {
 	private float MAX_HEALTH = 200.0f;
 	
 	/** Strength of gravity to apply along the y-axis */
-	private float GRAVITY = -800.0f;
+	private static float GRAVITY = -100.0f;
 	
 	/** Acceleration with which the player can move along the x-axis */
 	private float RUN_ACCELERATION = 150.0f;
@@ -85,7 +85,7 @@ public class Player extends Sprite {
 	 *            Gamescreen to which player belongs
 	 */
 public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, int id) {		
-	super(startX, startY, 30.0f, 30.0f, bitmap, gameScreen);
+	super(startX, startY, 30.0f, 30.0f, bitmap, GRAVITY, gameScreen);
 		mId = id;
 		mFullImage = bitmap;
 		mHealthText = new BitmapFont(startX, startY, gameScreen, Integer.toString(mHealth));
@@ -124,6 +124,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		// and the velocity decays towards zero.
 		if (moveLeft && !moveRight) {
 			acceleration.x = -RUN_ACCELERATION;
+			acceleration.y = RUN_ACCELERATION;
 			
 			if(this.mFrameHandler != null && this.mFrameHandler.getAnimation() != null){
 				if(this.mFrameHandler.getAnimation().enabled()){
@@ -133,8 +134,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			
 		} else if (moveRight && !moveLeft) {
 			acceleration.x = RUN_ACCELERATION;
+			acceleration.y = RUN_ACCELERATION;
 		} else {
 			acceleration.x = 0.0f;
+			acceleration.y = 0.0f;
 			velocity.x *= RUN_DECAY;
 		}
 
