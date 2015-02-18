@@ -19,6 +19,8 @@ import com.threeml.awu.world.gameobject.droppable.Healthkit;
 import com.threeml.awu.world.gameobject.map.Background;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
+import com.threeml.awu.world.gameobject.player.Team;
+import com.threeml.awu.world.gameobject.player.TeamManager;
 import com.threeml.awu.world.gameobject.weapon.Gun;
 
 /**
@@ -29,41 +31,65 @@ import com.threeml.awu.world.gameobject.weapon.Gun;
 public class SinglePlayerGameScreen extends GameScreen {
 
 	// /////////////////////////////////////////////////////////////////////////
-	// Properties
+	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
 	
-	/**
-	 * Width and height of the level (Changed later by width/height of backgroundimage)
-	 */
+	/** Width of the level (Changed later by width/height of backgroundimage) */
 	private float LEVEL_WIDTH = 0.0f;
+	/** Height of the level (Changed later by width/height of backgroundimage) */
 	private float LEVEL_HEIGHT = 0.0f;
 
-	/**
+	/*
 	 * Define viewports for this layer and the associated screen projection
 	 */
+	/** Viewport for device screen */
 	private ScreenViewport mScreenViewport;
+	/** Viewport for terrain - all game objects on this viewport */
 	private LayerViewport mTerrainViewport;
+	/** Viewport for background image - should only contain background */
 	private LayerViewport mBackgroundViewport; 
+	/** Viewport for all user controls or information */
 	private LayerViewport mDashboardViewport;
-	/**
+	
+	
+	/*
 	 * Define game objects used within game
 	 */
+	/** Background image - not interactable */
 	private Background mBackground;
+	/** Terrain image, all game objects interact with this object */
 	private Terrain mTerrain;
-	private Player mPlayer;
-	private Player mPlayer2;
+	//TODO MJ - Player management isn't complete
+	/** players */
+	//TODO MJ - remove this when completed team management
+	/*private Player mPlayer;
+	private Player mPlayer2;*/
+	
+	//TODO - should be a better way to add healthpacks to game
+		 //- I don't think there should be just one global healthpack
+	/** healthpacks */
 	private Healthkit healthPack;
-
+	//TODO MP - there shouldn't be one global gun object, probably.
+			//- need more work on weapon management
 	private Gun mGun;
+	//TODO MJ - Player management 
 	private List<Player> mPlayers = new ArrayList<Player>();
+	private Player mPlayer1;
+	private Player mPlayer2;
+	//private TeamManager mTeamManager;
 	
 	
-	/**
+	
+	/*
 	 * Create touch controls for player input
 	 */
+	/** Control objects - user interacts with Control objects */
 	private Control mLeft, mRight, mJump, mWeapon, mShoot;
+	/** List array to handle controls */
 	private List<Control> mControls = new ArrayList<Control>();
+	/** count down timer to change active user after 30 seconds */
 	private GameCountDownTimer mCountDownTimer;
+	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -77,6 +103,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	public SinglePlayerGameScreen(Game game) {
 		super("SinglePlayerGameScreen", game);
 		
+		//Loads image assets
 		loadAssets();
 		
 		//Get Camera/Screen Width and Height
@@ -118,7 +145,11 @@ public class SinglePlayerGameScreen extends GameScreen {
 		CreateGameObjects(screenHeight);
 		mCountDownTimer = game.getPlayerCountDown();
 		mCountDownTimer.start();
-		}
+	}
+	
+	// /////////////////////////////////////////////////////////////////////////
+	// Methods
+	// /////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Creates the objects for the game, such as controls, items, players, etc.
@@ -135,10 +166,15 @@ public class SinglePlayerGameScreen extends GameScreen {
 						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
 								.getAssetManager().getBitmap("Background"), this);
 
+				// Create the objects
+				
+				//createPlayersAndTeams();
+
+				
 		// Create the objects
-		mPlayer = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
-		mPlayer.setActive(true);
-		mPlayers.add(mPlayer);
+		mPlayer1 = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
+		mPlayer1.setActive(true);
+		mPlayers.add(mPlayer1);
 		
 		mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
 		mPlayers.add(mPlayer2);
@@ -170,24 +206,44 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mControls.add(mShoot);
 
 	}
-	
+	//TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
+	public void createPlayersAndTeams(){
+		try{
+		List<Team> teams = new ArrayList<Team>();
+		int count = 0;
+		for(int c = 0; c < 2; c++){
+			List<Player> players = new ArrayList<Player>();
+			for(int i = 0; i < 2; i++){
+				players.add(new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, count));
+				count++;
+			}
+			teams.get(c).setPlayers(players);
+		}
+		//mTeamManager = new TeamManager(teams.get(0), teams.get(1));
+		} catch(RuntimeException e){
+			Log.v("Major Error", e + "SinglePlayerGameScreen createPlayersAndTeams");
+		}
+
+	}
 	/**
 	 * Loads image assets to game
 	 */
 	public void loadAssets(){
 		// Load in the assets used by this layer
-		AssetStore assetManager = mGame.getAssetManager();
-		assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
-		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
-		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
-		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
-		assetManager.loadAndAddBitmap("Gun", "img/gun.png");
-		assetManager.loadAndAddBitmap("RightArrow", "img/rightarrow.png");
-		assetManager.loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
-		assetManager.loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
-		assetManager.loadAndAddBitmap("Weapons", "img/weapons.png");
-		assetManager.loadAndAddBitmap("Shoot", "img/shoot.png");
-		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
+				mGame.getAssetManager().loadAndAddBitmap("Player2", "img/player/mark.png");
+				mGame.getAssetManager().loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
+				mGame.getAssetManager().loadAndAddBitmap("Terrain", "img/terrain/castles.png");
+				//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
+				mGame.getAssetManager().loadAndAddBitmap("Background", "img/background/lostKingdom.png");
+				mGame.getAssetManager().loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
+				mGame.getAssetManager().loadAndAddBitmap("Gun", "img/gun.png");
+				mGame.getAssetManager().loadAndAddBitmap("RightArrow", "img/rightarrow.png");
+				mGame.getAssetManager().loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
+				mGame.getAssetManager().loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
+				mGame.getAssetManager().loadAndAddBitmap("Weapons", "img/weapons.png");
+				mGame.getAssetManager().loadAndAddBitmap("Shoot", "img/shoot.png");
+				mGame.getAssetManager().loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
+
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -200,6 +256,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 * @return Player Active player object
 	 */
 	private Player getActivePlayer() {
+		//return mTeamManager.getActivePlayerFromCurrentActiveTeam();
 		for(Player p : mPlayers){
 			if(p.getActive()){
 				return p;
@@ -210,31 +267,8 @@ public class SinglePlayerGameScreen extends GameScreen {
 	
 	//MJ ~
 	private void changeActivePlayer(){
-		/*if(playerIterator.hasNext()){
-			Log.v("CountDownTimer", "Active Player ID : " + getActivePlayer().getId());
-			Log.v("CountDownTimer", "Next Player ID : " + mPlayers.get(getActivePlayer().getId() + 1).getId());
-			try{
-			mPlayers.get(getActivePlayer().getId()).setActive(false);
-			} catch(Exception e){
-				Log.v("CountDownTimer", e + " : active player");
-			}
-			if(playerIterator.hasNext()){
-				try{
-				mPlayers.get(getActivePlayer().getId() + 1).setActive(true);
-				playerIterator.next();
-				} catch(Exception e){
-					Log.v("CountDownTimer", e + " : next player");
-				}
-			}
-		}
-		else{
-			mPlayers.get(getActivePlayer().getId()).setActive(false);
-			mPlayers.get(0).setActive(true);
-			while(playerIterator.hasPrevious()){
-				playerIterator.previous();
-			}
-		}*/
-		//This is really hacked together, I'm gonna fix it to be more scalable
+		
+		//TODO MJ - This is really hacked together, I'm gonna fix it to be more scalable
 		if(getActivePlayer().getId() == 0){
 			mPlayers.get(1).setActive(true);
 			mPlayers.get(0).setActive(false);
@@ -247,29 +281,23 @@ public class SinglePlayerGameScreen extends GameScreen {
 			mCountDownTimer.cancel();
 			mCountDownTimer.start();
 		}
+		//mTeamManager.changeActiveTeamAndPlayer();
 	}
 	
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Update and Draw methods
 	// /////////////////////////////////////////////////////////////////////////
-		
-	/*
-	 * (non-Javadoc) fs
-	 * 
-	 * @see
-	 * uk.ac.qub.eeecs.gage.world.GameScreen#update(uk.ac.qub.eeecs.gage.engine
-	 * .ElapsedTime)
-	 */
+
 	/**
 	 * Update method
+	 * @param elapsedTime
+	 * 				Elapsed time information
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
 		
 		if(getActivePlayer() != null){
-
-			
 			if(mCountDownTimer.hasFinished()){
 				changeActivePlayer();
 			}
@@ -301,13 +329,6 @@ public class SinglePlayerGameScreen extends GameScreen {
 				mBackgroundViewport.y -= mBackgroundViewport.getBottom();
 			else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
 				mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
-			
-			
-	
-			// Update the player
-			//getActivePlayer().update(elapsedTime, moveLeft.isActivated(),
-				//moveRight.isActivated(), jumpUp.isActivated(), mTerrain);
-			
 		}
 		else{
 			Log.v("Error", "Error occurred in SinglePlayerGameScreen: update method. No active player");
@@ -324,40 +345,45 @@ public class SinglePlayerGameScreen extends GameScreen {
 		//Update Items
 		healthPack.update(elapsedTime, mTerrain);
 		
+		/*for(Team t : mTeamManager.getAllTeams()){
+			for(Player p : t.getPlayers()){*/
 		for(Player p : mPlayers){
-		// Temporary solution to make the health pack appear
-		// to be collected by the user
-			if(p.getActive()){
-				p.update(elapsedTime, mLeft.isActivated(),
-					mRight.isActivated(), mJump.isActivated(), mTerrain);
+			// Temporary solution to make the health pack appear
+			// to be collected by the user
+				if(p.getActive()){
+					p.update(elapsedTime, mLeft.isActivated(),
+						mRight.isActivated(), mJump.isActivated(), mTerrain);
+				}
+				else {
+					p.update(elapsedTime, false,
+							false, false, mTerrain);
+				}
+				Log.v("UpdateMethod", "Player ID : " + p.getId());
+				
+				//TODO MP - This was for testing purposes? Can you take it out if it's not needed anymore
+				if(mWeapon.isActivated()){
+					mGun.setPosition(500, 120);
+				}
+				
+				if(p.getBound().intersects(healthBound))
+				{
+					//TODO - Should be a better way to handle healthpacks
+					healthPack.setPosition(-999, -999);
+					p.setHealth(healthPack.getHealthValue());
+					Log.v("Player Stats", "Health: " + p.getHealth());
+				}
 			}
-			else {
-				p.update(elapsedTime, false,
-						false, false, mTerrain);
-			}
-			Log.v("UpdateMethod", "Player ID : " + p.getId());
-			
-			if(mWeapon.isActivated())
-				mGun.setPosition(500, 120);
-			
-			if(p.getBound().intersects(healthBound))
-			{
-				healthPack.setPosition(-999, -999);
-				p.setHealth(healthPack.getHealthValue());
-				Log.v("Player Stats", "Health: " + p.getHealth());
-			}
-		}
+		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * uk.ac.qub.eeecs.gage.world.GameScreen#draw(uk.ac.qub.eeecs.gage.engine
-	 * .ElapsedTime, uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D)
-	 */
 	/**
-	 * draw method
+	 * Overrides the draw method from GameScreen class
+	 * 				Draws all gameobjects on the game screen
+	 * 
+	 * @param elapsedTime
+	 *            Elapsed time information
+	 * @param graphics2D
+	 *            Graphics instance
 	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
@@ -366,8 +392,12 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mBackground.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
 		
+		/*for(Team t : mTeamManager.getAllTeams()){
+			for(Player p : t.getPlayers()){*/
 		for(Player p : mPlayers){
-			p.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+				p.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+		
+			//}
 		}
 		
 		//mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
