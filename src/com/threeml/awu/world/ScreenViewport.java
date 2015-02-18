@@ -10,46 +10,32 @@ import android.graphics.Rect;
 public class ScreenViewport {
 
 	// /////////////////////////////////////////////////////////////////////////
-	// Properties
+	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Left hand x-coordinate of the viewport
-	 */
+	/** Left hand x-coordinate of the viewport */
 	public int left;
 
-	/**
-	 * Top y-coordinate of the viewport
-	 */
+	/** Top y-coordinate of the viewport */
 	public int top;
 
-	/**
-	 * Right hand x-coordinate of the viewport
-	 */
+	/** Right hand x-coordinate of the viewport */
 	public int right;
 
-	/**
-	 * Bottom y-coordinate of the viewport
-	 */
+	/** Bottom y-coordinate of the viewport */
 	public int bottom;
 
-	/**
-	 * Width of the viewport
-	 */
+	/** Width of the viewport */
 	public int width;
 
-	/**
-	 * Height of the viewport
-	 */
+	/** Height of the viewport */
 	public int height;
 
-	/**
-	 * Private Rect representation of this viewport
-	 */
+	/** Private Rect representation of this viewport */
 	private Rect rect = new Rect();
 	
 	// /////////////////////////////////////////////////////////////////////////
-	// Constructors and Methods
+	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -88,7 +74,10 @@ public class ScreenViewport {
 		width = right - left;
 		height = bottom - top;
 	}
-
+	// /////////////////////////////////////////////////////////////////////////
+	// Methods
+	// /////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Set the viewport using the specified dimensions
 	 * 

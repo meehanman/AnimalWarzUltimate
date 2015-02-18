@@ -16,9 +16,7 @@ public abstract class GameScreen {
 	// Properties
 	// /////////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Name that is given to this game screen
-	 */
+	/** Name that is given to this game screen */
 	protected final String mName;
 
 	/**
@@ -30,9 +28,7 @@ public abstract class GameScreen {
 		return mName;
 	}
 
-	/**
-	 * Game to which game screen belongs
-	 */
+	/** Game to which game screen belongs */
 	protected final Game mGame;
 
 	/**

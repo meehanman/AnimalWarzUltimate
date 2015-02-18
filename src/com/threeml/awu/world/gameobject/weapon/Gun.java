@@ -9,22 +9,44 @@ import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 
+//TODO - add JavaDoc Description
+/**
+ * 
+ * Gun class
+ *
+ */
 public class Gun extends Sprite {
-
+	//TODO - Gun class is in less than early stages, needs work
+	
+	// ///////////////////////////////////////////////////////////////////////// 
+	// Constructors 
+	// /////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * 
+	 * @param x
+	 * 				Centre x location of the control
+	 * @param y
+	 * 				Centre y location of the control
+	 * @param bitmap
+	 * 				Bitmap used to represent this control
+	 * @param gameScreen
+	 * 				Gamescreen to which this control belongs
+	 */
 	public Gun(float x, float y, Bitmap bitmap, GameScreen gameScreen) {
 		super(x, y, bitmap, gameScreen);
-		// TODO Auto-generated constructor stub
 	}
-
+	
+	// ///////////////////////////////////////////////////////////////////////// 
+	// Methods
+	// /////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * @param elapsedTime
+	 * 			Elapsed time information
+	 */
 	public void update(ElapsedTime elapsedTime)
 	{
 		
 	}
-	
-	/*@Override
-	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
-			LayerViewport layerViewport, ScreenViewport screenViewport)
-	{
-		graphics2D.drawBitmap(mBitmap, null, drawScreenRect, null);
-	}*/
 }

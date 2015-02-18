@@ -7,7 +7,6 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.GraphicsHelper;
-import com.threeml.awu.world.Constants.PlayerSpec;
 import com.threeml.awu.world.FrameHandler;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
@@ -17,30 +16,59 @@ import com.threeml.awu.world.gameobject.map.Terrain;
 
 
 /**
- * Player controlled sphere (that's not really a sphere)
+ * Player is any playable character on screen
+ * It is controlled by the onscreen controls and affected by
+ * droppables and weapons
+ * 
+ * Extends Sprite
  * 
  * @version 1.0
  */
 public class Player extends Sprite {
 
 	// /////////////////////////////////////////////////////////////////////////
-	// Properties
+	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
-	/**
-	 * Health the player has and Maximum that can be
-	 */
-	private Bitmap fullImage;
 	
-	private int health = 100;
+	/** Bitmap used to represent this Player */
+	private Bitmap mFullImage;
 	
+	/** Player's health value */
+	private int mHealth = 100;
+	
+	/** FrameHandler to handle spritesheet */
 	private FrameHandler mFrameHandler;
 	
-	//HealthFont
-	private BitmapFont healthText;
+	/** Health text that appears above the Player */
+	private BitmapFont mHealthText;
 	
+	/** Determines whether the user can interact with the Player */
 	private boolean mActive = false;
 	
+	/** ID of player, used in player management */
 	private int mId;
+	
+	/** Max Health the player can have */
+	private float MAX_HEALTH = 200.0f;
+	
+	/** Strength of gravity to apply along the y-axis */
+	private float GRAVITY = -800.0f;
+	
+	/** Acceleration with which the player can move along the x-axis */
+	private float RUN_ACCELERATION = 150.0f;
+	
+	/** Maximum velocity of the player along the x-axis */
+	private float MAX_X_VELOCITY = 200.0f;
+	
+	/** Scale factor that is applied to the x-velocity when the player is not moving left or right */
+	private float RUN_DECAY = 0.8f;
+	
+	/** Instantaneous velocity with which the player jumps up */
+	private float JUMP_VELOCITY = 200.0f;
+	
+	/** Scale factor that is used to turn the x-velocity into an angular velocity to give the visual appearance
+	 * that the sphere is rotating as the player moves. */
+	private float ANGULAR_VELOCITY_SCALE = 1.5f;
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -54,15 +82,17 @@ public class Player extends Sprite {
 	 * @param startY
 	 *            y location of the sphere
 	 * @param gameScreen
-	 *            Gamescreen to which sphere belongs
+	 *            Gamescreen to which player belongs
 	 */
 public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, int id) {		
 	super(startX, startY, 30.0f, 30.0f, bitmap, gameScreen);
 		mId = id;
-		fullImage = bitmap;
-		healthText = new BitmapFont(startX, startY, gameScreen, health+"");
+		mFullImage = bitmap;
+		mHealthText = new BitmapFont(startX, startY, gameScreen, Integer.toString(mHealth));
 		
-		mFrameHandler = new FrameHandler(fullImage, rows, columns);
+		mFrameHandler = new FrameHandler(mFullImage, rows, columns);
+		
+		//TODO MJ - set animation to be enabled if it exists AND animation class is working
 		//mFrameHandler.enableAnimation(mFrameHandler.getColumns() > 0 ? true : false);	
 		mFrameHandler.enableAnimation(false);	
 }
@@ -75,15 +105,15 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 * Update the player
 	 * 
 	 * @param elapsedTime
-	 *            Elapsed time information
+	 *            	Elapsed time information
 	 * @param moveLeft
-	 *            True if the move left control is active
+	 *            	True if the move left control is active
 	 * @param moveRight
-	 *            True if the move right control is active
+	 *            	True if the move right control is active
 	 * @param jumpUp
-	 *            True if the jump up control is active
+	 *            	True if the jump up control is active
 	 * @param platforms
-	 *            Array of platforms in the world
+	 *            	Array of platforms in the world
 	 */
 	public void update(ElapsedTime elapsedTime, boolean moveLeft,
 			boolean moveRight, boolean jumpUp, Terrain TerrainObj) {
@@ -93,7 +123,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		// want to move left or right, then the x-acceleration is zero
 		// and the velocity decays towards zero.
 		if (moveLeft && !moveRight) {
-			acceleration.x = -PlayerSpec.RunAcceleration.getValue();
+			acceleration.x = -RUN_ACCELERATION;
 			
 			if(this.mFrameHandler != null && this.mFrameHandler.getAnimation() != null){
 				if(this.mFrameHandler.getAnimation().enabled()){
@@ -102,19 +132,19 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			}
 			
 		} else if (moveRight && !moveLeft) {
-			acceleration.x = PlayerSpec.RunAcceleration.getValue();
+			acceleration.x = RUN_ACCELERATION;
 		} else {
 			acceleration.x = 0.0f;
-			velocity.x *= PlayerSpec.RunDecay.getValue();
+			velocity.x *= RUN_DECAY;
 		}
 
 		// If the user wants to jump up then providing an immediate
 		// boost to the y velocity.
 		if (jumpUp && velocity.y == 0.0f) {
-			velocity.y = PlayerSpec.JumpVelocity.getValue();
+			velocity.y = JUMP_VELOCITY;
 		}
 		else {
-			velocity.y = PlayerSpec.Gravity.getValue();
+			velocity.y = GRAVITY;
 		}
 
 		// Call the sprite's update method to apply the defined 
@@ -124,10 +154,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 
 		// The player's sphere is constrained by a maximum x-velocity,
 		// but not a y-velocity. Make sure we have not exceeded this.
-		if (Math.abs(velocity.x) > PlayerSpec.MaxXVelocity.getValue())
-			velocity.x = Math.signum(velocity.x) * PlayerSpec.MaxXVelocity.getValue();
+		if (Math.abs(velocity.x) > MAX_X_VELOCITY)
+			velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
 
-		healthText.update(elapsedTime,this);
+		mHealthText.update(elapsedTime,this);
 		
 		
 	}
@@ -135,12 +165,20 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	/**
 	 * Draw Method Override to encapsulate draw methods connected to player i.e
 	 * Player Health
-	 * **/
+	 * 
+	 * @param elapsedTime
+	 *            Elapsed time information
+	 * @param graphics2D
+	 *            Graphics instance
+	 * @param layerViewport
+	 *            Game layer viewport
+	 * @param screenViewport
+	 *            Screen viewport
+	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
 		try {
-		//super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 				screenViewport, drawSourceRect, drawScreenRect)) {
 
@@ -149,9 +187,9 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}
 		}
 		catch (Exception e){
-			Log.v("CustomError", e + "");
+			Log.v("CustomError", e + " : Error in Player draw method");
 		}
-		healthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 	
 	/**
@@ -159,36 +197,40 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 */
 	public void setHealth(int value)
 	{
-		health += value;
-		if(health <= (int)PlayerSpec.MaxHealth.getValue()){
-			health = (int)PlayerSpec.MaxHealth.getValue();
+		mHealth += value;
+		if(mHealth <= (int)MAX_HEALTH){
+			mHealth = (int)MAX_HEALTH;
 		}
 	}
 	
 	/**
 	 * Returns the health of the player
+	 * @return health
 	 */
 	public int getHealth() 
 	{
-		return health;
+		return mHealth;
 	}
 	
 	/**
 	 * Set Active Player
-	 * @param boolean active
+	 * @param active
 	 */
 	public void setActive(boolean a) {
 		mActive = a;
 	}
 	
 	/**
-	 * Get if Player is Active
-	 * @return boolean active
+	 * Returns if Player is Active
+	 * @return active
 	 */
 	public boolean getActive() {
 		return mActive;
 	}
-	
+	/**
+	 * Returns Player ID
+	 * @return id
+	 */
 	public int getId() {
 		return mId;
 	}

@@ -23,44 +23,51 @@ public class Sprite extends GameObject {
 	// Default values
 	// /////////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Default maximum acceleration and velocity
-	 */
+	/** Default maximum acceleration */
 	public static float DEFAULT_MAX_ACCELERATION = Float.MAX_VALUE;
+	/** Default maximum velocity */
 	public static float DEFAULT_MAX_VELOCITY = Float.MAX_VALUE;
 
-	/**
-	 * Default maximum angular acceleration and velocity
-	 */
+	/** Default maximum angular acceleration */
 	public static float DEFAULT_MAX_ANGULAR_ACCELERATION = Float.MAX_VALUE;
+	/** Default maximum angular velocity */
 	public static float DEFAULT_MAX_ANGULAR_VELOCITY = Float.MAX_VALUE;
 
 	// /////////////////////////////////////////////////////////////////////////
-	// Properties
+	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
 
-	/**
+	/*
 	 * Acceleration and velocity of the sprite, alongside maximum values.
 	 * Position is inherited from game object.
 	 */
+	/** Velocity of Sprite */
 	public Vector2 velocity = new Vector2();
+	/** Acceleration of Sprite */
 	public Vector2 acceleration = new Vector2();
-
+	
+	/** Max Acceleration of Sprite */
 	public float maxAcceleration = DEFAULT_MAX_ACCELERATION;
+	/** Max Velocity of Sprite */
 	public float maxVelocity = DEFAULT_MAX_VELOCITY;
-	/**
-	 * Strength of gravity to apply along the y-axis
-	 */
+	
+	/** Strength of gravity to apply along the y-axis*/
 	public float GRAVITY = -400.0f;
-	/**
+	
+	/*
 	 * Orientation alongside angular velocity and acceleration, with maximum
 	 * values.
 	 */
+	/** Orientation of Sprite */
 	public float orientation;
+	/** Angular Velocity of Sprite */
 	public float angularVelocity;
+	/** Angular Acceleration of Sprite */
 	public float angularAcceleration;
 
+	/** Max Angular Accelration of Sprite */
 	public float maxAngularAcceleration = DEFAULT_MAX_ANGULAR_ACCELERATION;
+	/** Max Angular Velocity of Sprite */
 	public float maxAngularVelocity = DEFAULT_MAX_ANGULAR_VELOCITY;
 
 	/**
@@ -121,23 +128,25 @@ public class Sprite extends GameObject {
 	}
 
 	// /////////////////////////////////////////////////////////////////////////
-	// Configuration Methods
+	// Methods
 	// /////////////////////////////////////////////////////////////////////////
 	
-	
-	// /////////////////////////////////////////////////////////////////////////
-	// Collision Detection
-	////////////////////////////////////////////////////////////////////////////
+	//TODO DM - Write a JavaDoc description for this method
 	/**
-	 * @author Dean
+	 * 
 	 * @param TerrainObj
-	 * @return Returns if a collision was resolved
+	 * 				Terrain Object that the sprite is checked against
+	 * @return collisionResolved
+	 * 				Returns if a collision was resolved
+	 * 
+	 * @author Dean
 	 */
 	public Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 		
 		Boolean collisionResolved = false;
 		BoundingBox SpriteBB = this.getBound();
 		
+		//TODO - shouldn't be any constant numbers here?
 		//TODO Need to work out the maths behind resolving a collision and refactor code
 		if(TerrainObj.isPixelSolid(SpriteBB, velocity)){
 			//True if solid pixel detected
@@ -152,16 +161,12 @@ public class Sprite extends GameObject {
 		return collisionResolved;
 	
 	}
-	// /////////////////////////////////////////////////////////////////////////
-	// Update and Draw
-	// /////////////////////////////////////////////////////////////////////////
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Updates the sprite
 	 * 
-	 * @see
-	 * uk.ac.qub.eeecs.gage.world.GameObject#update(uk.ac.qub.eeecs.gage.engine
-	 * .ElapsedTime)
+	 * @param elapsedTime
+	 * 				Elapsed time information
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
@@ -217,14 +222,17 @@ public class Sprite extends GameObject {
 		update(elapsedTime);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * uk.ac.qub.eeecs.gage.world.GameObject#draw(uk.ac.qub.eeecs.gage.engine
-	 * .ElapsedTime, uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D,
-	 * uk.ac.qub.eeecs.gage.world.LayerViewport,
-	 * uk.ac.qub.eeecs.gage.world.ScreenViewport)
+	/**
+	 * Overrides the draw method from GameObject class
+	 * 				Draws Sprite object on the game screen
+	 * @param elapsedTime
+	 *            Elapsed time information
+	 * @param graphics2D
+	 *            Graphics instance
+	 * @param layerViewport
+	 *            Game layer viewport
+	 * @param screenViewport
+	 *            Screen viewport
 	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
@@ -243,6 +251,8 @@ public class Sprite extends GameObject {
 			// Build an appropriate transformation matrix
 			drawMatrix.reset();
 			drawMatrix.postScale(scaleX, scaleY);
+			
+			//TODO - shouldn't be constant numbers here?
 			drawMatrix.postRotate(orientation, scaleX * mBitmap.getWidth()
 					/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
 			drawMatrix.postTranslate(drawScreenRect.left, drawScreenRect.top);
@@ -252,28 +262,46 @@ public class Sprite extends GameObject {
 		}
 	}
 	
-	////////////////////////////////////////////////////////////////////////////
-	// GET X and Y
-	////////////////////////////////////////////////////////////////////////////
 	/*
 	 * Gets the X position of the sprint bound
 	 * 
 	 * Used in Collision Detection
 	 * */
+	/**
+	 * Get the x position
+	 * 
+	 * @return x position
+	 */
 	public float getX(){
 		return this.mBound.x;
 	}
+	/**
+	 * set x position
+	 * 
+	 * @param x
+	 */
 	public void setX(float x){
 		this.mBound.x = x;
 	}
+	
 	/*
 	 * Gets the Y position of the sprint bound
 	 * 
 	 * Used in Collision Detection
 	 * */
+	/**
+	 * Get the y position
+	 * 
+	 * @return y position
+	 */
 	public float getY(){
 		return this.mBound.y;
 	}
+	/**
+	 * set y position
+	 * 
+	 * @param y
+	 */
 	public void setY(float y){
 		this.mBound.y = y;
 	}

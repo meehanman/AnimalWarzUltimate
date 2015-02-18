@@ -11,8 +11,6 @@ import com.threeml.awu.world.Sprite;
 
 /**
  * 
- * @author Dean
- *
  * Terrain holds the location of the walkable terrain
  * By scanning on create of the terrain, we are able to draw boxes
  * to represent the walkable location on the map allowing for AABB 
@@ -22,19 +20,30 @@ import com.threeml.awu.world.Sprite;
  * AABB can then be easily detected by checking any collisions between
  * the bounding boxes and another boundingBox i.e. player, Healthpack etc
  * 
+ * Extends Sprite
+ * 
+ * @author Dean
+ * 
  */
-
-
 public class Terrain extends Sprite {
-	
+	//TODO - remove this if it's not being used
 	public enum CollisionDirection {
 		Up, Down, Left, Right
 	};
 	
+	// /////////////////////////////////////////////////////////////////////////
+	// Constructors
+	// /////////////////////////////////////////////////////////////////////////
+	/**
+	 * 
+	 * @param gameScreen
+	 * 				Gamescreen to which this control belongs
+	 */
 	public Terrain(GameScreen gameScreen) {
 		super(gameScreen);
 		mBitmap = gameScreen.getGame().getAssetManager().getBitmap("Terrain");
 		
+		//TODO - shouldn't be any constants here
 		mBound.halfWidth = 1000.0f;
 		mBound.halfHeight = 300.0f;
 
@@ -43,17 +52,17 @@ public class Terrain extends Sprite {
 	 * Create a new Terrain object
 	 * 
 	 * @param x
-	 *            x location of the object
+	 *            	x location of the object
 	 * @param y
-	 *            y location of the object
+	 *            	y location of the object
 	 * @param width
-	 *            width of the object
+	 *            	width of the object
 	 * @param height
-	 *            height of the object
+	 *            	height of the object
 	 * @param bitmap
-	 *            Bitmap used to represent this object
+	 *            	Bitmap used to represent this object
 	 * @param gameScreen
-	 *            Gamescreen to which this object belongs
+	 *            	Gamescreen to which this object belongs
 	 */
 	public Terrain(float x, float y, float width, float height,
 			Bitmap bitmap, GameScreen gameScreen) {

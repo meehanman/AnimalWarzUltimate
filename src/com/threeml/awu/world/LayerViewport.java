@@ -10,31 +10,23 @@ import com.threeml.awu.util.BoundingBox;
 public class LayerViewport {
 
 	// /////////////////////////////////////////////////////////////////////////
-	// Properties
+	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Centre x location of the viewport
-	 */
+	/** Centre x location of the viewport */
 	public float x;
 
-	/**
-	 * Centre y location of the viewport
-	 */
+	/** Centre y location of the viewport */
 	public float y;
 
-	/**
-	 * Half-width of the viewport
-	 */
+	/** Half-width of the viewport */
 	public float halfWidth;
 
-	/**
-	 * Half-height of the viewport
-	 */
+	/** Half-height of the viewport */
 	public float halfHeight;
 
 	// /////////////////////////////////////////////////////////////////////////
-	// Constructor and Methods
+	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -66,7 +58,10 @@ public class LayerViewport {
 		this.halfWidth = halfWidth;
 		this.halfHeight = halfHeight;
 	}
-
+	// /////////////////////////////////////////////////////////////////////////
+	// Methods
+	// /////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Set the layer viewport of the specified dimensions
 	 * 
