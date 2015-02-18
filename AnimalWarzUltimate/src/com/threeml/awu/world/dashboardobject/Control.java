@@ -16,6 +16,9 @@ import com.threeml.awu.world.ScreenViewport;
  * Important: It is assumed that the control is defined in terms
  * of screen coordinates (not layer coordinates).
  * 
+ * Extends GameObject
+ * 
+ * @author Mary-Jane
  * @version 1.0
  */
 public class Control extends GameObject {
@@ -28,9 +31,9 @@ public class Control extends GameObject {
 	 * Create a new control.
 	 * 
 	 * @param x
-	 *            Centre y location of the control
-	 * @param y
 	 *            Centre x location of the control
+	 * @param y
+	 *            Centre y location of the control
 	 * @param width
 	 *            Width of the control
 	 * @param height
@@ -53,7 +56,8 @@ public class Control extends GameObject {
 	/**
 	 * Determine if this control has been activated (touched).
 	 * 
-	 * @return boolean true if the control has been touched, false otherwise
+	 * @return boolean 
+	 * 				true if the control has been touched, false otherwise
 	 */
 	public boolean isActivated() {
 
@@ -73,14 +77,18 @@ public class Control extends GameObject {
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Overrides the draw method from GameObject class
+	 * 				Draws Control object on the game screen
 	 * 
-	 * @see
-	 * uk.ac.qub.eeecs.gage.world.GameObject#draw(uk.ac.qub.eeecs.gage.engine
-	 * .ElapsedTime, uk.ac.qub.eeecs.gage.engine.graphics.IGraphics2D,
-	 * uk.ac.qub.eeecs.gage.world.LayerViewport,
-	 * uk.ac.qub.eeecs.gage.world.ScreenViewport)
+	 * @param elapsedTime
+	 *            Elapsed time information
+	 * @param graphics2D
+	 *            Graphics instance
+	 * @param layerViewport
+	 *            Game layer viewport
+	 * @param screenViewport
+	 *            Screen viewport
 	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,

@@ -7,43 +7,69 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.map.Terrain;
 
+/**
+ * 
+ * Default Item class, other droppable items should inherit
+ * from this class
+ * 
+ * Extends Sprite
+ *
+ */
 public class Item extends Sprite {
-	
-
 	//TODO DM - This Class needs lots of work
+	//TODO    - add some attributes that are relevant to all droppable classes
+	//			or ditch this class because it's unnecessary
 	
+	// /////////////////////////////////////////////////////////////////////////
+	// Constructors
+	// /////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * 
+	 * @param startX
+	 * 			The x coordinate of the starting position
+	 * @param startY
+	 * 			The y coordinate of the starting position
+	 * @param gameScreen
+	 * 			Gamescreen to which this control belongs
+	 */
 	public Item(float startX, float startY, GameScreen gameScreen) {
 		super(startX, startY, 20.0f, 20.0f, gameScreen.getGame()
 				.getAssetManager().getBitmap("Health"), gameScreen);
 		
-		// Store the centre of the screen
-	//	screenCentre.x = gameScreen.getGame().getScreenWidth() / 2;
-	//	screenCentre.y = gameScreen.getGame().getScreenHeight() / 2;
 	}
 	
-	public Item(float startX, float startY, float f, float g, Bitmap bitmap,
+	/**
+	 * 
+	 * @param startX
+	 * 			The x coordinate of the starting position
+	 * @param startY
+	 * 			The y coordinate of the starting position
+	 * @param width
+	 * 			width of object, as it appears on screen
+	 * @param height
+	 * 			height of object, as it appears on screen
+	 * @param bitmap
+	 * 			Bitmap used to represent this control
+	 * @param gameScreen
+	 * 			Gamescreen to which this control belongs
+	 */
+	public Item(float startX, float startY, float width, float height, Bitmap bitmap,
 			GameScreen gameScreen) {
-		super(startX, startY, f, g, bitmap, gameScreen);
-		// TODO Auto-generated constructor stub
+		super(startX, startY, width, height, bitmap, gameScreen);
 	}
-
+	// /////////////////////////////////////////////////////////////////////////
+	// Methods
+	// /////////////////////////////////////////////////////////////////////////
+	
+	//TODO - Is this method needed? If no, get rid of it
+	/**
+	 * @param elapsedTime
+	 * 			Elapsed time information
+	 * @param TerrainObj
+	 * 			
+	 */
 	public void update(ElapsedTime elapsedTime,  Terrain TerrainObj) {
-
-		/*
-		//Save Gravity Value
-		float playerGRAVITY = GRAVITY;
-		
-		//Check for collisions, if they are detected then turn off gravity
-		if(checkForAndResolveTerrainCollisions(TerrainObj)){
-			playerGRAVITY = 0f;
-		}
-				
-		// Apply gravity to the y-axis acceleration
-		acceleration.y = playerGRAVITY;
-		
-		// call the sprites update method to provide a new orientation
-		 * 
-		 */
 		super.update(elapsedTime);
 	}
 	

@@ -17,33 +17,25 @@ import android.graphics.Rect;
 public class GameObject {
 
 	// /////////////////////////////////////////////////////////////////////////
-	// Properties
+	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Game screen to which this game object belongs
-	 */
+	/** Game screen to which this game object belongs */
 	protected GameScreen mGameScreen;
 
-	/**
-	 * Bitmap used to render this game object
-	 */
+	/** Bitmap used to render this game object */
 	protected Bitmap mBitmap;
 
-	/**
-	 * Position of this game object
-	 */
+	/** Position of this game object */
 	public Vector2 position = new Vector2();
 
-	/**
-	 * Bounding box for this game object
-	 */
+	/** Bounding box for this game object */
 	protected BoundingBox mBound = new BoundingBox();
 
-	/**
-	 * Reusable Rect's used to draw this game object
-	 */
+	/** Reusable Rect used to draw this game object */	//TODO - needs more specific commenting
 	protected Rect drawSourceRect = new Rect();
+	
+	/** Reusable Rect used to draw this game object */
 	protected Rect drawScreenRect = new Rect();
 
 	// /////////////////////////////////////////////////////////////////////////

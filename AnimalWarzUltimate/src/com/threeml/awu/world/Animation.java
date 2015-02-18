@@ -7,20 +7,30 @@ package com.threeml.awu.world;
  */
 public class Animation {
 	
-	/**
-	 * Variables
-	 */
+	// /////////////////////////////////////////////////////////////////////////
+	// Attributes
+	// /////////////////////////////////////////////////////////////////////////
+	
 	private FrameHandler mFrameHandler;
 	private boolean mEnabled = false;
 
+	
+	// /////////////////////////////////////////////////////////////////////////
+	// Constructors
+	// /////////////////////////////////////////////////////////////////////////
+	
 	/**
-	 * Constructor, Animation is disabled by default
+	 * Creates Animation object, animation is disabled by default
 	 * @param frameHandler
 	 */
 	public Animation(FrameHandler frameHandler){
 		this.mFrameHandler = frameHandler;
 		mEnabled = false;
 	}
+	
+	// /////////////////////////////////////////////////////////////////////////
+	// Methods
+	// /////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * skips to the next frame of the image
@@ -31,7 +41,7 @@ public class Animation {
 			Log.v("CurrentFrame", currentFrame + "");
 		}*/
 		try {
-			if(mFrameHandler.getColumns() > 0){
+			if(mFrameHandler.getColumns() > 1){
 				if(mFrameHandler.mCurrentColumn < (this.mFrameHandler.getColumns() - 1)){
 					mFrameHandler.setFrame(mFrameHandler.getCurrentRow(), this.mFrameHandler.getCurrentColumn() + 1);
 				} else {
@@ -43,6 +53,7 @@ public class Animation {
 			mFrameHandler.setFrame(0,0);
 		}
 	}
+	
 	/**
 	 * Returns if Animation is enabled
 	 * @return

@@ -10,39 +10,31 @@ import android.util.Log;
  */
 public class FrameHandler {
 	
-	/*
-	 * Variables
-	 */
-	/**
-	 * Bitmap Full Image
-	 */
+	// /////////////////////////////////////////////////////////////////////////
+	// Attributes
+	// /////////////////////////////////////////////////////////////////////////
+	/** Bitmap Full Image */
 	Bitmap mFullImage;
-	/**
-	 * int No. of rows in image
-	 */
+	/** int No. of rows in image */
 	int mRows;
-	/**
-	 * int No. of columns in image
-	 */
+	/** int No. of columns in image */
 	int mColumns;
-	/**
-	 * int Current column in use
-	 */
+	/** int Current column in use */
 	int mCurrentColumn;
-	/**
-	 * int Current row in use
-	 */
+	/** int Current row in use */
 	int mCurrentRow;
-	/**
-	 * Animation Animation class for use in animated sprites
-	 */
+	/** Animation Animation class for use in animated sprites */
 	Animation mAnimation;
 	
 	/**
-	 * Constructor
-	 * @param fullImage	(Bitmap)
-	 * @param rows	(int)
-	 * @param columns (int)
+	 * Creates FrameHandler object
+	 * 
+	 * @param fullImage
+	 * 				Bitmap spritesheet that can be divided into frames
+	 * @param rows 
+	 * 				Number of rows in the spritesheet
+	 * @param columns
+	 * 				Number of columns in the spritesheet
 	 */
 	public FrameHandler(Bitmap fullImage, int rows, int columns){
 		this.mFullImage = fullImage;
@@ -54,14 +46,16 @@ public class FrameHandler {
 	}
 	/**
 	 * Enable for sprite animation
+	 * 
 	 * @param enable
+	 * 				Set true to enable animation, or false to use only one frame
 	 */
 	public void enableAnimation(boolean enable){
 		mAnimation.enabled(enable);
 	}
 	/**
-	 * Only call if Animation is enabled
-	 * @return
+	 * Only call if Animation is enabled, returns null if enabled not specified
+	 * @return animation
 	 */
 	public Animation getAnimation(){
 		if(mAnimation.enabled()){
@@ -74,8 +68,11 @@ public class FrameHandler {
 	
 	/**
 	 * Set the current frame
-	 * @param r (int) Row
-	 * @param c (int) Column
+	 * 
+	 * @param r
+	 * 				Sets the row
+	 * @param c 
+	 * 				Sets the column
 	 */
 	protected void setFrame(int r, int c){
 		if(r >= 0 && r <= mRows){
@@ -88,9 +85,12 @@ public class FrameHandler {
 	
 	/**
 	 * Get sub image using row and column as parameters to calculate the current frame
-	 * @param r	(int) Row of current frame
-	 * @param c (int) Column of current frame
-	 * @return
+	 * 
+	 * @param r	
+	 * 				Row of current frame
+	 * @param c 
+	 * 				Column of current frame
+	 * @return bitmap
 	 */
 	public Bitmap getFrameImage(){
 		//if((c >= 0 && c <= mColumns) && (r >= 0 && r <= mRows)){
@@ -109,7 +109,8 @@ public class FrameHandler {
 	}
 	/**
 	 * Get Full Image
-	 * @return Bitmap
+	 * 
+	 * @return fullImage
 	 */
 	public Bitmap getFullImage() {
 		return mFullImage;
@@ -124,8 +125,8 @@ public class FrameHandler {
 	}
 	
 	/**
-	 * Get Rows
-	 * @return int
+	 * Get number of rows in image
+	 * @return rows
 	 */
 	public int getRows() {
 		return mRows;
@@ -140,8 +141,8 @@ public class FrameHandler {
 	}
 	
 	/**
-	 * Get COlumns
-	 * @return int
+	 * Get number of columns in image
+	 * @return columns
 	 */
 	public int getColumns() {
 		return mColumns;
@@ -149,6 +150,7 @@ public class FrameHandler {
 	
 	/**
 	 * Set Columns
+	 * 
 	 * @param columns
 	 */
 	public void setColumns(int columns) {
@@ -157,7 +159,8 @@ public class FrameHandler {
 	
 	/**
 	 * Get Current Column
-	 * @return int
+	 * 
+	 * @return currentColumn
 	 */
 	public int getCurrentColumn() {
 		return mCurrentColumn;
@@ -173,7 +176,7 @@ public class FrameHandler {
 	
 	/**
 	 * Get Current Row
-	 * @return int
+	 * @return currentRow
 	 */
 	public int getCurrentRow() {
 		return mCurrentRow;
