@@ -172,6 +172,7 @@ public class Sprite extends GameObject {
 		BoundingBox SpriteBB = this.getBound();
 		
 		//TODO Need to work out the maths behind resolving a collision and refactor code
+		
 		if(TerrainObj.isPixelSolid(SpriteBB, velocity)){
 			//True if solid pixel detected
 			this.velocity.x = 0;

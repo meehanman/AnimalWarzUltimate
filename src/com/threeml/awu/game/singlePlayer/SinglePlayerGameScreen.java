@@ -3,18 +3,14 @@ package com.threeml.awu.game.singlePlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.threeml.awu.Game;
-import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
+import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BoundingBox;
-import com.threeml.awu.world.GameObject;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -87,10 +83,14 @@ public class SinglePlayerGameScreen extends GameScreen {
 		int screenWidth = game.getScreenWidth();
 		int screenHeight = game.getScreenHeight();
 		
-		//Set the level width and height to that of the background image
-		LEVEL_WIDTH = getGame().getAssetManager().getBitmap("Terrain").getWidth()/2;
-		LEVEL_HEIGHT = getGame().getAssetManager().getBitmap("Terrain").getHeight()/2;
-				
+		//Change the scaling of the map on screen
+		LEVEL_WIDTH = getGame().getAssetManager().getBitmap("Terrain").getWidth();
+		LEVEL_HEIGHT = getGame().getAssetManager().getBitmap("Terrain").getHeight();
+		
+		//TODO apply scaling depending on screensize
+		LEVEL_WIDTH /= 1.2f;
+		LEVEL_HEIGHT /= 1.2f;
+		
 		// Create the screen viewport
 		mScreenViewport = new ScreenViewport(0, 0, screenWidth,
 				screenHeight);
@@ -127,49 +127,47 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 * 				Height of the screen
 	 */
 	private void CreateGameObjects(int screenHeight) {
-		// Create the background
-				mBackground = new Background(LEVEL_WIDTH / 2.0f,
+		// Create the terrain and background for the game
+		mTerrain = new Terrain(LEVEL_WIDTH / 2.0f,
+				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
+						.getAssetManager().getBitmap("Terrain"), this);	
+		mBackground = new Background(LEVEL_WIDTH / 2.0f,
 						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
 								.getAssetManager().getBitmap("Background"), this);
-				mTerrain = new Terrain(LEVEL_WIDTH / 2.0f,
-						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
-								.getAssetManager().getBitmap("Terrain"), this);
-				
-				
 
-				// Create the objects
-				mPlayer = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
-				mPlayer.setActive(true);
-				mPlayers.add(mPlayer);
-				
-				mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
-				mPlayers.add(mPlayer2);
-				
-				//So we can easily walk on it?
-				healthPack = new Healthkit(50, 750, 300, getGame().getAssetManager().getBitmap("Health"),this); 
-				
-				//Create Controls for game
-				mLeft = new Control(
-						100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
-				mControls.add(mLeft);
-				
-				mGun = new Gun(500.0f, 100.0f, getGame().getAssetManager().getBitmap("Gun"), this);
+		// Create the objects
+		mPlayer = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
+		mPlayer.setActive(true);
+		mPlayers.add(mPlayer);
+		
+		mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
+		mPlayers.add(mPlayer2);
+		
+		//So we can easily walk on it?
+		healthPack = new Healthkit(50, 750, 300, getGame().getAssetManager().getBitmap("Health"),this); 
+		
+		//Create Controls for game
+		mLeft = new Control(
+				100.0f, (screenHeight - 100.0f), 100.0f, 100.0f, "LeftArrow", this);
+		mControls.add(mLeft);
+		
+		mGun = new Gun(500.0f, 100.0f, getGame().getAssetManager().getBitmap("Gun"), this);
 
-				mRight = new Control(
-						250.0f, (screenHeight  - 100.0f), 100.0f, 100.0f, "RightArrow", this);
-				mControls.add(mRight);
-				
-				mJump = new Control(
-						175.5f, (screenHeight - 200.0f), 100.0f, 100.0f, "JumpArrow", this);
-				mControls.add(mJump);
-				
-				mWeapon = new Control(
-						650.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Weapons", this);
-				mControls.add(mWeapon);
-				
-				mShoot = new Control(
-						850.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Shoot", this);
-				mControls.add(mShoot);
+		mRight = new Control(
+				250.0f, (screenHeight  - 100.0f), 100.0f, 100.0f, "RightArrow", this);
+		mControls.add(mRight);
+		
+		mJump = new Control(
+				175.5f, (screenHeight - 200.0f), 100.0f, 100.0f, "JumpArrow", this);
+		mControls.add(mJump);
+		
+		mWeapon = new Control(
+				650.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Weapons", this);
+		mControls.add(mWeapon);
+		
+		mShoot = new Control(
+				850.0f, (screenHeight - 100.0f), 300.0f, 300.0f, "Shoot", this);
+		mControls.add(mShoot);
 
 	}
 	
@@ -178,20 +176,18 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 */
 	public void loadAssets(){
 		// Load in the assets used by this layer
-				AssetStore assetManager = mGame.getAssetManager();
-				//assetManager.loadAndAddBitmap("Player", "img/player/mark.png");
-				assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
-				assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
-				//assetManager.loadAndAddBitmap("Terrain", "img/terrain/EarthRise.png");
-				assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
-				assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
-				assetManager.loadAndAddBitmap("Gun", "img/gun.png");
-				assetManager.loadAndAddBitmap("RightArrow", "img/rightarrow.png");
-				assetManager.loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
-				assetManager.loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
-				assetManager.loadAndAddBitmap("Weapons", "img/weapons.png");
-				assetManager.loadAndAddBitmap("Shoot", "img/shoot.png");
-				assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
+		AssetStore assetManager = mGame.getAssetManager();
+		assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
+		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
+		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
+		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
+		assetManager.loadAndAddBitmap("Gun", "img/gun.png");
+		assetManager.loadAndAddBitmap("RightArrow", "img/rightarrow.png");
+		assetManager.loadAndAddBitmap("LeftArrow", "img/leftarrow.png");
+		assetManager.loadAndAddBitmap("JumpArrow", "img/jumparrow.png");
+		assetManager.loadAndAddBitmap("Weapons", "img/weapons.png");
+		assetManager.loadAndAddBitmap("Shoot", "img/shoot.png");
+		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////
