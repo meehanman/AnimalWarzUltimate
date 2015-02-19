@@ -93,15 +93,19 @@ public class Player extends Sprite {
 	 * @param 
 	 */
 public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, int id) {		
-	super(startX, startY, 30.0f, 30.0f, bitmap, GRAVITY, gameScreen);
+	super(startX, startY, (bitmap.getWidth() / columns), (bitmap.getHeight() / rows), bitmap, GRAVITY, gameScreen);
 		mId = id;
 		mFullImage = bitmap;
+		
 		mHealthText = new BitmapFont(startX, startY, gameScreen, Integer.toString(mHealth));
 		
 		mFrameHandler = new FrameHandler(mFullImage, rows, columns);
 		
 		//TODO MJ - set animation to be enabled if it exists AND animation class is working
-		mFrameHandler.enableAnimation(mFrameHandler.getColumns() > 1 ? true : false);	
+		mFrameHandler.enableAnimation((mFrameHandler.getColumns() > 1 ? true : false) || (mFrameHandler.getRows() > 1 ? true : false));	
+		
+		mBound.halfWidth = (bitmap.getWidth() / columns) / 2.0f;
+		mBound.halfHeight = (bitmap.getHeight() / rows) / 2.0f;
 		//mFrameHandler.enableAnimation(false);	
 }
 
@@ -136,7 +140,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			
 			if(this.mFrameHandler != null && this.mFrameHandler.getAnimation() != null){
 				if(this.mFrameHandler.getAnimation().enabled()){
-					this.mFrameHandler.getAnimation().nextFrame();
+					this.mFrameHandler.getAnimation().nextFrameVertical();
 				}
 			}
 			
