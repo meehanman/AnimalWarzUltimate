@@ -19,6 +19,10 @@ public class Item extends Sprite {
 	//TODO    - add some attributes that are relevant to all droppable classes
 	//			or ditch this class because it's unnecessary
 	
+	/**If the item should still be active on screen
+	 *  i.e. an item is used up and is no longer needed
+	 * **/
+	private boolean active = true;
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -59,6 +63,20 @@ public class Item extends Sprite {
 		// and orientation.
 		super.update(elapsedTime,TerrainObj);
 		
+	}
+
+	/**
+	 * @return if the current item is still active
+	 */
+	public boolean isActive() {
+		return active;
+	}
+
+	/**
+	 * @param Set the item to not active
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 

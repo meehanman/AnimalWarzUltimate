@@ -1,6 +1,7 @@
 package com.threeml.awu.game.singlePlayer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.util.Log;
@@ -20,7 +21,6 @@ import com.threeml.awu.world.gameobject.map.Background;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
-import com.threeml.awu.world.gameobject.player.TeamManager;
 import com.threeml.awu.world.gameobject.weapon.Gun;
 
 /**
@@ -67,8 +67,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 	
 	//TODO - should be a better way to add healthpacks to game
 		 //- I don't think there should be just one global healthpack
-	/** healthpacks */
-	private Healthkit healthPack;
+		//-Updated to array, we could have an array of healthpacks
+		//-after certain goes, we then can "para" in some more
+	private List<Healthkit> healthPacks = new ArrayList<Healthkit>();
 	//TODO MP - there shouldn't be one global gun object, probably.
 			//- need more work on weapon management
 	private Gun mGun;
@@ -170,7 +171,10 @@ public class SinglePlayerGameScreen extends GameScreen {
 				
 				//createPlayersAndTeams();
 
-				
+		
+		//TODO - Add recursive loop to add players setting first player active
+		// to coincide with
+		//TODO - Add random spawn locations
 		// Create the objects
 		mPlayer1 = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
 		mPlayer1.setActive(true);
@@ -179,7 +183,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
 		mPlayers.add(mPlayer2);
 		
-		healthPack = new Healthkit(50, 750, 300, getGame().getAssetManager().getBitmap("Health"),this); 
+		healthPacks.add(new Healthkit(50, 750, 300, getGame().getAssetManager().getBitmap("Health"),this));
 		
 		//Create Controls for game
 		float x=0,y=0,width=0,height=0;
@@ -365,17 +369,12 @@ public class SinglePlayerGameScreen extends GameScreen {
 		else{
 			Log.v("Error", "Error occurred in SinglePlayerGameScreen: update method. No active player");
 		}
-		// Ensure the healthpack cannot leave the confines of the world
-		BoundingBox healthBound = healthPack.getBound();
-		if (healthBound.getBottom() < 0){
-			healthPack.position.y -= healthBound.getBottom();
-		}
+
+		
 		//Until we have a paralex effect, lets position forground and background together
 		mTerrainViewport.x = mBackgroundViewport.x;
 		mTerrainViewport.y = mBackgroundViewport.y;
 		
-		//Update Items
-		healthPack.update(elapsedTime, mTerrain);
 		
 		/*for(Team t : mTeamManager.getAllTeams()){
 			for(Player p : t.getPlayers()){*/
@@ -398,15 +397,37 @@ public class SinglePlayerGameScreen extends GameScreen {
 				mGun.setPosition(500, 120);
 			}
 			
-			if(p.getBound().intersects(healthBound))
-			{
-				healthPack.setPosition(-999, -999);
-				p.setHealth(healthPack.getHealthValue());
+			//Update Items
+			for(Healthkit h : healthPacks){
+				h.update(elapsedTime, mTerrain);
 				
-				healthPack = null;
+				// Ensure healthpacks cannot leave the confines of the world
+				//TODO this should be applied to sprite/item class
+				BoundingBox healthBound = h.getBound();
+				if (healthBound.getBottom() < 0){
+					h.position.y -= healthBound.getBottom();
+				}
+				
+				//Checks for any collisions
+				if(p.getBound().intersects(healthBound)){
+					//Apply health to player
+					p.setHealth(h.getHealthValue());
+					//Remove from list
+					h.setActive(false);
+				}
 			}
 		}
 
+		
+		//TODO DM - More work needed to collect used up items
+		//Garbage Collection to remove objects from screen not being used
+		Iterator<Healthkit> iter = healthPacks.listIterator();
+		while(iter.hasNext()){
+			//If the healthkit is NOT active
+		    if(!iter.next().isActive()) {
+		        iter.remove(); //Remove
+		    }
+		}
 	}
 
 	/**
@@ -434,7 +455,11 @@ public class SinglePlayerGameScreen extends GameScreen {
 		}
 		
 		//mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
-		healthPack.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+		for(Healthkit h : healthPacks){
+			h.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+	
+		//}
+		}
 		//mGun.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 
 		// Draw the controls last so they appear at the top
