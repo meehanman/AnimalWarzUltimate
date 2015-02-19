@@ -50,6 +50,8 @@ public class TeamManager {
 		mTeams = new ArrayList<Team>();
 		mTeams.add(mTeamOne);
 		mTeams.add(mTeamTwo);
+		
+		setFirstActivePlayer();
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -102,7 +104,7 @@ public class TeamManager {
 	public Player getActivePlayerFromCurrentActiveTeam(){
 		return getActiveTeam().getActivePlayer();
 	}
-	
+
 	/**
 	 * Checks if the game is over by checking the teams' collective health
 	 * Selects a winning team by whichever doesn't have 0 health or chooses a draw
@@ -129,8 +131,11 @@ public class TeamManager {
 	 * active player
 	 */
 	public void changeActiveTeamAndPlayer(){
+		Log.v("changeActiveTeamAndPlayer", "TeamManager changeActiveTeamAndPlayer called");
+		Log.v("changeActiveTeamAndPlayer", "Active Team : " + getActiveTeam().getTeamName() + " Active Player " + getActiveTeam().getActivePlayer().getId());
 		changeActiveTeam();
 		getActiveTeam().nextActivePlayer();
+		Log.v("changeActiveTeamAndPlayer", "TeamManager changeActiveTeamAndPlayer completed");
 	}
 	
 	/**
@@ -209,5 +214,9 @@ public class TeamManager {
 	 */
 	public void setTeamTwo(Team teamTwo) {
 		mTeamTwo = teamTwo;
+	}
+	
+	public void setFirstActivePlayer(){
+		mTeamOne.setActivePlayerByIndex(0);
 	}
 }
