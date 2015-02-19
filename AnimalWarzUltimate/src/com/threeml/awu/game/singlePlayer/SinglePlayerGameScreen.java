@@ -21,6 +21,7 @@ import com.threeml.awu.world.gameobject.map.Background;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
+import com.threeml.awu.world.gameobject.player.TeamManager;
 import com.threeml.awu.world.gameobject.weapon.Gun;
 
 /**
@@ -74,10 +75,10 @@ public class SinglePlayerGameScreen extends GameScreen {
 			//- need more work on weapon management
 	private Gun mGun;
 	//TODO MJ - Player management 
-	private List<Player> mPlayers = new ArrayList<Player>();
+	/*private List<Player> mPlayers = new ArrayList<Player>();
 	private Player mPlayer1;
-	private Player mPlayer2;
-	//private TeamManager mTeamManager;
+	private Player mPlayer2;*/
+	private TeamManager mTeamManager;
 	
 	
 	
@@ -169,19 +170,19 @@ public class SinglePlayerGameScreen extends GameScreen {
 
 				// Create the objects
 				
-				//createPlayersAndTeams();
+				createPlayersAndTeams();
 
 		
 		//TODO - Add recursive loop to add players setting first player active
 		// to coincide with
 		//TODO - Add random spawn locations
 		// Create the objects
-		mPlayer1 = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
+		/*mPlayer1 = new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 0);
 		mPlayer1.setActive(true);
 		mPlayers.add(mPlayer1);
 		
 		mPlayer2 = new Player(600, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, 1);
-		mPlayers.add(mPlayer2);
+		mPlayers.add(mPlayer2);*/
 		
 		healthPacks.add(new Healthkit(50, 750, 300, getGame().getAssetManager().getBitmap("Health"),this));
 		
@@ -241,17 +242,23 @@ public class SinglePlayerGameScreen extends GameScreen {
 	//TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
 	public void createPlayersAndTeams(){
 		try{
-		List<Team> teams = new ArrayList<Team>();
-		int count = 0;
-		for(int c = 0; c < 2; c++){
 			List<Player> players = new ArrayList<Player>();
+			List<Player> players2 = new ArrayList<Player>();
+			int count = 0;
 			for(int i = 0; i < 2; i++){
-				players.add(new Player(700, 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, count));
+				players.add(new Player((count * 100), 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, count));
+				Log.v("PlayerManagement", players.get(i).getId() +"");
 				count++;
 			}
-			teams.get(c).setPlayers(players);
-		}
-		//mTeamManager = new TeamManager(teams.get(0), teams.get(1));
+			Team t1 = new Team(players, "Team1");
+			
+			for(int i = 0; i < 2; i++){
+				players2.add(new Player((count * 100), 400, 14, 1, getGame().getAssetManager().getBitmap("Player"), this, count));
+				Log.v("PlayerManagement", players.get(i).getId() +"");
+				count++;
+			}
+			Team t2 = new Team(players, "Team2");
+		mTeamManager = new TeamManager(t1, t2);
 		} catch(RuntimeException e){
 			Log.v("Major Error", e + "SinglePlayerGameScreen createPlayersAndTeams");
 		}
@@ -292,20 +299,20 @@ public class SinglePlayerGameScreen extends GameScreen {
 	 * @return Player Active player object
 	 */
 	private Player getActivePlayer() {
-		//return mTeamManager.getActivePlayerFromCurrentActiveTeam();
-		for(Player p : mPlayers){
+		return mTeamManager.getActivePlayerFromCurrentActiveTeam();
+		/*for(Player p : mPlayers){
 			if(p.getActive()){
 				return p;
 			}
 		}
-		return null;
+		return null;*/
 	}
 	
 	//MJ ~
 	private void changeActivePlayer(){
 		
 		//TODO MJ - This is really hacked together, I'm gonna fix it to be more scalable
-		if(getActivePlayer().getId() == 0){
+		/*if(getActivePlayer().getId() == 0){
 			mPlayers.get(1).setActive(true);
 			mPlayers.get(0).setActive(false);
 			mCountDownTimer.cancel();
@@ -316,8 +323,10 @@ public class SinglePlayerGameScreen extends GameScreen {
 			mPlayers.get(1).setActive(false);
 			mCountDownTimer.cancel();
 			mCountDownTimer.start();
-		}
-		//mTeamManager.changeActiveTeamAndPlayer();
+		}*/
+		mTeamManager.changeActiveTeamAndPlayer();
+		mCountDownTimer.cancel();
+		mCountDownTimer.start();
 	}
 	
 	
@@ -376,9 +385,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mTerrainViewport.y = mBackgroundViewport.y;
 		
 		
-		/*for(Team t : mTeamManager.getAllTeams()){
-			for(Player p : t.getPlayers()){*/
-		for(Player p : mPlayers){
+		for(Team t : mTeamManager.getAllTeams()){
+			for(Player p : t.getPlayers()){
+		//for(Player p : mPlayers){
 			// Temporary solution to make the health pack appear
 			// to be collected by the user
 				if(p.getActive()){
@@ -393,9 +402,9 @@ public class SinglePlayerGameScreen extends GameScreen {
 				
 			Log.v("UpdateMethod", "Player ID : " + p.getId());
 			
-			if(mWeaponsCrateButton.isActivated()){
+			/*if(mWeaponsCrateButton.isActivated()){
 				mGun.setPosition(500, 120);
-			}
+			}*/
 			
 			//Update Items
 			for(Healthkit h : healthPacks){
@@ -416,6 +425,7 @@ public class SinglePlayerGameScreen extends GameScreen {
 					h.setActive(false);
 				}
 			}
+		}
 		}
 
 		
@@ -446,12 +456,12 @@ public class SinglePlayerGameScreen extends GameScreen {
 		mBackground.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,	mScreenViewport);
 		
-		/*for(Team t : mTeamManager.getAllTeams()){
-			for(Player p : t.getPlayers()){*/
-		for(Player p : mPlayers){
+		for(Team t : mTeamManager.getAllTeams()){
+			for(Player p : t.getPlayers()){
+		//for(Player p : mPlayers){
 				p.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		
-			//}
+			}
 		}
 		
 		//mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);

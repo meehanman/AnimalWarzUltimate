@@ -51,8 +51,9 @@ public class Team {
 	public void nextActivePlayer(){
 		if(mPlayers.indexOf(getActivePlayer()) < mPlayers.size()){
 			setActivePlayerByIndex(mPlayers.indexOf(getActivePlayer()) + 1);
+		}else {
+			setActivePlayerByIndex(0);
 		}
-		setActivePlayerByIndex(0);
 	}
 	
 	/**
@@ -134,7 +135,7 @@ public class Team {
 	 * @param players
 	 */
 	public void setPlayers(List<Player> players) {
-		mPlayers = players;
+		mPlayers.addAll(players);
 	}
 	/**
 	 * Get the team name 
