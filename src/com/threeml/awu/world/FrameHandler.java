@@ -1,9 +1,12 @@
 package com.threeml.awu.world;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.Log;
 /**
- * FrameHandler class, handles large images with small sub-images
+ * FrameHandler takes in a larger image and returns a smaller subimage
+ * 
+ * Initialise with a sprite sheet with a number of rows and columns
  * 
  * @author Mary-Jane
  *
@@ -81,6 +84,8 @@ public class FrameHandler {
 		if(c >= 0 && c <= mColumns){
 			this.mCurrentColumn = c;
 		}
+		
+		Log.v("nextFrameTest", "R: "+this.mCurrentRow+" C: "+this.mCurrentColumn);
 	}
 	
 	/**
@@ -93,19 +98,14 @@ public class FrameHandler {
 	 * @return bitmap
 	 */
 	public Bitmap getFrameImage(){
-		//if((c >= 0 && c <= mColumns) && (r >= 0 && r <= mRows)){
+			
 			int width = (int) (this.mFullImage.getWidth() / mColumns);
 			
 			int height = (int) (this.mFullImage.getHeight() / mRows);
+			int srcX = mCurrentColumn * width;
 			int srcY = mCurrentRow * height;
-			int  srcX = mCurrentColumn * width;
-			/*Log.v("currentframe", "getImageFrame() called");
-			Log.v("currentframe", 	" y : " + srcY +
-									" x : " + srcX +
-									" width : " + width +
-									" height : " + height);*/
-			
-			return Bitmap.createBitmap(mFullImage, srcY, srcX, width, height);
+
+			return Bitmap.createBitmap(mFullImage, srcX,srcY, width, height);
 	}
 	/**
 	 * Get Full Image

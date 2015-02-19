@@ -1,6 +1,10 @@
 package com.threeml.awu.world;
+
+import android.util.Log;
+
 /**
  * Animation Class, used in conjunction with frame handler to create illusion of movement
+ * 
  * 
  * @author Mary-Jane
  *
@@ -36,13 +40,9 @@ public class Animation {
 	 * skips to the next frame of the image
 	 */
 	public void nextFrame(){
-		/*if(mColumns > 0){
-			currentFrame = currentFrame++ % mColumns;
-			Log.v("CurrentFrame", currentFrame + "");
-		}*/
-		try {
-			if(mFrameHandler.getColumns() > 1){
-				if(mFrameHandler.mCurrentColumn < (this.mFrameHandler.getColumns() - 1)){
+		try {			
+			if(mFrameHandler.getColumns() > 0){
+				if(mFrameHandler.getCurrentColumn() < (this.mFrameHandler.getColumns() - 1)){
 					mFrameHandler.setFrame(mFrameHandler.getCurrentRow(), this.mFrameHandler.getCurrentColumn() + 1);
 				} else {
 					mFrameHandler.setFrame(mFrameHandler.getCurrentRow(), 0);
