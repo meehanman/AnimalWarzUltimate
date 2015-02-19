@@ -1,6 +1,7 @@
 package com.threeml.awu.world.gameobject.player;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
@@ -101,12 +102,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		
 		mFrameHandler = new FrameHandler(mFullImage, rows, columns);
 		
-		//TODO MJ - set animation to be enabled if it exists AND animation class is working
-		mFrameHandler.enableAnimation((mFrameHandler.getColumns() > 1 ? true : false) || (mFrameHandler.getRows() > 1 ? true : false));	
-		
 		mBound.halfWidth = (bitmap.getWidth() / columns) / 2.0f;
 		mBound.halfHeight = (bitmap.getHeight() / rows) / 2.0f;
-		//mFrameHandler.enableAnimation(false);	
 }
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -137,16 +134,23 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		if (moveLeft && !moveRight) {
 			acceleration.x = -RUN_ACCELERATION;
 			acceleration.y = RUN_ACCELERATION;
-			
-			if(this.mFrameHandler != null && this.mFrameHandler.getAnimation() != null){
-				if(this.mFrameHandler.getAnimation().enabled()){
-					this.mFrameHandler.getAnimation().nextFrameVertical();
-				}
+			this.mFrameHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk"));
+			if(mFrameHandler != null && this.mFrameHandler.getRows() > 1){
+				this.mFrameHandler.nextFrameVertical();
 			}
 			
 		} else if (moveRight && !moveLeft) {
 			acceleration.x = RUN_ACCELERATION;
 			acceleration.y = RUN_ACCELERATION;
+			
+			Matrix matrix = new Matrix();
+			matrix.preScale(-1, 1);
+			Bitmap bitmap = mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk");
+			this.mFrameHandler.setFullImage(Bitmap.createBitmap(bitmap, 0,
+					0, bitmap.getWidth(), bitmap.getHeight(), matrix, false));
+			if(mFrameHandler != null && this.mFrameHandler.getRows() > 1){
+				this.mFrameHandler.nextFrameVertical();
+			}
 		} else {
 			acceleration.x = 0.0f;
 			acceleration.y = 0.0f;

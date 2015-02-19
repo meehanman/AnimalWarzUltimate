@@ -27,8 +27,6 @@ public class FrameHandler {
 	int mCurrentColumn;
 	/** int Current row in use */
 	int mCurrentRow;
-	/** Animation Animation class for use in animated sprites */
-	Animation mAnimation;
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructor
@@ -50,34 +48,11 @@ public class FrameHandler {
 		this.mColumns = columns;
 		mCurrentColumn = 0;
 		mCurrentRow = 0;
-		mAnimation = new Animation(this);
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Enable for sprite animation
-	 * 
-	 * @param enable
-	 * 				Set true to enable animation, or false to use only one frame
-	 */
-	public void enableAnimation(boolean enable){
-		mAnimation.enabled(enable);
-	}
-	/**
-	 * Only call if Animation is enabled, returns null if enabled not specified
-	 * @return animation
-	 */
-	public Animation getAnimation(){
-		if(mAnimation.enabled()){
-			return mAnimation;
-		}
-		else {
-			return null;
-		}
-	}
 	
 	/**
 	 * Set the current frame
@@ -108,7 +83,6 @@ public class FrameHandler {
 	 * @return bitmap
 	 */
 	public Bitmap getFrameImage(){
-			Log.v("Animation", "Image present : " + Boolean.toString(mFullImage == null ? false : true));
 			int width = (int) (this.mFullImage.getWidth() / mColumns);
 			
 			int height = (int) (this.mFullImage.getHeight() / mRows);
@@ -118,6 +92,44 @@ public class FrameHandler {
 
 			return Bitmap.createBitmap(mFullImage, srcX,srcY, width, height);
 	}
+	
+
+	/**
+	 * skips to the next frame of the image
+	 */
+	public void nextFrameHorizontal(){
+		try {			
+			if(getColumns() > 0){
+				if(getCurrentColumn() < (getColumns() - 1)){
+					setFrame(getCurrentRow(), getCurrentColumn() + 1);
+				} else {
+					setFrame(getCurrentRow(), 0);
+				}
+				
+			}
+		}catch(Exception e){
+			setFrame(0,0);
+		}
+	}
+	
+	/**
+	 * skips to the next frame of the image
+	 */
+	public void nextFrameVertical(){
+		try {			
+			if(getRows() > 0){
+				if(getCurrentRow() < (getRows() - 1)){
+					setFrame(getCurrentRow() + 1, getCurrentColumn());
+				} else {
+					setFrame(0, getCurrentColumn());
+				}
+				
+			}
+		}catch(Exception e){
+			setFrame(0,0);
+		}
+	}
+	
 	/**
 	 * Get Full Image
 	 * 
