@@ -246,14 +246,14 @@ public class SinglePlayerGameScreen extends GameScreen {
 			List<Player> players2 = new ArrayList<Player>();
 			int count = 0;
 			for(int i = 0; i < 2; i++){
-				players.add(new Player((count * 100), 400, 1, 15, getGame().getAssetManager().getBitmap("DefaultPlayer"), this, count));
+				players.add(new Player((count * 100), 400, 1, 15, getGame().getAssetManager().getBitmap("PlayerWalk"), this, count));
 				Log.v("PlayerManagement", players.get(i).getId() +"");
 				count++;
 			}
 			Team t1 = new Team(players, "Team1");
 			
 			for(int i = 0; i < 2; i++){
-				players2.add(new Player((count * 100), 400, 1, 15, getGame().getAssetManager().getBitmap("DefaultPlayer"), this, count));
+				players2.add(new Player((count * 100), 400, 1, 15, getGame().getAssetManager().getBitmap("PlayerWalk"), this, count));
 				Log.v("PlayerManagement", players.get(i).getId() +"");
 				count++;
 			}
@@ -272,7 +272,12 @@ public class SinglePlayerGameScreen extends GameScreen {
 
 		AssetStore assetManager = mGame.getAssetManager();
 		assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
-		assetManager.loadAndAddBitmap("DefaultPlayer", "img/player/wwalk.png");
+		assetManager.loadAndAddBitmap("PlayerBackFlip", "img/player/wbackflp.png");
+		assetManager.loadAndAddBitmap("PlayerWalk", "img/player/wwalk.png");
+		assetManager.loadAndAddBitmap("PlayerWin", "img/player/wwinner.png");
+		assetManager.loadAndAddBitmap("PlayerUp", "img/player/wflyup.png");
+		assetManager.loadAndAddBitmap("PlayerFall", "img/player/wfall.png");
+		
 		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
 		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
