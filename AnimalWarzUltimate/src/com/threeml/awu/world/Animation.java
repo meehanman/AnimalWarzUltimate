@@ -39,13 +39,31 @@ public class Animation {
 	/**
 	 * skips to the next frame of the image
 	 */
-	public void nextFrame(){
+	public void nextFrameHorizontal(){
 		try {			
 			if(mFrameHandler.getColumns() > 0){
 				if(mFrameHandler.getCurrentColumn() < (this.mFrameHandler.getColumns() - 1)){
 					mFrameHandler.setFrame(mFrameHandler.getCurrentRow(), this.mFrameHandler.getCurrentColumn() + 1);
 				} else {
 					mFrameHandler.setFrame(mFrameHandler.getCurrentRow(), 0);
+				}
+				
+			}
+		}catch(Exception e){
+			mFrameHandler.setFrame(0,0);
+		}
+	}
+	
+	/**
+	 * skips to the next frame of the image
+	 */
+	public void nextFrameVertical(){
+		try {			
+			if(mFrameHandler.getRows() > 0){
+				if(mFrameHandler.getCurrentRow() < (this.mFrameHandler.getRows() - 1)){
+					mFrameHandler.setFrame(mFrameHandler.getCurrentRow() + 1, this.mFrameHandler.getCurrentColumn());
+				} else {
+					mFrameHandler.setFrame(0, mFrameHandler.getCurrentColumn());
 				}
 				
 			}

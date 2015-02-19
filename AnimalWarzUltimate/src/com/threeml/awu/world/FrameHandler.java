@@ -108,12 +108,13 @@ public class FrameHandler {
 	 * @return bitmap
 	 */
 	public Bitmap getFrameImage(){
-			
+			Log.v("Animation", "Image present : " + Boolean.toString(mFullImage == null ? false : true));
 			int width = (int) (this.mFullImage.getWidth() / mColumns);
 			
 			int height = (int) (this.mFullImage.getHeight() / mRows);
 			int srcX = mCurrentColumn * width;
 			int srcY = mCurrentRow * height;
+			
 
 			return Bitmap.createBitmap(mFullImage, srcX,srcY, width, height);
 	}
