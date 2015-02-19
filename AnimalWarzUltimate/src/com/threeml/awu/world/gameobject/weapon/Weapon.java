@@ -37,7 +37,7 @@ public class Weapon extends Sprite {
 	
 	/** If the weapon is currently active **/
 	private Boolean mActive;
-	
+
 	
 	// ///////////////////////////////////////////////////////////////////////// 
 	// Constructors 

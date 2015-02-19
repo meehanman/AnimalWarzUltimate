@@ -97,8 +97,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mFrameHandler = new FrameHandler(mFullImage, rows, columns);
 		
 		//TODO MJ - set animation to be enabled if it exists AND animation class is working
-		//mFrameHandler.enableAnimation(mFrameHandler.getColumns() > 0 ? true : false);	
-		mFrameHandler.enableAnimation(false);	
+		mFrameHandler.enableAnimation(mFrameHandler.getColumns() > 1 ? true : false);	
+		//mFrameHandler.enableAnimation(false);	
 }
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -196,6 +196,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		catch (Exception e){
 			Log.v("CustomError", e + " : Error in Player draw method");
 		}
+		
 		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 	
