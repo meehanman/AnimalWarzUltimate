@@ -94,16 +94,13 @@ public class Player extends Sprite {
 	 * @param 
 	 */
 public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, int id) {		
-	super(startX, startY, (bitmap.getWidth() / columns), (bitmap.getHeight() / rows), bitmap, GRAVITY, gameScreen);
+	super(startX, startY, 20.0f, 20.0f, bitmap, gameScreen);
 		mId = id;
 		mFullImage = bitmap;
 		
 		mHealthText = new BitmapFont(startX, startY, gameScreen, Integer.toString(mHealth));
 		
 		mFrameHandler = new FrameHandler(mFullImage, rows, columns);
-		
-		mBound.halfWidth = (bitmap.getWidth() / columns) / 2.0f;
-		mBound.halfHeight = (bitmap.getHeight() / rows) / 2.0f;
 }
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -269,4 +266,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public void setCurrentWeapon(Weapon mCurrentWeapon) {
 		this.mCurrentWeapon = mCurrentWeapon;
 	}
+	/**
+	 * Gets a spawn location for the map
+	 * @author Dean
+	 */
+	
+
 }
