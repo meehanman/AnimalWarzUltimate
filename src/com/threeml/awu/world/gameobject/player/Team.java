@@ -85,6 +85,10 @@ public class Team {
 		}
 	}
 	
+	public void addNewPlayer(Player p){
+		mPlayers.add(p);
+	}
+	
 	/**
 	 * Set the active player by it's index in the player's list
 	 * 

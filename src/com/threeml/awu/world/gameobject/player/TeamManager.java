@@ -3,6 +3,9 @@ package com.threeml.awu.world.gameobject.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.threeml.awu.world.GameScreen;
+
+import android.graphics.Bitmap;
 import android.util.Log;
 
 /**
@@ -218,5 +221,11 @@ public class TeamManager {
 	
 	public void setFirstActivePlayer(){
 		mTeamOne.setActivePlayerByIndex(0);
+	}
+	
+	public void createNewPlayerAndAddToTeam(int teamId, Player p){
+		if(mTeamOne.getId() == teamId){
+			mTeamOne.addNewPlayer(p);
+		}
 	}
 }
