@@ -124,33 +124,6 @@ public class Sprite extends GameObject {
 			GameScreen gameScreen) {
 		super(x, y, width, height, bitmap, gameScreen);
 	}
-	
-	/**
-	 * Create a new sprite with a new Gravity Value, Used to give player 
-	 * a slightly higher gravity value to other items.
-	 * 
-	 * @param x
-	 *            Centre y location of the sprite
-	 * @param y
-	 *            Centre x location of the sprite
-	 * @param width
-	 *            Width of the sprite
-	 * @param height
-	 *            Height of the sprite
-	 * @param bitmap
-	 *            Bitmap used to represent this sprite
-	 * @param newGravity
-	 * 			  New strength of gravity to apply along the y-axis
-	 * @param gameScreen
-	 *            Gamescreen to which this sprite belongs
-	 */
-	public Sprite(float x, float y, float width, float height, Bitmap bitmap, float newGravity,
-			GameScreen gameScreen) {
-		super(x, y, width, height, bitmap, gameScreen);
-		
-		//New Gravity Value
-		GRAVITY = newGravity;
-	}
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
@@ -178,6 +151,7 @@ public class Sprite extends GameObject {
 			this.velocity.x = 0;
 			this.velocity.y = 0;
 			collisionResolved = true;
+			
 		}else{
 			//False if no collision detected
 			this.velocity.y = GRAVITY;
