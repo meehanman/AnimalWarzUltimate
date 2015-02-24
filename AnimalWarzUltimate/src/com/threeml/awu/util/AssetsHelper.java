@@ -14,12 +14,14 @@ import com.threeml.awu.engine.AssetStore;
  *
  */
 public class AssetsHelper {
-
+	
+	// Load in the assets used by this layer
 	public static void loadAllAssets(Game mGame){
-		// Load in the assets used by this layer
 
 		//Game Assets
 		AssetStore assetManager = mGame.getAssetManager();
+		
+		//Player Assets
 		assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
 		assetManager.loadAndAddBitmap("PlayerBackFlip", "img/player/wbackflp.png");
 		assetManager.loadAndAddBitmap("PlayerWalk", "img/player/wwalk.png");
@@ -27,10 +29,8 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("PlayerUp", "img/player/wflyup.png");
 		assetManager.loadAndAddBitmap("PlayerFall", "img/player/wfall.png");
 		
-		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
-		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
+		//Game Objects
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
-		assetManager.loadAndAddBitmap("Gun", "img/gun.png");
 		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
 
 		//DashboardControls
@@ -61,4 +61,19 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("ContinueButton", "img/TeamSelectionImages/continue.png");
 
 	}
+
+	// Load in the assets used by this layer
+	public static void loadMapAssets(String MapName,Game mGame){
+		//Game Assets
+		AssetStore assetManager = mGame.getAssetManager();
+		assetManager.loadAndAddBitmap("smallMapImage", "img/TerrainImages/small/"+MapName+"Map.png");
+		assetManager.loadAndAddBitmap("TerrainImage", "img/TerrainImages/large/"+MapName+"Map.png");
+		assetManager.loadAndAddBitmap("TerrainBackground", "img/TerrainImages/background/MapBackgroundDefault.png");
+		
+		//TODO - Find Backgrounds to Match Other Images
+		//assetManager.loadAndAddBitmap("TerrainImage", "img/TerrainImages/background/"+MapName+".png",true);
+
+
+	}
+
 }

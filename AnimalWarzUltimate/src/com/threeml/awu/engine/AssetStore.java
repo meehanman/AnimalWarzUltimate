@@ -159,7 +159,7 @@ public class AssetStore {
 	public boolean loadAndAddBitmap(String assetName, String bitmapFile) {
 		
 		//DM - Allows old params to be passed through the stack with the default FASLE
-		// Always will be imutable
+		// Always will be imutable (non-editable)
 		return loadAndAddBitmap(assetName, bitmapFile, false);
 	}
 	
