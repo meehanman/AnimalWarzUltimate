@@ -1,7 +1,6 @@
 package com.threeml.awu.world;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.util.Log;
 /**
  * FrameHandler takes in a larger image and returns a smaller subimage

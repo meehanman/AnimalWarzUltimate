@@ -84,17 +84,22 @@ public class Player extends Sprite {
 	 * 
 	 * @param startX
 	 *            x location of the sphere
+	 * @param startY
+	 *            y location of the sphere
+	 *            
 	 * @param columns
 	 * @param rows
 	 * @param bitmap
-	 * @param startY
-	 *            y location of the sphere
 	 * @param gameScreen
 	 *            Gamescreen to which player belongs
 	 * @param 
 	 */
 public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, int id) {		
+	
+	
+	
 	super(startX, startY, 20.0f, 20.0f, bitmap, gameScreen);
+	
 		mId = id;
 		mFullImage = bitmap;
 		
@@ -266,10 +271,5 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public void setCurrentWeapon(Weapon mCurrentWeapon) {
 		this.mCurrentWeapon = mCurrentWeapon;
 	}
-	/**
-	 * Gets a spawn location for the map
-	 * @author Dean
-	 */
-	
 
 }

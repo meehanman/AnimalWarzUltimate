@@ -1,6 +1,8 @@
 package com.threeml.awu.world.gameobject.map;
 import java.util.Random;
 
+import android.util.Log;
+
 import com.threeml.awu.Game;
 import com.threeml.awu.util.AssetsHelper;
 import com.threeml.awu.util.Vector2;
@@ -37,15 +39,17 @@ public class MapHelper {
 	 */
 	public MapHelper(String MapName, Game mGame) {
 		
-		if(MapName == "Random"){
-			//If Random Map is choosen
-			MapName = getRandomMapName();
-		}else{
+		//If its not a map name in the MapNamesArray
+		if(isMapName(MapName)){
 			//Set Map Name
 			this.MapName = MapName;
+		}else{
+			//Set as Random Map
+			this.MapName = getRandomMapName();
+			
 		}
 		//Load Assets into memory
-		AssetsHelper.loadMapAssets(MapName, mGame);
+		AssetsHelper.loadMapAssets(this.MapName, mGame);
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -59,15 +63,25 @@ public class MapHelper {
 	public static String[] getMapNames(){
 		return MapNames;
 	}
+	public static Boolean isMapName(String s){
+		for(String m : MapNames){
+			if(m==s){return true;}
+		}
+		
+		return false;
+		
+	}
 	/**
 	 * Returns a Random Map Name
 	 * 
-	 * @return
+	 * @return Returns a Random Map Name
 	 */
 	private static String getRandomMapName(){
 		
 		Random randomMapLocation = new Random();
-		return MapNames[randomMapLocation.nextInt(MapNames.length-1)];
+		int RandomMap = randomMapLocation.nextInt(MapNames.length-1);
+		Log.v("RandomMap",MapNames[RandomMap] + " map choosen.");
+		return MapNames[RandomMap];
 	}
 	/**
 	 * @return the mapName
@@ -75,7 +89,9 @@ public class MapHelper {
 	public String getName() {
 		return this.MapName;
 	}
-
+	/**
+	 * @return Returns a vector2 array of all spawn locations
+	 */
 	public Vector2[] getSpawnLocations() {
 
 		if (MapName == "Castles") {

@@ -2,13 +2,7 @@ package com.threeml.awu.world.gameobject.weapon;
 
 import android.graphics.Bitmap;
 
-import com.threeml.awu.engine.ElapsedTime;
-import com.threeml.awu.engine.graphics.IGraphics2D;
-import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.world.GameScreen;
-import com.threeml.awu.world.LayerViewport;
-import com.threeml.awu.world.ScreenViewport;
-import com.threeml.awu.world.Sprite;
 
 //TODO - add JavaDoc Description
 /**
