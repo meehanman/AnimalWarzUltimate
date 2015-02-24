@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import com.threeml.awu.Game;
 
 /**
- * Sample demo game that is create within the MainActivity class
+ * Main GameScreen
+ * Extends Game (mGame Fragment) to key in 
+ * the app interface.
  * 
- * @version 1.0
+ * Upon running will open the menu screen
+ * 
  */
+
 public class GameScreen extends Game {
 
 	/**
@@ -30,7 +34,7 @@ public class GameScreen extends Game {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Go with a default 20 UPS/FPS
+		// Go with a default 30 UPS/FPS
 		setTargetFramesPerSecond(30);
 	}
 

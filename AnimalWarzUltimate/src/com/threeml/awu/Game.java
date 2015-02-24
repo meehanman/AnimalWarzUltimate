@@ -1,5 +1,11 @@
 package com.threeml.awu;
 
+/**
+ * Main Game Fragment (mGame)
+ * providing access to core game services and management of
+ * the update/render cycle.
+ * 
+ */
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.GameCountDownTimer;
@@ -20,12 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Central game class, providing access to core game services and management of
- * the update/render cycle.
- * 
- * @version 1.0
- */
+
 public abstract class Game extends Fragment {
 
 	// /////////////////////////////////////////////////////////////////////////

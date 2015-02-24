@@ -5,6 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+/**
+ * SplashScreen that shows before game starts. 
+ * After nSeconds, Starts Main Activity (mGame)
+ * Shows the 3ml Logo
+ * 
+ * @author Mark
+ *
+ */
+
+
+
 public class SplashScreen extends Activity{
 	
 	private static int SPLASH_TIME_OUT = 500;

@@ -32,6 +32,7 @@ public class Music implements OnCompletionListener {
 	 * Asset filename
 	 */
 	private String mAssetFile;
+	
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -119,7 +120,7 @@ public class Music implements OnCompletionListener {
 	 * @param looping
 	 *            Boolean true to loop, false for play once.
 	 */
-	public void setLopping(boolean looping) {
+	public void setLooping(boolean looping) {
 		mMediaPlayer.setLooping(looping);
 	}
 
@@ -185,4 +186,33 @@ public class Music implements OnCompletionListener {
 			mIsPrepared = false;
 		}
 	}
+
+	/**
+	 * DM - MJ Moved these here to coincide with 
+	 * ready made Music Class
+	 * 
+	 * @see http://stackoverflow.com/questions/6884590/android-how-to-create-fade-in-fade-out-sound-effects-for-any-music-file-that-my
+	 * 
+	 * @author Mary-Jane
+	 * @author Dean
+	 */
+
+		private void FadeOut(float deltaTime)
+		{
+			/*
+		    setVolume(volume, volume);
+		    setVolume(mMediaPlayer.setv-= speed* deltaTime);
+		    stop();
+		    dispose();
+		    */
+
+		}
+		private void FadeIn(float deltaTime)
+		{
+			/*
+			setVolume(volume, volume);
+		    volume += speed* deltaTime;
+		    */
+		}
+
 }
