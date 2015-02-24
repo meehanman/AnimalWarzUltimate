@@ -1,17 +1,10 @@
 package com.threeml.awu.game;
 
-import java.io.IOException;
 import java.util.List;
 
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
-import android.util.Log;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
@@ -25,31 +18,23 @@ import com.threeml.awu.world.GameScreen;
 /**
  * An exceedingly basic menu screen with a couple of touch area
  * 
- * @version 1.0
+ * 
  */
 public class MenuScreen extends GameScreen {
-	
-	/**
-	 * Define the variables for sound effects
-	 */
-	private SoundPool mSoundPool;
-	private final int mMaxChannels = 20;
-	private int mButtonDingId = -1;
-	
-	private MediaPlayer mMediaPlayer;
-	private boolean mMediaAvailable = false;
-	
-	private float volume = 1;
-	private float speed = 0.005f;
 	
 	/**
 	 * Define the trigger touch region for playing the 'games'
 	 */
 	private Rect mPlayGameBound;
 	private Rect mBackgroundBound, mBackgroundLogoBound;
+	
+	/**
+	 * Define Assets to be used in Main Menu
+	 */
+	AssetStore assetManager = mGame.getAssetManager();
 
 	/**
-	 * Create a simple menu screen
+	 * AnimalWarz Menu Screen
 	 * 
 	 * @param game
 	 *            Game to which this screen belongs
@@ -57,38 +42,20 @@ public class MenuScreen extends GameScreen {
 	public MenuScreen(Game game) {
 		super("MenuScreen", game);
 
-		// Load in the bitmap used on the menu screen
-		AssetStore assetManager = mGame.getAssetManager();
+
 		//Load in BG Image and assets
 		assetManager.loadAndAddBitmap("MainMenuBackground", "img/MainMenu/MenuBackground.jpg");
 		assetManager.loadAndAddBitmap("MainMenuLogo", "img/MainMenu/menulogo.png");
 		//Load in button images
 		assetManager.loadAndAddBitmap("NewGameButton", "img/MainMenu/newGameButton.png");
 		
-		mSoundPool = new SoundPool(mMaxChannels, AudioManager.STREAM_MUSIC, 0);
-		AssetManager am = game.getActivity().getAssets();
-		try {
-			
-			AssetFileDescriptor assetDescriptor = am.openFd("sfx/click2.ogg");
-		} catch (IOException e) {
-			Log.v("Error", "Couldn't load sfx");
-		}
+		//Load in Audio 
+		assetManager.loadAndAddMusic("Dungeon_Boss", "music/Video_Dungeon_Boss.mp3");
+		assetManager.loadAndAddSound("ButtonClick", "sfx/CursorSelect.wav");
+		
+		//DM - Lower this annoying Music
+		assetManager.getMusic("Dungeon_Boss").setVolume(.02f);
 
-		game.getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		mMediaPlayer = new MediaPlayer();
-		try {
-			
-			AssetFileDescriptor musicDescriptior = am.openFd("music/Video_Dungeon_Boss.mp3");
-			mMediaPlayer.setDataSource(musicDescriptior.getFileDescriptor(),
-					musicDescriptior.getStartOffset(),
-					musicDescriptior.getLength());
-			mMediaPlayer.setLooping(true);
-			mMediaPlayer.prepare();
-			
-			mMediaAvailable = true;
-		} catch (IOException e) {
-			Log.v("Error", "Couldn't load music");
-		}
 	}
 
 	/*
@@ -103,7 +70,6 @@ public class MenuScreen extends GameScreen {
 
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
-
 		List<TouchEvent> touchEvents = input.getTouchEvents();
 		if (touchEvents.size() > 0) {
 
@@ -113,11 +79,10 @@ public class MenuScreen extends GameScreen {
 			TouchEvent touchEvent = touchEvents.get(0);
 
 			if (mPlayGameBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
-				if(mButtonDingId != -1){
-					mSoundPool.play(mButtonDingId, 10.0f, 10.0f, 1, 0, 1.0f);
-				}
-				mSoundPool.release();
-				mMediaPlayer.release();
+				
+				assetManager.getMusic("Dungeon_Boss").pause();
+				assetManager.getSound("ButtonClick").play();
+				
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
 				SinglePlayerGameScreen singlePlayerGameScreen = new SinglePlayerGameScreen(mGame);
@@ -179,21 +144,39 @@ public class MenuScreen extends GameScreen {
 		graphics2D.drawBitmap(playGame, null, mPlayGameBound, null);
 	}
 	
+	/**
+	 * Overrides the method to ensure music plays 
+	 * when game resumed
+	 * 
+	 * @author Dean
+	 * @author Mary-Jane
+	 */
 	@Override
 	public void resume() {
 		super.resume();
 		
+		assetManager.getMusic("Dungeon_Boss").play();
+		/*
 		if(mMediaAvailable){
 			this.FadeIn(3);
 			mMediaPlayer.start();
 		}
+		*/
 	}
 	
 	
+	/**
+	 * Overrides the method to ensure music is not playing when game not running
+	 * 
+	 * @author Dean
+	 * @author Mary-Jane
+	 */
 	@Override
 	public void pause() {
 		super.pause();
 		
+		assetManager.getMusic("Dungeon_Boss").pause();	
+		/*
 		if(mMediaAvailable) {
 			mMediaPlayer.pause();
 			
@@ -204,23 +187,9 @@ public class MenuScreen extends GameScreen {
 				mSoundPool.release();
 			}
 		}
+		*/
 	}
 	
 	
-	//MJ - This stuff needs work
-	//src: http://stackoverflow.com/questions/6884590/android-how-to-create-fade-in-fade-out-sound-effects-for-any-music-file-that-my
-	private void FadeOut(float deltaTime)
-	{
-	    mMediaPlayer.setVolume(volume, volume);
-	    volume -= speed* deltaTime;
-	    mMediaPlayer.stop();
-		mMediaPlayer.release();
-
-	}
-	private void FadeIn(float deltaTime)
-	{
-		mMediaPlayer.setVolume(volume, volume);
-	    volume += speed* deltaTime;
-
-	}
+	
 }

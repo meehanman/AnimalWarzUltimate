@@ -1,6 +1,12 @@
 package com.threeml.awu;
 
-
+/**
+ * 
+ * The Main Activity the game runs on that sets the Game Window
+ * properties, opens the Menu fragment
+ * 
+ *
+ */
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
