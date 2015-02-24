@@ -12,7 +12,6 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.engine.input.Input;
 import com.threeml.awu.engine.input.TouchEvent;
-import com.threeml.awu.game.singlePlayer.SinglePlayerGameScreen;
 import com.threeml.awu.world.GameScreen;
 
 /**
@@ -83,11 +82,20 @@ public class MenuScreen extends GameScreen {
 				assetManager.getMusic("Dungeon_Boss").pause();
 				assetManager.getSound("ButtonClick").play();
 				
+				/*
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
-				SinglePlayerGameScreen singlePlayerGameScreen = new SinglePlayerGameScreen(mGame);
+				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
 				// As it's the only added screen it will become active.
-				mGame.getScreenManager().addScreen(singlePlayerGameScreen);
+				mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
+				*/
+				//DM - Testing intermediate screen
+				// If the play game area has been touched then swap screens
+				mGame.getScreenManager().removeScreen(this.getName());
+				//AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
+				TeamSelectionScreen TeamSelectionScreen = new TeamSelectionScreen(mGame);
+				// As it's the only added screen it will become active.
+				mGame.getScreenManager().addScreen(TeamSelectionScreen);
 			}
 		}
 	}
