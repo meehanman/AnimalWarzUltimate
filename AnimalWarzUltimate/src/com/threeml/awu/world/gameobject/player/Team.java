@@ -1,6 +1,5 @@
 package com.threeml.awu.world.gameobject.player;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -107,14 +106,20 @@ public class Team {
 	 * @return player
 	 */
 	public Player getActivePlayer(){
+		Player ActivePlayer = null;
+		
 		for(Player p : mPlayers){
 			if(p.getActive()){
-				return p;
-			} else{
-				return null;
+				ActivePlayer = p;
 			}
 		}
-		return null;
+		//We can never return null here,
+		//or the game WILL crash on update
+		if(ActivePlayer == null){
+			//Set An active player to the first player?
+			ActivePlayer = mPlayers.get(0);
+		}
+		return ActivePlayer;
 	}
 	/**
 	 * Gets the size of the list of players

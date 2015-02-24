@@ -6,6 +6,15 @@ package com.threeml.awu;
  * the update/render cycle.
  * 
  */
+import android.app.Fragment;
+import android.media.AudioManager;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.threeml.awu.engine.AssetStore;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.GameCountDownTimer;
@@ -15,16 +24,6 @@ import com.threeml.awu.engine.graphics.IRenderSurface;
 import com.threeml.awu.engine.input.Input;
 import com.threeml.awu.engine.io.FileIO;
 import com.threeml.awu.world.GameScreen;
-
-import android.app.Fragment;
-import android.media.AudioManager;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 
 public abstract class Game extends Fragment {

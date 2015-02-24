@@ -69,6 +69,7 @@ public class AssetStore {
 
 	/**
 	 * Add the specified bitmap asset to the store
+	 * DM - Edited to remove bitmap if already added to replace with new bitmap
 	 * 
 	 * @param assetName
 	 *            Name given to the asset
@@ -79,7 +80,8 @@ public class AssetStore {
 	 */
 	public boolean add(String assetName, Bitmap asset) {
 		if (mBitmaps.containsKey(assetName))
-			return false;
+			mBitmaps.remove(assetName);
+			//return false;
 
 		mBitmaps.put(assetName, asset);
 		return true;

@@ -3,9 +3,6 @@ package com.threeml.awu.world.gameobject.player;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.threeml.awu.world.GameScreen;
-
-import android.graphics.Bitmap;
 import android.util.Log;
 
 /**

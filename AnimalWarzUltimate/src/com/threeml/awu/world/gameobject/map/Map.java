@@ -7,8 +7,6 @@ package com.threeml.awu.world.gameobject.map;
  * 
  * @author Dean
  */
-import android.graphics.Bitmap;
-
 import com.threeml.awu.Game;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
@@ -59,7 +57,27 @@ public class Map {
 	public Vector2[] getSpawnLocations() {
 		return this.SpawnLocations;
 	}
-
+	/**
+	 * Returns a Spawn Location that has not been used yet
+	 * then sets the value of that location to 0
+	 * @author Dean
+	 */
+	public Vector2 getAndRemoveSpawnLocation(){
+		
+		for(Vector2 SpawnLocation : SpawnLocations){
+			if(!SpawnLocation.isZero()){
+			 	//If its the last spawn location don't set the location to 0
+				if(SpawnLocation == SpawnLocations[SpawnLocations.length-1]){
+					SpawnLocation.set(0, 0);
+				}
+				return SpawnLocation;
+		 	}
+		}
+		
+		//If nothings returned, return the last spawn location
+		return SpawnLocations[SpawnLocations.length-1];
+	}
+	
 	/**
 	 * @return the mapTerrainObj
 	 */

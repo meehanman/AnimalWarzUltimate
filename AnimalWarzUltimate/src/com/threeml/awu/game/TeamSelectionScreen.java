@@ -72,7 +72,8 @@ public class TeamSelectionScreen extends GameScreen {
 				
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
-				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
+				//Where the Map and Team Selection is passed
+				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame,"Castles",2,2);
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
 			}
