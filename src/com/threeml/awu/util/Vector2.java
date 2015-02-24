@@ -51,6 +51,20 @@ public class Vector2 {
 		this.x = x;
 		this.y = y;
 	}
+	
+	/**
+	 * Double Vectors Created for Map Spawn Locations
+	 * 
+	 * @param d
+	 * @param e
+	 * @return
+	 * @author Dean
+	 */
+	public Vector2(double x, double y) {
+		// TODO Auto-generated method stub
+		this.x = (float)x;
+		this.y = (float)y;
+	}
 
 	/**
 	 * Constructs a vector with the given component value

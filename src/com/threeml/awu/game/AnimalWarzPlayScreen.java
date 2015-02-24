@@ -18,6 +18,7 @@ import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.dashboardobject.Control;
 import com.threeml.awu.world.gameobject.droppable.Healthkit;
 import com.threeml.awu.world.gameobject.map.Background;
+import com.threeml.awu.world.gameobject.map.Map;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
@@ -36,9 +37,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	// /////////////////////////////////////////////////////////////////////////
 	
 	/** Width of the level (Changed later by width/height of backgroundimage) */
-	private float LEVEL_WIDTH = 0.0f;
+	private float LEVEL_WIDTH = 1600f;
 	/** Height of the level (Changed later by width/height of backgroundimage) */
-	private float LEVEL_HEIGHT = 0.0f;
+	private float LEVEL_HEIGHT = 580f;
 
 	/*
 	 * Define viewports for this layer and the associated screen projection
@@ -110,12 +111,15 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		int screenHeight = game.getScreenHeight();
 		
 		//Change the scaling of the map on screen
-		LEVEL_WIDTH = getGame().getAssetManager().getBitmap("Terrain").getWidth();
-		LEVEL_HEIGHT = getGame().getAssetManager().getBitmap("Terrain").getHeight();
+		//TODO DM - We need to have a level width larger than images so stuff can fly 
+		//around the game, not limited to just the map itself, unless we add larger images
+		//with large transparent borders
+		//LEVEL_WIDTH = getGame().getAssetManager().getBitmap("TerrainImage").getWidth();
+		//LEVEL_HEIGHT = getGame().getAssetManager().getBitmap("TerrainImage").getHeight();
 		
-		//TODO apply scaling depending on screensize
-		LEVEL_WIDTH /= 1.2f;
-		LEVEL_HEIGHT /= 1.2f;
+		//TODO DM - apply scaling depending on screensize
+		//LEVEL_WIDTH /= 1.2f;
+		//LEVEL_HEIGHT /= 1.2f;
 		
 		// Create the screen viewport
 		mScreenViewport = new ScreenViewport(0, 0, screenWidth,
@@ -157,17 +161,16 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 * 				Height of the screen
 	 */
 	private void CreateGameObjects(int screenHeight, int screenWidth) {
+		
 		// Create the terrain and background for the game
-		mTerrain = new Terrain(LEVEL_WIDTH / 2.0f,
-				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
-						.getAssetManager().getBitmap("Terrain"), this);	
-		mBackground = new Background(LEVEL_WIDTH / 2.0f,
-						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, getGame()
-								.getAssetManager().getBitmap("Background"), this);
+		Map mCurrentMap = new Map("Castles",LEVEL_WIDTH,LEVEL_HEIGHT,mGame,this);
+		
+		//Set Terrain and Background Objects
+		mTerrain = mCurrentMap.getTerrain();
+		mBackground = mCurrentMap.getBackground();
 
-				// Create the objects
-				
-				createPlayersAndTeams();
+		// Create the objects
+		createPlayersAndTeams();
 
 		
 		//TODO - Add recursive loop to add players setting first player active
