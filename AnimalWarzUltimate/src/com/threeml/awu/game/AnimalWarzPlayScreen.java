@@ -105,9 +105,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	public AnimalWarzPlayScreen(Game game) {
 		super("AnimalWarzPlayScreen", game);
 		
-		//Loads image assets
-		loadAssets();
-		
 		//Get Camera/Screen Width and Height
 		int screenWidth = game.getScreenWidth();
 		int screenHeight = game.getScreenHeight();
@@ -264,37 +261,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		}
 
 	}
-	/**
-	 * Loads image assets to game
-	 */
-	public void loadAssets(){
-		// Load in the assets used by this layer
 
-		AssetStore assetManager = mGame.getAssetManager();
-		assetManager.loadAndAddBitmap("Player", "img/player/worm_walk_left.png");
-		assetManager.loadAndAddBitmap("PlayerBackFlip", "img/player/wbackflp.png");
-		assetManager.loadAndAddBitmap("PlayerWalk", "img/player/wwalk.png");
-		assetManager.loadAndAddBitmap("PlayerWin", "img/player/wwinner.png");
-		assetManager.loadAndAddBitmap("PlayerUp", "img/player/wflyup.png");
-		assetManager.loadAndAddBitmap("PlayerFall", "img/player/wfall.png");
-		
-		assetManager.loadAndAddBitmap("Terrain", "img/terrain/castles.png");
-		assetManager.loadAndAddBitmap("Background", "img/background/lostKingdom.png");
-		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
-		assetManager.loadAndAddBitmap("Gun", "img/gun.png");
-		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
-
-		//DashboardControls
-		assetManager.loadAndAddBitmap("MoveLeft","img/dashControls/MoveLeft.png");
-		assetManager.loadAndAddBitmap("MoveRight","img/dashControls/MoveRight.png");
-		assetManager.loadAndAddBitmap("JumpLeft","img/dashControls/JumpLeft.png");
-		assetManager.loadAndAddBitmap("JumpRight","img/dashControls/JumpRight.png");
-		assetManager.loadAndAddBitmap("WeaponsCrate","img/dashControls/WeaponsCrate.png");
-		assetManager.loadAndAddBitmap("Fireeee","img/dashControls/Fireeee.png");
-		assetManager.loadAndAddBitmap("AimUp","img/dashControls/AimUp.png");
-		assetManager.loadAndAddBitmap("AimDown","img/dashControls/AimDown.png");
-	}
-	
 	// /////////////////////////////////////////////////////////////////////////
 	// Support methods
 	// /////////////////////////////////////////////////////////////////////////

@@ -10,6 +10,8 @@ import android.os.Handler;
  * After nSeconds, Starts Main Activity (mGame)
  * Shows the 3ml Logo
  * 
+ * DM - Can we load our resouces here for the game?
+ * 
  * @author Mark
  *
  */
@@ -18,7 +20,7 @@ import android.os.Handler;
 
 public class SplashScreen extends Activity{
 	
-	private static int SPLASH_TIME_OUT = 500;
+	private static int SPLASH_TIME_OUT = 1000;
 	
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {

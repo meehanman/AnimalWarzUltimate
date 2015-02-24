@@ -41,21 +41,8 @@ public class TeamSelectionScreen extends GameScreen {
 	 */
 	public TeamSelectionScreen(Game game) {
 		super("TeamSelectionScreen", game);
-
-
-		//Load in BG Image and assets
-		assetManager.loadAndAddBitmap("TSBackground", "img/TeamSelectionImages/MenuBackground.jpg");
-		assetManager.loadAndAddBitmap("TSTitle", "img/TeamSelectionImages/TeamSelectionTitle.png");
-		//Load in button images
-		assetManager.loadAndAddBitmap("ContinueButton", "img/TeamSelectionImages/continue.png");
 		
-		//Load in Audio 
-		assetManager.loadAndAddMusic("Dungeon_Boss", "music/Video_Dungeon_Boss.mp3");
-		assetManager.loadAndAddSound("ButtonClick", "sfx/CursorSelect.wav");
-		
-		//DM - Lower this annoying Music
-		assetManager.getMusic("Dungeon_Boss").setVolume(.02f);
-
+		//loadAssets();
 	}
 
 	/*
@@ -189,7 +176,5 @@ public class TeamSelectionScreen extends GameScreen {
 		}
 		*/
 	}
-	
-	
 	
 }

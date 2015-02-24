@@ -12,6 +12,7 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.engine.input.Input;
 import com.threeml.awu.engine.input.TouchEvent;
+import com.threeml.awu.util.AssetsHelper;
 import com.threeml.awu.world.GameScreen;
 
 /**
@@ -40,21 +41,10 @@ public class MenuScreen extends GameScreen {
 	 */
 	public MenuScreen(Game game) {
 		super("MenuScreen", game);
-
-
-		//Load in BG Image and assets
-		assetManager.loadAndAddBitmap("MainMenuBackground", "img/MainMenu/MenuBackground.jpg");
-		assetManager.loadAndAddBitmap("MainMenuLogo", "img/MainMenu/menulogo.png");
-		//Load in button images
-		assetManager.loadAndAddBitmap("NewGameButton", "img/MainMenu/newGameButton.png");
 		
-		//Load in Audio 
-		assetManager.loadAndAddMusic("Dungeon_Boss", "music/Video_Dungeon_Boss.mp3");
-		assetManager.loadAndAddSound("ButtonClick", "sfx/CursorSelect.wav");
-		
-		//DM - Lower this annoying Music
-		assetManager.getMusic("Dungeon_Boss").setVolume(.02f);
-
+		//Loads all the assets for the game
+		//TODO DM - See Trello for changes to be made
+		AssetsHelper.loadAllAssets(game);
 	}
 
 	/*
@@ -197,7 +187,5 @@ public class MenuScreen extends GameScreen {
 		}
 		*/
 	}
-	
-	
 	
 }
