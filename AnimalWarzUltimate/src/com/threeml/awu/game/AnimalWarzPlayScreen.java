@@ -148,7 +148,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			mTerrainViewport = new LayerViewport(240.0f * mScreenViewport.height / mScreenViewport.width, 240.0f, 240.0f * mScreenViewport.height / mScreenViewport.width, 240);
 		}
 
-		CreateGameObjects(screenHeight, screenWidth);
+		CreateGameObjects(screenHeight, screenWidth,Players,Teams);
 		mCountDownTimer = game.getPlayerCountDown();
 		mCountDownTimer.start();
 	}
@@ -163,7 +163,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 * @param screenHeight
 	 * 				Height of the screen
 	 */
-	private void CreateGameObjects(int screenHeight, int screenWidth) {
+	private void CreateGameObjects(int screenHeight, int screenWidth,int Players, int Teams) {
 
 		// Create the terrain and background for the game
 		Map mCurrentMap = new Map("Castles", LEVEL_WIDTH, LEVEL_HEIGHT, mGame, this);
@@ -173,7 +173,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mBackground = mCurrentMap.getBackground();
 
 		// Create the objects
-		createPlayersAndTeams();
+		createPlayersAndTeams(Players,Teams);
 
 
 		//TODO - Add recursive loop to add players setting first player active
@@ -251,13 +251,15 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		//mControls.add(mWeaponsList);
 	}
 	//TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
-	public void createPlayersAndTeams() {
+	public void createPlayersAndTeams(int Players, int Teams) {
+		
 		try {
 			List < Player > players = new ArrayList < Player > ();
 			List < Player > players2 = new ArrayList < Player > ();
 			int count = 0;
-			for (int i = 0; i < 2; i++) {
-				Vector2 spawnLocation = mCurrentMap.getAndRemoveSpawnLocation();
+
+			for (int i = 0; i < Players; i++) {
+				Vector2 spawnLocation = mCurrentMap.getUniqueSpawnLocation();
 				players.add(new Player(spawnLocation.x, spawnLocation.y, 1, 15, getGame().getAssetManager().getBitmap("PlayerWalk"), this, count));
 				Log.v("PlayerManagement", players.get(i).getId() + "");
 				count++;
@@ -265,7 +267,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			Team t1 = new Team(players, "Team1");
 
 			for (int i = 0; i < 2; i++) {
-				Vector2 spawnLocation = mCurrentMap.getAndRemoveSpawnLocation();
+				Vector2 spawnLocation = mCurrentMap.getUniqueSpawnLocation();
 				players2.add(new Player(spawnLocation.x, spawnLocation.y, 1, 15, getGame().getAssetManager().getBitmap("PlayerWalk"), this, count));
 				Log.v("PlayerManagement", players.get(i).getId() + "");
 				count++;
@@ -379,7 +381,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				}
 
 
-				Log.v("UpdateMethod", "Player ID : " + p.getId());
+				//Log.v("UpdateMethod", "Player ID : " + p.getId());
 
 				/*if(mWeaponsCrateButton.isActivated()){
 				mGun.setPosition(500, 120);

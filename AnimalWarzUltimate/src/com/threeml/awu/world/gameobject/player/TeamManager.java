@@ -131,11 +131,11 @@ public class TeamManager {
 	 * active player
 	 */
 	public void changeActiveTeamAndPlayer(){
-		Log.v("changeActiveTeamAndPlayer", "TeamManager changeActiveTeamAndPlayer called");
-		Log.v("changeActiveTeamAndPlayer", "Active Team : " + getActiveTeam().getTeamName() + " Active Player " + getActiveTeam().getActivePlayer().getId());
+		//Log.v("changeActiveTeamAndPlayer", "TeamManager changeActiveTeamAndPlayer called");
+		//Log.v("changeActiveTeamAndPlayer", "Active Team : " + getActiveTeam().getTeamName() + " Active Player " + getActiveTeam().getActivePlayer().getId());
 		changeActiveTeam();
 		getActiveTeam().nextActivePlayer();
-		Log.v("changeActiveTeamAndPlayer", "TeamManager changeActiveTeamAndPlayer completed");
+		//Log.v("changeActiveTeamAndPlayer", "TeamManager changeActiveTeamAndPlayer completed");
 	}
 	
 	/**

@@ -46,7 +46,7 @@ public class GameCountDownTimer extends CountDownTimer{
 	 */
 	@Override
 	public void onTick(long millisUntilFinished) {
-    	 Log.v("CountDownTimer", "Count Down : " + Long.toString(millisUntilFinished/1000));
+    	 //Log.v("CountDownTimer", "Count Down : " + Long.toString(millisUntilFinished/1000));
     	 finished = false;
      }
 	/**
@@ -54,7 +54,7 @@ public class GameCountDownTimer extends CountDownTimer{
 	 */
 	@Override
      public void onFinish() {
-		 Log.v("CountDownTimer", "Count Down : Finished");
+		 //Log.v("CountDownTimer", "Count Down : Finished");
 		 finished = true;
      }
 	/**
