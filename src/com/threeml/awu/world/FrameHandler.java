@@ -69,7 +69,7 @@ public class FrameHandler {
 			this.mCurrentColumn = c;
 		}
 		
-		Log.v("nextFrameTest", "R: "+this.mCurrentRow+" C: "+this.mCurrentColumn);
+		//Log.v("nextFrameTest", "R: "+this.mCurrentRow+" C: "+this.mCurrentColumn);
 	}
 	
 	/**

@@ -91,9 +91,9 @@ public class Terrain extends Sprite {
 		if((spriteXPixel<0||spriteYPixel<0)||(spriteXPixel>mBitmap.getWidth()||spriteYPixel>mBitmap.getHeight())){return false;}
 		
 		//Logging of tests to determine direction and if alpha or not
-		Log.v("IPSLocation", "x:"+(int)spriteXPixel+"px y:"+(int)spriteYPixel+"px: Angle:"+directionAngle);
+		//Log.v("IPSLocation", "x:"+(int)spriteXPixel+"px y:"+(int)spriteYPixel+"px: Angle:"+directionAngle);
 		//Log.v("IPSLocation",(int)SpriteBound.y+" "+(int)SpriteBound.x);
-		Log.v("pixelColor","Alpha:"+Color.alpha(mBitmap.getPixel((int)spriteXPixel, (int)spriteYPixel)));
+		//Log.v("pixelColor","Alpha:"+Color.alpha(mBitmap.getPixel((int)spriteXPixel, (int)spriteYPixel)));
 		
 		//Return if there is a collision at this point
 		return (Color.alpha(mBitmap.getPixel((int)spriteXPixel, (int)spriteYPixel)) > 150);

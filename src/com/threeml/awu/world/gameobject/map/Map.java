@@ -7,6 +7,10 @@ package com.threeml.awu.world.gameobject.map;
  * 
  * @author Dean
  */
+import java.util.Random;
+
+import android.util.Log;
+
 import com.threeml.awu.Game;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
@@ -34,6 +38,8 @@ public class Map {
 		this.name = MapHelper.getName();
 		//Set the Spawn Locations
 		this.SpawnLocations = MapHelper.getSpawnLocations();
+		//Shuffle the spawn locations
+		shuffleSpawnLocations();
 		//Create the Terrain Object
 		this.MapTerrainObj = new Terrain(LEVEL_WIDTH / 2.0f,
 				LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, mGame
@@ -62,18 +68,19 @@ public class Map {
 	 * then sets the value of that location to 0
 	 * @author Dean
 	 */
-	public Vector2 getAndRemoveSpawnLocation(){
+	public Vector2 getUniqueSpawnLocation(){
 		
-		for(Vector2 SpawnLocation : SpawnLocations){
-			if(!SpawnLocation.isZero()){
-			 	//If its the last spawn location don't set the location to 0
-				if(SpawnLocation == SpawnLocations[SpawnLocations.length-1]){
-					SpawnLocation.set(0, 0);
-				}
-				return SpawnLocation;
+		for(int i = 0; i<SpawnLocations.length;i++){
+			if(SpawnLocations[i] != null){
+				Vector2 temp = SpawnLocations[i];
+				//TODO DM - Temp Scale
+				temp.x/=4;
+				temp.y/=4;
+				SpawnLocations[i] = null;
+				Log.v("SpawnLocation",i+") Spawned Player: "+temp.x+" "+temp.y);
+				return temp;
 		 	}
-		}
-		
+		}	
 		//If nothings returned, return the last spawn location
 		return SpawnLocations[SpawnLocations.length-1];
 	}
@@ -90,5 +97,23 @@ public class Map {
 	public Background getBackground() {
 		return MapBackgroundObj;
 	}
+	
+	/**
+	 * Shuffle the spawn locations 
+	 * so each games locations are different
+	 * @param ar
+	 * @author Dean
+	 */
+	  private void shuffleSpawnLocations()
+	  {
+	    Random rnd = new Random();
+	    for (int i = SpawnLocations.length - 1; i > 0; i--)
+	    {
+	      int index = rnd.nextInt(i + 1);
+	      Vector2 a = SpawnLocations[index];
+	      SpawnLocations[index] = SpawnLocations[i];
+	      SpawnLocations[i] = a;
+	    }
+	  }
             
 }
