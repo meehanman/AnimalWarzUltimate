@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.threeml.awu.Game;
@@ -24,7 +25,6 @@ import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
 import com.threeml.awu.world.gameobject.player.TeamManager;
 import com.threeml.awu.world.gameobject.weapon.Gun;
-import com.threeml.awu.world.gameobject.weapon.Weapon;
 
 /**
  * Simple steering game world
@@ -63,6 +63,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private Background mBackground;
 	/** Terrain image, all game objects interact with this object */
 	private Terrain mTerrain;
+	
+	private Bitmap mBitmap;
 	// TODO MJ - Player management isn't complete
 	/** players */
 	// TODO MJ - remove this when completed team management
@@ -485,11 +487,13 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		for (Control c : mControls) {
 			c.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 		}
+		mWeaponsList.quarterBitmap(getGame().getAssetManager().getBitmap("WeaponArchive"));
 		if (mWeaponSelect.isActivated()) {
 			mWeaponsList.draw(elapsedTime, graphics2D, mDashboardViewport,
 					mScreenViewport);
+		
 		}
-
+		
 	}
 	
 }
