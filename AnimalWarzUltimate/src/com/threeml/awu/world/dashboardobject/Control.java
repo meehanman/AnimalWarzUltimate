@@ -101,5 +101,6 @@ public class Control extends GameObject {
 				(int) (position.y + mBound.halfHeight));
 
 		graphics2D.drawBitmap(mBitmap, null, drawScreenRect, null);
+		
 	}
 }

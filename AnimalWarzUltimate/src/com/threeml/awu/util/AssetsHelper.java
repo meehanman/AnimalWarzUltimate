@@ -42,7 +42,7 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("Fireeee","img/dashControls/Fireeee.png");
 		assetManager.loadAndAddBitmap("AimUp","img/dashControls/AimUp.png");
 		assetManager.loadAndAddBitmap("AimDown","img/dashControls/AimDown.png");
-		
+		assetManager.loadAndAddBitmap("WeaponArchive", "img/dashControls/WeaponArchive.png");
 		//Main Menu Items
 		//Load in BG Image and assets
 		assetManager.loadAndAddBitmap("MainMenuBackground", "img/MainMenu/MenuBackground.jpg");

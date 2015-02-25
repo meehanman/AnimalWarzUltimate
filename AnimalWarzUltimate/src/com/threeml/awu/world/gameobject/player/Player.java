@@ -127,7 +127,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 *            	Array of platforms in the world
 	 */
 	public void update(ElapsedTime elapsedTime, boolean moveLeft,
-			boolean moveRight, boolean jumpUp, Terrain TerrainObj) {
+			boolean moveRight, boolean jumpUp, boolean weaponSelect,
+			Terrain TerrainObj) {
 
 		// Depending upon the left and right movement touch controls
 		// set an appropriate x-acceleration. If the user does not

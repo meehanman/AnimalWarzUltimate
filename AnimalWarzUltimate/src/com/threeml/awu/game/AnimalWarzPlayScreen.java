@@ -24,6 +24,7 @@ import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
 import com.threeml.awu.world.gameobject.player.TeamManager;
 import com.threeml.awu.world.gameobject.weapon.Gun;
+import com.threeml.awu.world.gameobject.weapon.Weapon;
 
 /**
  * Simple steering game world 
@@ -52,7 +53,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private LayerViewport mBackgroundViewport;
 	/** Viewport for all user controls or information */
 	private LayerViewport mDashboardViewport;
-
+	/** Rectanlge used to display available weapons */
 
 	/*
 	 * Define game objects used within game
@@ -88,7 +89,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 * Create touch controls for player input
 	 */
 	private Control mMoveLeftButton, mMoveRightButton, mJumpLeftButton,
-	mJumpRightButton, mWeaponsCrateButton, mShootButton, mAimUpButton, mAimDownButton;
+	mJumpRightButton, mWeaponSelect, mShootButton, mAimUpButton, mAimDownButton,
+	mWeaponsList;
 	/** List array to handle controls */
 	private List < Control > mControls = new ArrayList < Control > ();
 	/** count down timer to change active user after 30 seconds */
@@ -228,8 +230,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		x = screenWidthCell * 40;
 		y = (screenHeight - (screenHeightCell * 15f));
 
-		mWeaponsCrateButton = new Control(x, y, width, height, "WeaponsCrate", this);
-		mControls.add(mWeaponsCrateButton);
+		mWeaponSelect = new Control(x, y, width, height, "WeaponsCrate", this);
+		mControls.add(mWeaponSelect);
 
 		x = screenWidthCell * 80;
 		mShootButton = new Control(x, y, width, height, "Fireeee", this);
@@ -242,7 +244,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		y = (screenHeight - (screenHeightCell * 38.2f));
 		mJumpLeftButton = new Control(x, y, width, height, "JumpLeft", this);
 		mControls.add(mJumpLeftButton);
-
+		
+		y = (screenHeight - (screenHeightCell * 43.4f));
+		mWeaponsList = new Control(getGame().getScreenWidth() / 2, getGame().getScreenHeight() / 2
+				, 400, 400, "WeaponArchive", this);
+		//mControls.add(mWeaponsList);
 	}
 	//TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
 	public void createPlayersAndTeams() {
@@ -365,10 +371,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				// to be collected by the user
 				if (p.getActive()) {
 					p.update(elapsedTime, mMoveLeftButton.isActivated(),
-					mMoveRightButton.isActivated(), mJumpLeftButton.isActivated(), mTerrain);
+					mMoveRightButton.isActivated(), mJumpLeftButton.isActivated(),
+					mWeaponSelect.isActivated(), mTerrain);
 				} else {
 					p.update(elapsedTime, false,
-					false, false, mTerrain);
+					false, false, false, mTerrain);
 				}
 
 
@@ -448,6 +455,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			c.draw(elapsedTime, graphics2D, mDashboardViewport,
 			mScreenViewport);
 		}
-
+		if (mWeaponSelect.isActivated()) {		
+			mWeaponsList.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
+		}
+		
 	}
 }
