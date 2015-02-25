@@ -1,5 +1,7 @@
 package com.threeml.awu.util;
 
+import android.graphics.Bitmap;
+
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
 

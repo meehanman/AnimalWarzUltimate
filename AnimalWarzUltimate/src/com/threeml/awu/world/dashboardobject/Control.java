@@ -1,5 +1,7 @@
 package com.threeml.awu.world.dashboardobject;
 
+import android.graphics.Bitmap;
+
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.engine.input.Input;
@@ -76,6 +78,23 @@ public class Control extends GameObject {
 
 		return false;
 	}
+	
+	public boolean isTouched() {
+		// Consider any touch events occurring in this update
+				Input input = mGameScreen.getGame().getInput();
+
+				// Check if any of the touch events were on this control
+				BoundingBox bound = getBound();
+				for (int idx = 0; idx < TouchHandler.MAX_TOUCHPOINTS; idx++) {
+					if (input.existsTouch(idx)) {
+						if (bound.contains(input.getTouchX(idx), input.getTouchY(idx))) {
+							return true;
+						}
+					}
+				}
+
+				return false;
+	}
 
 	/**
 	 * Overrides the draw method from GameObject class
@@ -103,4 +122,53 @@ public class Control extends GameObject {
 		graphics2D.drawBitmap(mBitmap, null, drawScreenRect, null);
 		
 	}
+
+	/**
+	 * @param bitmap
+	 * 			The bitmap that will be quartered into four segments.
+	 * @return
+	 * 		Bitmap divided into four segments.
+	 */
+	public Bitmap [] quarterBitmap(Bitmap bitmap) {
+		
+		Bitmap [] mBitmap = new Bitmap[4]; 
+		mBitmap[0] = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth()/2, 
+				bitmap.getHeight()/2);
+		mBitmap[1] = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2, 0,
+				bitmap.getWidth()/2, bitmap.getHeight()/2);
+		mBitmap[2] = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight()/2,
+				bitmap.getWidth()/2, bitmap.getHeight()/2);
+		mBitmap[3] = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2, 
+				bitmap.getHeight()/2, bitmap.getWidth()/2, bitmap.getHeight()/2);
+		return mBitmap;
+		
+	}
+	/*	
+	/**
+	 * 	Divides the Bitmap into a specified number of rows and columns
+	 * 
+	 * @param bitmap
+	 * 			Bitmap that will be divided
+	 * @param x
+	 * 			Number of rows in the Bitmap
+	 * @param y
+	 * 			Number of columns in the Bitmap
+	 * @return
+	 * 			The divided Bitmap
+	 
+	public Bitmap [][] divideBitmap(Bitmap bitmap, int x, int y) {
+		
+		Bitmap[][] divideBitmap = new Bitmap[x][y];
+		int width, height;
+		width = bitmap.getWidth() / x;
+		height = bitmap.getHeight() / y;
+		for (int i = 0; i < x; ++i) {
+			for (int j = 0; j < y; ++j) {
+				divideBitmap[i][j] = Bitmap.createBitmap(bitmap, x * width, y * height,
+						width, height);
+			}
+		}
+		return divideBitmap;
+		
+	} */
 }
