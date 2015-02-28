@@ -61,7 +61,7 @@ public class FrameHandler {
 	 * @param c 
 	 * 				Sets the column
 	 */
-	protected void setFrame(int r, int c){
+	public void setFrame(int r, int c){
 		if(r >= 0 && r <= mRows){
 			this.mCurrentRow = r;
 		}

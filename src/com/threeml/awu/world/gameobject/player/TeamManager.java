@@ -94,7 +94,6 @@ public class TeamManager {
 		try{
 			changeActiveTeam();
 			mActivePlayer = mActiveTeam.changeActivePlayer();
-			Log.v("Team Management", "Active team : " + mTeams.indexOf(mActiveTeam));
 		}catch(Exception e){
 			Log.e("TeamError", "Error in TeamManager changeActivePlayer : " + e);
 		}

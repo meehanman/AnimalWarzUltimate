@@ -92,8 +92,13 @@ public class Player extends Sprite {
 public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen) {		
 	super(startX, startY, 20.0f, 20.0f, bitmap, gameScreen);
 		mFullImage = bitmap;
-		
-		mHealthText = new BitmapFont(startX, startY, gameScreen, Integer.toString(mHealth));
+		try {
+			mHealthText = new BitmapFont(startX, startY, gameScreen, Integer.toString(mHealth), 16);
+			//mHealthText = new BitmapFont(startX, startY, gameScreen, "Worm", 16);
+		}
+		catch(Exception e){
+			Log.e("Text Error", "Player constructor error : " + e);
+		}
 		
 		mFrameHandler = new FrameHandler(mFullImage, rows, columns);
 }
@@ -199,7 +204,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			}
 		}
 		catch (Exception e){
-			Log.v("CustomError", e + " : Error in Player draw method");
+			Log.v("Text Error", e + " : Error in Player draw method");
 		}
 		
 		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
