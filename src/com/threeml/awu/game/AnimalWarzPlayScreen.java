@@ -111,7 +111,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	public AnimalWarzPlayScreen(Game game, String MapName, int Teams,
 			int Players) {
 		super("AnimalWarzPlayScreen", game);
-
+		mTeamManager = new TeamManager();
 		// Get the current Map Ready
 		mCurrentMap = new Map(MapName, LEVEL_WIDTH, LEVEL_HEIGHT, mGame, this);
 
@@ -272,34 +272,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	public void createPlayersAndTeams(int Players, int Teams) {
 
 		try {
-			List<Player> players = new ArrayList<Player>();
-			List<Player> players2 = new ArrayList<Player>();
-			int count = 0;
-
-			for (int i = 0; i < Players; i++) {
-				Vector2 spawnLocation = mCurrentMap.getUniqueSpawnLocation();
-				players.add(new Player(spawnLocation.x, spawnLocation.y, 1, 15,
-						getGame().getAssetManager().getBitmap("PlayerWalk"),
-						this, count));
-				Log.v("PlayerManagement", players.get(i).getId() + "");
-				count++;
-			}
-			Team t1 = new Team(players, "Team1");
-
-			for (int i = 0; i < 2; i++) {
-				Vector2 spawnLocation = mCurrentMap.getUniqueSpawnLocation();
-				players2.add(new Player(spawnLocation.x, spawnLocation.y, 1,
-						15,
-						getGame().getAssetManager().getBitmap("PlayerWalk"),
-						this, count));
-				Log.v("PlayerManagement", players.get(i).getId() + "");
-				count++;
-			}
-			Team t2 = new Team(players, "Team2");
-			mTeamManager = new TeamManager(t1, t2);
+			mTeamManager.createNewTeam("Cylons", 4, mCurrentMap, getGame(), this);
+			mTeamManager.createNewTeam("Humans", 4, mCurrentMap, getGame(), this);
+			
 		} catch (RuntimeException e) {
-			Log.v("Major Error", e
-					+ "AnimalWarzPlayScreen createPlayersAndTeams");
+			Log.e("TeamError", "AnimalWarzPlayScreen createPlayersAndTeams : " + e);
 		}
 
 	}
@@ -314,7 +291,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 * @return Player Active player object
 	 */
 	private Player getActivePlayer() {
-		return mTeamManager.getActivePlayerFromCurrentActiveTeam();
+		return mTeamManager.getActivePlayer();
 		/*
 		 * for(Player p : mPlayers){ if(p.getActive()){ return p; } } return
 		 * null;
@@ -333,7 +310,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		 * mPlayers.get(1).setActive(false); mCountDownTimer.cancel();
 		 * mCountDownTimer.start(); }
 		 */
-		mTeamManager.changeActiveTeamAndPlayer();
+		mTeamManager.changeActivePlayer();
 		mCountDownTimer.cancel();
 		mCountDownTimer.start();
 	}
@@ -391,19 +368,12 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mTerrainViewport.x = mBackgroundViewport.x;
 		mTerrainViewport.y = mBackgroundViewport.y;
 
-		for (Team t : mTeamManager.getAllTeams()) {
-			for (Player p : t.getPlayers()) {
+			for (Player p : mTeamManager.getAllNotActivePlayers()) {
 				// for(Player p : mPlayers){
 				// Temporary solution to make the health pack appear
 				// to be collected by the user
-				if (p.getActive()) {
-					p.update(elapsedTime, mMoveLeftButton.isActivated(),
-							mMoveRightButton.isActivated(),
-							mJumpLeftButton.isActivated(),
-							mWeaponSelect.isActivated(), mTerrain);
-				} else {
-					p.update(elapsedTime, false, false, false, false, mTerrain);
-				}
+				
+				p.update(elapsedTime, false, false, false, false, mTerrain);
 
 				// Log.v("UpdateMethod", "Player ID : " + p.getId());
 
@@ -432,6 +402,28 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					}
 				}
 			}
+		mTeamManager.getActivePlayer().update(elapsedTime, mMoveLeftButton.isActivated(),
+				mMoveRightButton.isActivated(),
+				mJumpLeftButton.isActivated(),
+				mWeaponSelect.isActivated(), mTerrain);
+		
+		for (Healthkit h : healthPacks) {
+			h.update(elapsedTime, mTerrain);
+
+			// Ensure healthpacks cannot leave the confines of the world
+			// TODO this should be applied to sprite/item class
+			BoundingBox healthBound = h.getBound();
+			if (healthBound.getBottom() < 0) {
+				h.position.y -= healthBound.getBottom();
+			}
+
+			// Checks for any collisions
+			if (mTeamManager.getActivePlayer().getBound().intersects(healthBound)) {
+				// Apply health to player
+				mTeamManager.getActivePlayer().setHealth(h.getHealthValue());
+				// Remove from list
+				h.setActive(false);
+			}
 		}
 
 		// TODO DM - More work needed to collect used up items
@@ -443,7 +435,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				iter.remove(); // Remove
 			}
 		}
-	}
+}
 
 	/**
 	 * Overrides the draw method from GameScreen class Draws all gameobjects on
@@ -463,14 +455,13 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,
 				mScreenViewport);
 
-		for (Team t : mTeamManager.getAllTeams()) {
-			for (Player p : t.getPlayers()) {
+		
+			for (Player p : mTeamManager.getAllPlayers()) {
 				// for(Player p : mPlayers){
 				p.draw(elapsedTime, graphics2D, mBackgroundViewport,
 						mScreenViewport);
 
 			}
-		}
 
 		// mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport,
 		// mScreenViewport);

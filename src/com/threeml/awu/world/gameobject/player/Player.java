@@ -44,12 +44,6 @@ public class Player extends Sprite {
 	/** Health text that appears above the Player */
 	private BitmapFont mHealthText;
 	
-	/** Determines whether the user can interact with the Player */
-	private boolean mActive = false;
-	
-	/** ID of player, used in player management */
-	private int mId;
-	
 	/** Max Health the player can have */
 	private float MAX_HEALTH = 200.0f;
 	
@@ -83,24 +77,20 @@ public class Player extends Sprite {
 	 * Create the player's sphere
 	 * 
 	 * @param startX
-	 *            x location of the sphere
+	 *            	X location of the player
 	 * @param startY
-	 *            y location of the sphere
-	 *            
+	 *            	Y location of the player
 	 * @param columns
+	 * 				No. of columns in the bitmap spritesheet
 	 * @param rows
+	 * 				No. of rows in the bitmap spritesheet
 	 * @param bitmap
+	 * 				Bitmap image used to represent the player
 	 * @param gameScreen
 	 *            Gamescreen to which player belongs
-	 * @param 
 	 */
-public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, int id) {		
-	
-	
-	
+public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen) {		
 	super(startX, startY, 20.0f, 20.0f, bitmap, gameScreen);
-	
-		mId = id;
 		mFullImage = bitmap;
 		
 		mHealthText = new BitmapFont(startX, startY, gameScreen, Integer.toString(mHealth));
@@ -233,29 +223,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public int getHealth() 
 	{
 		return mHealth;
-	}
-	
-	/**
-	 * Set Active Player
-	 * @param active
-	 */
-	public void setActive(boolean a) {
-		mActive = a;
-	}
-	
-	/**
-	 * Returns if Player is Active
-	 * @return active
-	 */
-	public boolean getActive() {
-		return mActive;
-	}
-	/**
-	 * Returns Player ID
-	 * @return id
-	 */
-	public int getId() {
-		return mId;
 	}
 
 	/**

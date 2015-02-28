@@ -3,6 +3,12 @@ package com.threeml.awu.world.gameobject.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.threeml.awu.Game;
+import com.threeml.awu.util.Vector2;
+import com.threeml.awu.world.GameScreen;
+import com.threeml.awu.world.gameobject.map.Map;
+
+import android.graphics.Bitmap;
 import android.util.Log;
 
 /**
@@ -19,15 +25,13 @@ public class TeamManager {
 	// /////////////////////////////////////////////////////////////////////////
 	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
-	
-	/** First team */
-	private Team mTeamOne;
-	/** Second team */
-	private Team mTeamTwo;
-	/** Winning team id */
-	private int mWinningTeamId = -1;
+
 	/** List containing both teams */
 	private List<Team> mTeams;
+	/** The current playing team */
+	private Team mActiveTeam;
+	/** The current Player the user interacts with */
+	private Player mActivePlayer;
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -42,16 +46,23 @@ public class TeamManager {
 	 * 				Second team
 	 */
 	public TeamManager(Team teamOne, Team teamTwo){
-		mTeamOne = teamOne;
-		mTeamOne.setId(1);
-		mTeamTwo = teamTwo;
-		mTeamTwo.setId(2);
 		
 		mTeams = new ArrayList<Team>();
-		mTeams.add(mTeamOne);
-		mTeams.add(mTeamTwo);
+		mTeams.add(teamOne);
+		mTeams.add(teamTwo);
 		
-		setFirstActivePlayer();
+		//TODO MJ FIX THIS
+		mActiveTeam = mTeams.get(0);
+		mActivePlayer = mTeams.get(0).getPlayers().get(0);
+	}
+	
+	/**
+	 * Empty constructor
+	 * 
+	 * Initialises list of teams
+	 */
+	public TeamManager(){
+		mTeams = new ArrayList<Team>();
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -59,170 +70,145 @@ public class TeamManager {
 	// /////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Gets the currently active team
-	 * 
-	 * @return active team
-	 */
-	public Team getActiveTeam(){
-		try{
-			if(mTeamOne.isActive()){
-				return mTeamOne;
-			}else if(mTeamTwo.isActive()){
-				return mTeamTwo;
-			}
-		}catch(Exception e){
-			Log.v("Error", e + "Error in TeamManager getActiveTeam");
-			mTeamOne.setActive(true);
-			mTeamTwo.setActive(false);
-		}
-		return mTeamOne;
-	}
-	
-	/**
 	 * Changes the currently active team to be the currently inactive team
+	 * Should only be called within changeActivePlayer method
 	 */
-	public void changeActiveTeam(){
+	private void changeActiveTeam(){
 		try{
-			switch(getActiveTeam().getId()){
-			case 1:
-				mTeamOne.setActive(false);
-				mTeamTwo.setActive(true);
-				break;
-			case 2:
-				mTeamOne.setActive(true);
-				mTeamTwo.setActive(false);
-				break;
-			default:
-				mTeamOne.setActive(true);
-				mTeamTwo.setActive(false);
+			if(mTeams.indexOf(mActiveTeam) < (mTeams.size() - 1)){
+				mActiveTeam = mTeams.get(mTeams.indexOf(mActiveTeam) + 1);
+			}
+			else {
+				mActiveTeam = mTeams.get(0);
 			}
 		}catch(Exception e){
-			Log.v("Error", e + "Error in TeamManager changeActiveTeam");
-		}
-	}
-	
-	public Player getActivePlayerFromCurrentActiveTeam(){
-		return getActiveTeam().getActivePlayer();
-	}
-
-	/**
-	 * Checks if the game is over by checking the teams' collective health
-	 * Selects a winning team by whichever doesn't have 0 health or chooses a draw
-	 * if both teams have 0 health
-	 * @return game over
-	 */
-	public boolean checkIfGameOverAndFindWinningTeam(){
-		if(mTeamOne.getCollectiveHealth() <= 0 && mTeamTwo.getCollectiveHealth() > 0){
-			mWinningTeamId = mTeamOne.getId();
-			return true;
-		} else if(mTeamTwo.getCollectiveHealth() <= 0 && mTeamOne.getCollectiveHealth() > 0){
-			mWinningTeamId = mTeamOne.getId();
-			return true;
-		} else if (mTeamOne.getCollectiveHealth() <= 0 && mTeamTwo.getCollectiveHealth() <= 0){
-			mWinningTeamId = 0;
-			return true;
-		} else {
-			return false;
+			Log.e("TeamError", "Error in TeamManager changeActiveTeam : " + e);
+			mActiveTeam = mTeams.get(0);
 		}
 	}
 	
 	/**
-	 * Changes the active team to the other team and select the next
-	 * active player
+	 * Changes the currently active player
 	 */
-	public void changeActiveTeamAndPlayer(){
-		//Log.v("changeActiveTeamAndPlayer", "TeamManager changeActiveTeamAndPlayer called");
-		//Log.v("changeActiveTeamAndPlayer", "Active Team : " + getActiveTeam().getTeamName() + " Active Player " + getActiveTeam().getActivePlayer().getId());
-		changeActiveTeam();
-		getActiveTeam().nextActivePlayer();
-		//Log.v("changeActiveTeamAndPlayer", "TeamManager changeActiveTeamAndPlayer completed");
-	}
-	
-	/**
-	 * Gets the winning team by id, if 0 returned then game was a draw
-	 * @return
-	 */
-	public int getWinningTeamId(){
-		if(mWinningTeamId > 0){
-			return getTeamById(mWinningTeamId).getId();
-		} else {
-			return mWinningTeamId;
+	public void changeActivePlayer(){
+		try{
+			changeActiveTeam();
+			mActivePlayer = mActiveTeam.changeActivePlayer();
+			Log.v("Team Management", "Active team : " + mTeams.indexOf(mActiveTeam));
+		}catch(Exception e){
+			Log.e("TeamError", "Error in TeamManager changeActivePlayer : " + e);
 		}
 	}
 	
 	/**
-	 * Gets a team by it's id - id should be 1 or 2. If team doesn't exist,
-	 * null is returned
-	 * @param id
-	 * @return id or null if team does not exist
-	 */
-	public Team getTeamById(int id){
-		if(id == mTeamOne.getId()){
-			return mTeamOne;
-		} else if(id == mTeamOne.getId()){
-			return mTeamTwo;
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * Returns a list containing both teams
+	 * Creates a new team and adds to the team manager
 	 * 
-	 * @return teams
+	 * @param p
+	 * 			List of players in team
+	 * @param n
+	 * 			Name of team
 	 */
-	public List<Team> getAllTeams(){
-		return mTeams;
+	public void createNewTeam(List<Player> p, String n){
+		mTeams.add(new Team(p, n));
 	}
 	
-	public List<Player> getAllPlayers(){
+	/**
+	 * Returns all players, except the current active player
+	 * 
+	 * @return
+	 * 			All not active players
+	 */
+	public List<Player> getAllNotActivePlayers(){
 		List<Player> players = new ArrayList<Player>();
-		for(Team t : getAllTeams()){
-			players.addAll(t.getPlayers());
+		try {
+			players.addAll(getAllPlayers());
+			players.remove(mActivePlayer);
+		}
+		catch(Exception e){
+			Log.e("TeamError", "Error in Team getAllNotActivePlayers : "
+					+ e);
 		}
 		return players;
 	}
 	
 	/**
-	 * Get the first team
+	 * Returns all the players handled by the team manager
 	 * 
-	 * @return team 1
+	 * @return
+	 * 			all players
 	 */
-	public Team getTeamOne() {
-		return mTeamOne;
-	}
-	/**
-	 * Set the first team
-	 * 
-	 * @param teamOne
-	 */
-	public void setTeamOne(Team teamOne) {
-		mTeamOne = teamOne;
-	}
-	/**
-	 * Get the second team
-	 * 
-	 * @return team 2
-	 */
-	public Team getTeamTwo() {
-		return mTeamTwo;
-	}
-	/**
-	 * Set the second team
-	 * 
-	 * @param teamTwo
-	 */
-	public void setTeamTwo(Team teamTwo) {
-		mTeamTwo = teamTwo;
-	}
-	
-	public void setFirstActivePlayer(){
-		mTeamOne.setActivePlayerByIndex(0);
-	}
-	
-	public void createNewPlayerAndAddToTeam(int teamId, Player p){
-		if(mTeamOne.getId() == teamId){
-			mTeamOne.addNewPlayer(p);
+	public List<Player> getAllPlayers(){
+		List<Player> players = new ArrayList<Player>();
+		try {
+			for(int i = 0; i < mTeams.size(); i ++){
+				players.addAll(mTeams.get(i).getPlayers());
+			}
 		}
+		catch(Exception e){
+			Log.e("TeamError", "Error in Team getAllPlayers : "
+					+ e);
+		}
+		return players;
+	}
+	
+	/**
+	 * Creates a new team, with players, and adds to the team manager
+	 * 
+	 * @param n
+	 * 			Name of team
+	 * @param numPlayers
+	 * 			Number of players to create
+	 */
+	public void createNewTeam(String n, int numPlayers, Map map, Game game, GameScreen gameScreen){
+		try {
+			List<Player> players = new ArrayList<Player>();
+			for(int i = 0; i < numPlayers; i++){
+				Vector2 spawnLocation = map.getUniqueSpawnLocation();
+				players.add(new Player(spawnLocation.x, spawnLocation.y, 1,
+						15,
+						game.getAssetManager().getBitmap("PlayerWalk"),
+						gameScreen));
+			}
+			mTeams.add(new Team(players, n));
+			if(mActivePlayer == null){
+				mActiveTeam = mTeams.get(0);
+				mActivePlayer = mTeams.get(0).getPlayers().get(0);
+			}
+		}
+		catch(Exception e){
+			Log.e("TeamError", "Error in TeamManager createNewTeam : " + e);
+		}
+	}
+	
+	/**
+	 * Creates a new player using given arguments
+	 * 
+	 * @param teamIndex
+	 * 				index of the team in the team list
+	 * @param startX
+	 *            	X location of the player
+	 * @param startY
+	 *            	Y location of the player
+	 * @param columns
+	 * 				No. of columns in the bitmap spritesheet
+	 * @param rows
+	 * 				No. of rows in the bitmap spritesheet
+	 * @param bitmap
+	 * 				Bitmap image used to represent the player
+	 * @param gameScreen
+	 *            Gamescreen to which player belongs
+	 */
+	public void createNewPlayer(int teamIndex, float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen){
+		mTeams.get(teamIndex).addNewPlayer(new Player(startX, startY, columns, rows, bitmap, gameScreen));
+	}
+	
+	/**
+	 * Returns the active player
+	 * 
+	 * @return
+	 * 			Active Player
+	 */
+	public Player getActivePlayer(){
+		return mActivePlayer;
 	}
 }

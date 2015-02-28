@@ -217,7 +217,7 @@ public abstract class Game extends Fragment {
 		// Create the screen manager
 		mScreenManager = new ScreenManager();		
 		
-		countDownTimer = new GameCountDownTimer(9000000, 1000);
+		countDownTimer = new GameCountDownTimer(60000, 1000);
 		
 		// Request control of the volume
 		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
