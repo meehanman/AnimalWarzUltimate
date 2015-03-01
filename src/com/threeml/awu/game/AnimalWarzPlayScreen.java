@@ -271,16 +271,18 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				.getScreenHeight() / 2, "WeaponArchive", this);
 		// mControls.add(mWeaponsList);
 		
-		mDashboardTimer = new OnScreenText(getGame().getScreenWidth() - 50, getGame()
-				.getScreenHeight() - 50, this, "0", 20);
+		x = screenWidthCell * 60;
+		y = (screenHeight - 10);
+		mDashboardTimer = new OnScreenText(getGame().getScreenWidth() / 2, getGame()
+				.getScreenHeight() / 2, this, "0", 200);
 	}
 
 	// TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
 	public void createPlayersAndTeams(int Players, int Teams) {
 
 		try {
-			mTeamManager.createNewTeam("3ml", 4, mCurrentMap, getGame(), this);
-			mTeamManager.createTestNewTeam("Uni", 4, mCurrentMap, getGame(), this);
+			mTeamManager.createNewTeam("GOOD", 5, mCurrentMap, getGame(), this);
+			mTeamManager.createTestNewTeam("EVIL", 5, mCurrentMap, getGame(), this);
 			
 		} catch (RuntimeException e) {
 			Log.e("TeamError", "AnimalWarzPlayScreen createPlayersAndTeams : " + e);

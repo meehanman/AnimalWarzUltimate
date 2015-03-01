@@ -14,17 +14,17 @@ public class GameObjectText extends BitmapFont{
 	private GameObject mGameObj;
 	private int mHeightFromObject;
 	
-	public GameObjectText(GameScreen gameScreen, String str,
-			int fontSize, GameObject gameObj, int heightFromObject){
-		super(gameObj.getBound().x, gameObj.getBound().y + heightFromObject, gameScreen, str, fontSize);
+	public GameObjectText(GameScreen gameScreen, String str, GameObject gameObj, int heightFromObject){
+		super(gameObj.getBound().x, gameObj.getBound().y + heightFromObject, gameScreen, str);
 		
 		mGameObj = gameObj;
 		mHeightFromObject = heightFromObject;
 	}
 	
 	public void update(ElapsedTime elapsedTime) {
-
-		this.position = new Vector2(mGameObj.getBound().x + ((mTextImage.getWidth() / 2)/1.5), mGameObj.getBound().y + mHeightFromObject);
+		
+		//TODO - this is awful hacked together, need a better way to align the center of text to center of player
+		this.position = new Vector2(mGameObj.getBound().x + (mTextImage.getWidth() * 0.35), mGameObj.getBound().y + mHeightFromObject);
 				//mGameObj.position;
 		//this.setY(mGameObj.getBound().y + mHeightFromObject);
 
