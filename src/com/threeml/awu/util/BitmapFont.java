@@ -25,17 +25,45 @@ import com.threeml.awu.world.Sprite;
  */
 
 public class BitmapFont extends Sprite {
-
+	
+	// /////////////////////////////////////////////////////////////////////////
+	// Attributes
+	// /////////////////////////////////////////////////////////////////////////
+	
+	/** FrameHandler used to handle the font spritesheet */
 	FrameHandler mFrameHandler;
+	/** Image used to represent this object */
 	protected Bitmap mTextImage;
+	/** Width of characters in font spritesheet */
 	protected final static int mTextCellwidth = 12;
+	/** Height of characters in font spritesheet */
 	private final static int mTextCellheight = 19;
+	/** List that holds the individual characters */
 	List<Bitmap> BitmapList = new ArrayList<Bitmap>();
+	/** Size of font, as it appears on the screen */
 	private int mFontSize;
+	/** Text displayed */
 	protected String mText;
+	/** Bitmap font spritesheet */
 	private static Bitmap mFont;
+	/** Max number of characters allowed in text */
 	private final static int MAX_CHARS = 20;
-
+	
+	// /////////////////////////////////////////////////////////////////////////
+	// Constructors
+	// /////////////////////////////////////////////////////////////////////////	
+	/**
+	 * Creates new BitmapFont object
+	 * 
+	 * @param x
+	 * 				X position of text
+	 * @param y
+	 * 				Y position of text
+	 * @param gameScreen
+	 * 				Gamescreen to which text belongs
+	 * @param str
+	 *				Text to display 
+	 */
 	public BitmapFont(float x, float y, GameScreen gameScreen, String str) {
 		super(x, y, (MAX_CHARS * mTextCellwidth),
 				mTextCellheight, mFont, gameScreen);
@@ -53,6 +81,21 @@ public class BitmapFont extends Sprite {
 			 Log.e("Text Error", "BitmapFont constructor error : " + e);
 		}
 	}
+	
+	/**
+	 * Creates new BitmapFont object
+	 * 
+	 * @param x
+	 * 				X position of text
+	 * @param y
+	 * 				Y position of text
+	 * @param gameScreen
+	 * 				Gamescreen to which text belongs
+	 * @param str
+	 *				Text to display 
+	 * @param fontSize
+	 * 				Determines size of text on screen
+	 */
 	public BitmapFont(float x, float y, GameScreen gameScreen, String str,
 			int fontSize) {
 		super(x, y, (MAX_CHARS * (int)(fontSize * 0.75)),
@@ -70,7 +113,18 @@ public class BitmapFont extends Sprite {
 			 Log.e("Text Error", "BitmapFont constructor error : " + e);
 		}
 	}
-	
+	// /////////////////////////////////////////////////////////////////////////
+	// Methods
+	// /////////////////////////////////////////////////////////////////////////
+	/**
+	 * Used the centralise the text and cut text more than 20 characters
+	 * (MJ) Temporary solution because I can't get the text to position correctly above game objects
+	 * 
+	 * @param str
+	 * 				String to be displayed
+	 * @return
+	 * 				String
+	 */
 	protected String buildString(String str) {
 		String buffer = "";
 		if(str.length() > MAX_CHARS){
@@ -88,13 +142,23 @@ public class BitmapFont extends Sprite {
 		sb.append(buffer);
 		return sb.toString();
 	}
-
+	
+	/**
+	 * Creates a new Bitmap that is mutable then calls method 
+	 * to create the bitmap that will represent this object
+	 */
 	private void createNewTextBitmap(){
 		mTextImage = Bitmap.createBitmap((int)(mText.length() * mTextCellwidth),
 				mTextCellheight, Bitmap.Config.ARGB_8888);
 		getTextAsImage();
 	}
-
+	 
+	 /**
+	  * Creates a bitmap of the text
+	  * 
+	  * @return
+	  * 			Bitmap text
+	  */
 	private Bitmap getTextAsImage() {
 		try {
 			updateString();
@@ -112,7 +176,9 @@ public class BitmapFont extends Sprite {
 		return mTextImage;
 	}
 
-	// Returns an array of bitmaps to be drawn from the string
+	/**
+	 *  Creates an array of bitmaps to be drawn from the string
+	 */
 	public void updateString() {
 		try {
 			BitmapList.clear();
@@ -126,7 +192,15 @@ public class BitmapFont extends Sprite {
 		}
 
 	}
-
+	
+	/**
+	 * Creates a bitmap of an individual character
+	 * 
+	 * @param ch
+	 * 				Character to create bitmap of
+	 * @return
+	 * 				Bitmap
+	 */
 	private Bitmap getLetterBitmap(char ch) {
 		try {
 			int r = 0, c = 0;
@@ -212,6 +286,12 @@ public class BitmapFont extends Sprite {
 		}
 	}
 	
+	/**
+	 * Change the string of text and update bitmap to reflect the changes
+	 * 
+	 * @param str
+	 * 				New string
+	 */
 	public void updateText(String str){
 		mText = buildString(str);
 		createNewTextBitmap();
