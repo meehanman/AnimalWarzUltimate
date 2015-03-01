@@ -33,6 +33,11 @@ public class TeamManager {
 	/** The current Player the user interacts with */
 	private Player mActivePlayer;
 	
+	
+	//TESTING PURPOSES ONLY
+	private String [] villains = new String [] {"Cyberman", "Dalek", "The Master", "Weeping Angel"};
+	private String [] heroes = new String [] {"The Doctor", "Amy", "Jack", "Rose"};
+	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -166,7 +171,28 @@ public class TeamManager {
 				players.add(new Player(spawnLocation.x, spawnLocation.y, 1,
 						15,
 						game.getAssetManager().getBitmap("PlayerWalk"),
-						gameScreen));
+						gameScreen, heroes[i]));
+			}
+			mTeams.add(new Team(players, n));
+			if(mActivePlayer == null){
+				mActiveTeam = mTeams.get(0);
+				mActivePlayer = mTeams.get(0).getPlayers().get(0);
+			}
+		}
+		catch(Exception e){
+			Log.e("TeamError", "Error in TeamManager createNewTeam : " + e);
+		}
+	}
+	//TODO MJ - added name arrays for testing purposes, need to remove later
+	public void createTestNewTeam(String n, int numPlayers, Map map, Game game, GameScreen gameScreen){
+		try {
+			List<Player> players = new ArrayList<Player>();
+			for(int i = 0; i < numPlayers; i++){
+				Vector2 spawnLocation = map.getUniqueSpawnLocation();
+				players.add(new Player(spawnLocation.x, spawnLocation.y, 1,
+						15,
+						game.getAssetManager().getBitmap("PlayerWalk"),
+						gameScreen, villains[i]));
 			}
 			mTeams.add(new Team(players, n));
 			if(mActivePlayer == null){
@@ -198,7 +224,7 @@ public class TeamManager {
 	 *            Gamescreen to which player belongs
 	 */
 	public void createNewPlayer(int teamIndex, float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen){
-		mTeams.get(teamIndex).addNewPlayer(new Player(startX, startY, columns, rows, bitmap, gameScreen));
+		mTeams.get(teamIndex).addNewPlayer(new Player(startX, startY, columns, rows, bitmap, gameScreen, "Default"));
 	}
 	
 	/**

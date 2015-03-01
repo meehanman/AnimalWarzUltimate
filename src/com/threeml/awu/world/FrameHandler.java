@@ -94,7 +94,7 @@ public class FrameHandler {
 	
 
 	/**
-	 * skips to the next frame of the image
+	 * skips to the next frame of the image horizontally
 	 */
 	public void nextFrameHorizontal(){
 		try {			
@@ -112,7 +112,7 @@ public class FrameHandler {
 	}
 	
 	/**
-	 * skips to the next frame of the image
+	 * skips to the next frame of the image vertically
 	 */
 	public void nextFrameVertical(){
 		try {			
