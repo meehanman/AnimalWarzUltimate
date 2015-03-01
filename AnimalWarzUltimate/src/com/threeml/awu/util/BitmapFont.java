@@ -27,52 +27,70 @@ import com.threeml.awu.world.Sprite;
 public class BitmapFont extends Sprite {
 
 	FrameHandler mFrameHandler;
-	private Bitmap mTextImage;
-	private final int mTextCellwidth = 12;
-	private final int mTextCellheight = 18;
+	protected Bitmap mTextImage;
+	protected final static int mTextCellwidth = 12;
+	private final static int mTextCellheight = 19;
 	List<Bitmap> BitmapList = new ArrayList<Bitmap>();
 	private int mFontSize;
-	private String mText;
+	protected String mText;
 	private static Bitmap mFont;
+	private final static int MAX_CHARS = 20;
 
 	public BitmapFont(float x, float y, GameScreen gameScreen, String str,
 			int fontSize) {
-		// super(x, y, (str.toCharArray().length * mTextCellwidth),
-		// mTextCellheight, mFont, gameScreen);
-		super(x, y, 200, 20, mFont, gameScreen);
+		super(x, y, (MAX_CHARS * mTextCellwidth),
+				mTextCellheight, mFont, gameScreen);
+		//super(x, y, 200, 20, mFont, gameScreen);
 		try {
 
 			mFont = gameScreen.getGame().getAssetManager().getBitmap("Font");
 			mFontSize = fontSize;
 			// Create a default string
 			mFrameHandler = new FrameHandler(mFont, 2, 53);
-			mText = str;
-			mTextImage = Bitmap.createBitmap(mText.length() * mTextCellwidth,
-					mTextCellheight, Bitmap.Config.ARGB_8888);
-			mTextImage = getTextAsImage();
+			mText = buildString(str);
+			createNewTextBitmap();
 		} catch (Exception e) {
-			// Log.e("Text Error", "BitmapFont constructor error : " + e);
+			 Log.e("Text Error", "BitmapFont constructor error : " + e);
 		}
+	}
+	
+	protected String buildString(String str) {
+		String buffer = "";
+		if(str.length() > MAX_CHARS){
+			str = str.substring(0, 19);
+		}
+		else if(str.length() < MAX_CHARS) {
+			int difference =  (MAX_CHARS - str.length());
+			for(int i = 0; i < (difference/2); i ++){
+				buffer += " ";
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append(buffer);
+		sb.append(str);
+		sb.append(buffer);
+		return sb.toString();
+	}
+
+	private void createNewTextBitmap(){
+		mTextImage = Bitmap.createBitmap(mText.length() * mTextCellwidth,
+				mTextCellheight, Bitmap.Config.ARGB_8888);
+		getTextAsImage();
 	}
 
 	private Bitmap getTextAsImage() {
 		try {
-			try {
-
-				updateString();
-			} catch (Exception e) {
-				Log.v("Text Test", "Image error : " + e);
-			}
+			updateString();
+			
 			Canvas canvas = new Canvas(mTextImage);
 			int count = 0;
 			for (Bitmap b : BitmapList) {
 				canvas.drawBitmap(b, (count * mTextCellwidth), 0, null);
 				count++;
 			}
-			// Log.v("Text Test", "After | Image size : " +
 			// mTextImage.getWidth() + ", " + mTextImage.getHeight());
 		} catch (Exception e) {
-			// Log.e("Text Error", "BitmapFont getTextAsImage error : " + e);
+			 Log.e("Text Error", "BitmapFont getTextAsImage error : " + e);
 		}
 		return mTextImage;
 	}
@@ -80,15 +98,14 @@ public class BitmapFont extends Sprite {
 	// Returns an array of bitmaps to be drawn from the string
 	public void updateString() {
 		try {
-			// Log.v("Text Test", mText);
-
+			BitmapList.clear();
 			for (char c : mText.toCharArray()) {
 				// Returns a bitmap of the letter
 				BitmapList.add(getLetterBitmap(c));
 
 			}
 		} catch (Exception e) {
-			// Log.e("Text Error", "BitmapFont updateString error : " + e);
+			 Log.e("Text Error", "BitmapFont updateString error : " + e);
 		}
 
 	}
@@ -112,7 +129,7 @@ public class BitmapFont extends Sprite {
 				c = (int) ch - 97;
 				r = 0;
 			} else if (ch >= 'A' && ch <= 'Z') { // 65 - 90
-				c = (int) ch - 65;
+				c = ((int) ch - 65) + 27;
 				r = 0;
 			} else if (ch >= '0' && ch <= '9') { // 48-57
 				if(ch == '0'){
@@ -129,33 +146,17 @@ public class BitmapFont extends Sprite {
 				 */
 				if (!found) { // If not found, output space which is between z
 								// and A
-					c = 0;
+					c = 26;
 					r = 0;
 				}
 
 			}
 			mFrameHandler.setFrame(r, c);
-			// Log.v("Image Test", "Char : " + ch + " |Col : " + c + " |Row : "
-			// + r);
 		} catch (Exception e) {
-			// Log.e("Text Error", "BitmapFont getLetterBitmap error : " + e);
+			 Log.e("Text Error", "BitmapFont getLetterBitmap error : " + e);
 		}
 
 		return mFrameHandler.getFrameImage();
-	}
-
-	/**
-	 ** Update method that will follow an object like player (for health etc)
-	 ** 
-	 * @author Dean
-	 **/
-	public void update(ElapsedTime elapsedTime, GameObject GameObj) {
-
-		this.position = GameObj.position;
-		this.setY(GameObj.getBound().y + 5f);
-
-		super.update(elapsedTime);
-
 	}
 
 	/**
@@ -183,17 +184,20 @@ public class BitmapFont extends Sprite {
 						/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
 				drawMatrix.postTranslate(drawScreenRect.left,
 						drawScreenRect.top);
-
-				float BoundXPos = this.getBound().x;
+				
 				// Draw the image
-				graphics2D.drawBitmap(getTextAsImage(), drawMatrix, null);
-
-				// Reset the draw location for the images
-				this.getBound().x = BoundXPos;
+				graphics2D.drawBitmap(mTextImage, drawMatrix, null);
 			}
 		} catch (Exception e) {
+			// Turned off this error log because it's always being hit and I'm not sure why
+			// so to save logcat is temporarily switched off until the problem can be solved
 			// Log.e("Text Error", "BitmapFont draw error : " + e);
 		}
+	}
+	
+	public void updateText(String str){
+		mText = buildString(str);
+		createNewTextBitmap();
 	}
 
 }

@@ -11,12 +11,14 @@ import com.threeml.awu.Game;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.graphics.IGraphics2D;
+import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.dashboardobject.Control;
+import com.threeml.awu.world.dashboardobject.OnScreenText;
 import com.threeml.awu.world.gameobject.droppable.Healthkit;
 import com.threeml.awu.world.gameobject.map.Background;
 import com.threeml.awu.world.gameobject.map.Map;
@@ -97,6 +99,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private List<Control> mControls = new ArrayList<Control>();
 	/** count down timer to change active user after 30 seconds */
 	private GameCountDownTimer mCountDownTimer;
+	
+	private OnScreenText mDashboardTimer;
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -266,14 +270,17 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				.getScreenHeight() / 2, getGame().getScreenWidth() / 2,  getGame()
 				.getScreenHeight() / 2, "WeaponArchive", this);
 		// mControls.add(mWeaponsList);
+		
+		mDashboardTimer = new OnScreenText(getGame().getScreenWidth() - 50, getGame()
+				.getScreenHeight() - 50, this, "0", 20);
 	}
 
 	// TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
 	public void createPlayersAndTeams(int Players, int Teams) {
 
 		try {
-			mTeamManager.createNewTeam("Cylons", 4, mCurrentMap, getGame(), this);
-			mTeamManager.createNewTeam("Humans", 4, mCurrentMap, getGame(), this);
+			mTeamManager.createNewTeam("3ml", 4, mCurrentMap, getGame(), this);
+			mTeamManager.createTestNewTeam("Uni", 4, mCurrentMap, getGame(), this);
 			
 		} catch (RuntimeException e) {
 			Log.e("TeamError", "AnimalWarzPlayScreen createPlayersAndTeams : " + e);
@@ -435,6 +442,13 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				iter.remove(); // Remove
 			}
 		}
+		try {
+			mDashboardTimer.updateText(Long.toString(mCountDownTimer.getCountDownInSeconds()));
+			mDashboardTimer.update(elapsedTime);
+		}
+		catch (Exception e){
+			Log.e("Text Error", "Game screen timer error : " + e);
+		}
 }
 
 	/**
@@ -478,12 +492,17 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		for (Control c : mControls) {
 			c.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 		}
+		
+		
+		
 		mWeaponsList.quarterBitmap(getGame().getAssetManager().getBitmap("WeaponArchive"));
 		if (mWeaponSelect.isActivated()) {
 			mWeaponsList.draw(elapsedTime, graphics2D, mDashboardViewport,
 					mScreenViewport);
 		
 		}
+		
+		mDashboardTimer.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 		
 	}
 	

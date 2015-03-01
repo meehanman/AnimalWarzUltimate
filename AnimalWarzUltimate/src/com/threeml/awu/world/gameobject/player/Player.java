@@ -13,6 +13,7 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
+import com.threeml.awu.world.gameobject.GameObjectText;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.weapon.Weapon;
 
@@ -38,11 +39,15 @@ public class Player extends Sprite {
 	/** Player's health value */
 	private int mHealth = 100;
 	
+	/** Player's name */
+	private GameObjectText mNameText;
+	private String mName;
+	
 	/** FrameHandler to handle spritesheet */
 	private FrameHandler mFrameHandler;
 	
 	/** Health text that appears above the Player */
-	private BitmapFont mHealthText;
+	private GameObjectText mHealthText;
 	
 	/** Max Health the player can have */
 	private float MAX_HEALTH = 200.0f;
@@ -51,7 +56,7 @@ public class Player extends Sprite {
 	private static float GRAVITY = -100.0f;
 	
 	/** Acceleration with which the player can move along the x-axis */
-	private float RUN_ACCELERATION = 250.0f;
+	private float RUN_ACCELERATION = 200.0f;
 	
 	/** Maximum velocity of the player along the x-axis */
 	private float MAX_X_VELOCITY = 300.0f;
@@ -89,12 +94,13 @@ public class Player extends Sprite {
 	 * @param gameScreen
 	 *            Gamescreen to which player belongs
 	 */
-public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen) {		
+public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, GameScreen gameScreen, String name) {		
 	super(startX, startY, 20.0f, 20.0f, bitmap, gameScreen);
 		mFullImage = bitmap;
 		try {
-			mHealthText = new BitmapFont(startX, startY, gameScreen, Integer.toString(mHealth), 16);
-			//mHealthText = new BitmapFont(startX, startY, gameScreen, "Worm", 16);
+			mName = name;
+			mHealthText = new GameObjectText(gameScreen, Integer.toString(mHealth), 16, this, (int)this.getBound().halfHeight);
+			mNameText = new GameObjectText(gameScreen, mName, 16, this, (int)this.getBound().halfHeight + 10);
 		}
 		catch(Exception e){
 			Log.e("Text Error", "Player constructor error : " + e);
@@ -174,7 +180,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		if (Math.abs(velocity.x) > MAX_X_VELOCITY)
 			velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
 
-		mHealthText.update(elapsedTime,this);
+		mHealthText.update(elapsedTime);
+		mNameText.update(elapsedTime);
 		
 		
 	}
@@ -208,6 +215,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}
 		
 		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		mNameText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 	
 	/**
@@ -219,6 +227,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		if(mHealth <= (int)MAX_HEALTH){
 			mHealth = (int)MAX_HEALTH;
 		}
+		mHealthText.updateText(Integer.toString(mHealth));
 	}
 	
 	/**
