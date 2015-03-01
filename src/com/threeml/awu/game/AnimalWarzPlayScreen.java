@@ -271,10 +271,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				.getScreenHeight() / 2, "WeaponArchive", this);
 		// mControls.add(mWeaponsList);
 		
-		x = screenWidthCell * 60;
-		y = (screenHeight - 10);
-		mDashboardTimer = new OnScreenText(getGame().getScreenWidth() / 2, getGame()
-				.getScreenHeight() / 2, this, "0", 200);
+		x = screenWidthCell * 55;
+		y = (screenHeight - 200);
+		mDashboardTimer = new OnScreenText(x, y, this, "0", 250);
 	}
 
 	// TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
