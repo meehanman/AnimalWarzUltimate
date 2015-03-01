@@ -35,8 +35,8 @@ public class TeamManager {
 	
 	
 	//TESTING PURPOSES ONLY
-	private String [] villains = new String [] {"Cyberman", "Dalek", "The Master", "Weeping Angel"};
-	private String [] heroes = new String [] {"The Doctor", "Amy", "Jack", "Rose"};
+	private String [] villains = new String [] {"Cyberman", "Dalek", "The Master", "Weeping Angel", "Stephen"};
+	private String [] heroes = new String [] {"The Doctor", "Amy", "Jack", "Rose", "Clara"};
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors

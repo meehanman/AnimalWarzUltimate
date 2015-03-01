@@ -99,8 +99,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mFullImage = bitmap;
 		try {
 			mName = name;
-			mHealthText = new GameObjectText(gameScreen, Integer.toString(mHealth), 16, this, (int)this.getBound().halfHeight);
-			mNameText = new GameObjectText(gameScreen, mName, 16, this, (int)this.getBound().halfHeight + 10);
+			mHealthText = new GameObjectText(gameScreen, Integer.toString(mHealth), this, (int)this.getBound().halfHeight);
+			mNameText = new GameObjectText(gameScreen, mName, this, (int)this.getBound().halfHeight + 10);
 		}
 		catch(Exception e){
 			Log.e("Text Error", "Player constructor error : " + e);

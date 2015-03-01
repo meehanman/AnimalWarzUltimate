@@ -36,10 +36,27 @@ public class BitmapFont extends Sprite {
 	private static Bitmap mFont;
 	private final static int MAX_CHARS = 20;
 
-	public BitmapFont(float x, float y, GameScreen gameScreen, String str,
-			int fontSize) {
+	public BitmapFont(float x, float y, GameScreen gameScreen, String str) {
 		super(x, y, (MAX_CHARS * mTextCellwidth),
 				mTextCellheight, mFont, gameScreen);
+		//super(x, y, 200, 20, mFont, gameScreen);
+		try {
+			
+			mFont = gameScreen.getGame().getAssetManager().getBitmap("Font");
+			mFontSize = mTextCellheight;
+			// Create a default string
+			mFrameHandler = new FrameHandler(mFont, 2, 53);
+			mText = buildString(str);
+			createNewTextBitmap();
+			
+		} catch (Exception e) {
+			 Log.e("Text Error", "BitmapFont constructor error : " + e);
+		}
+	}
+	public BitmapFont(float x, float y, GameScreen gameScreen, String str,
+			int fontSize) {
+		super(x, y, (MAX_CHARS * (int)(fontSize * 0.75)),
+				fontSize, mFont, gameScreen);
 		//super(x, y, 200, 20, mFont, gameScreen);
 		try {
 
@@ -73,7 +90,7 @@ public class BitmapFont extends Sprite {
 	}
 
 	private void createNewTextBitmap(){
-		mTextImage = Bitmap.createBitmap(mText.length() * mTextCellwidth,
+		mTextImage = Bitmap.createBitmap((int)(mText.length() * mTextCellwidth),
 				mTextCellheight, Bitmap.Config.ARGB_8888);
 		getTextAsImage();
 	}
@@ -85,7 +102,7 @@ public class BitmapFont extends Sprite {
 			Canvas canvas = new Canvas(mTextImage);
 			int count = 0;
 			for (Bitmap b : BitmapList) {
-				canvas.drawBitmap(b, (count * mTextCellwidth), 0, null);
+				canvas.drawBitmap(b, (int)(count * mTextCellwidth), 0, null);
 				count++;
 			}
 			// mTextImage.getWidth() + ", " + mTextImage.getHeight());
