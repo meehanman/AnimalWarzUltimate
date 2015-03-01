@@ -9,6 +9,7 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.gameobject.map.Map;
 
 import android.graphics.Bitmap;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
 /**
@@ -35,8 +36,9 @@ public class TeamManager {
 	
 	
 	//TESTING PURPOSES ONLY
-	private String [] villains = new String [] {"Cyberman", "Dalek", "The Master", "Weeping Angel", "Stephen"};
+	private String [] villains = new String [] {"Cyberman", "Dalek", "The Master", "Weeping Angel", "The Silence"};
 	private String [] heroes = new String [] {"The Doctor", "Amy", "Jack", "Rose", "Clara"};
+	private String [] threeml = new String [] {"MayJay", "Mark", "Dean", "Lisa", "Jade"};
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -204,6 +206,26 @@ public class TeamManager {
 			Log.e("TeamError", "Error in TeamManager createNewTeam : " + e);
 		}
 	}
+	public void createTestNewTeam2(String n, int numPlayers, Map map, Game game, GameScreen gameScreen){
+		try {
+			List<Player> players = new ArrayList<Player>();
+			for(int i = 0; i < numPlayers; i++){
+				Vector2 spawnLocation = map.getUniqueSpawnLocation();
+				players.add(new Player(spawnLocation.x, spawnLocation.y, 1,
+						15,
+						game.getAssetManager().getBitmap("PlayerWalk"),
+						gameScreen, threeml[i]));
+			}
+			mTeams.add(new Team(players, n));
+			if(mActivePlayer == null){
+				mActiveTeam = mTeams.get(0);
+				mActivePlayer = mTeams.get(0).getPlayers().get(0);
+			}
+		}
+		catch(Exception e){
+			Log.e("TeamError", "Error in TeamManager createNewTeam : " + e);
+		}
+	}
 	
 	/**
 	 * Creates a new player using given arguments
@@ -235,5 +257,17 @@ public class TeamManager {
 	 */
 	public Player getActivePlayer(){
 		return mActivePlayer;
+	}
+	
+	public Team getTeam(int index){
+		try {
+			return mTeams.get(index);
+		} catch (Exception e){
+			Log.e("Error", "TeamManager getTeam : " + e);
+			return mTeams.get(0);
+		}
+	}
+	public List<Team> getTeams(){
+		return mTeams;
 	}
 }
