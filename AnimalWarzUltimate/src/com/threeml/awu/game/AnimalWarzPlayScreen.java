@@ -101,6 +101,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private GameCountDownTimer mCountDownTimer;
 	
 	private OnScreenText mDashboardTimer;
+	List<OnScreenText> mTeamHealthText;
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -271,9 +272,17 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				.getScreenHeight() / 2, "WeaponArchive", this);
 		// mControls.add(mWeaponsList);
 		
-		x = screenWidthCell * 55;
+		x = screenWidthCell * 100.0f;
 		y = (screenHeight - 200);
 		mDashboardTimer = new OnScreenText(x, y, this, "0", 250);
+		
+		x = screenWidthCell * 100.0f;
+		mTeamHealthText = new ArrayList<OnScreenText>();
+		for(Team t : mTeamManager.getTeams()){
+			
+			mTeamHealthText.add(new OnScreenText(x, y, this, t.getTeamName() + " : " + t.getCollectiveHealth(), 150));
+			y -= 100;
+		}
 	}
 
 	// TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
@@ -282,6 +291,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		try {
 			mTeamManager.createNewTeam("GOOD", 5, mCurrentMap, getGame(), this);
 			mTeamManager.createTestNewTeam("EVIL", 5, mCurrentMap, getGame(), this);
+			mTeamManager.createTestNewTeam2("THREEML", 5, mCurrentMap, getGame(), this);
 			
 		} catch (RuntimeException e) {
 			Log.e("TeamError", "AnimalWarzPlayScreen createPlayersAndTeams : " + e);
@@ -446,6 +456,29 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		try {
 			mDashboardTimer.updateText(Long.toString(mCountDownTimer.getCountDownInSeconds()));
 			mDashboardTimer.update(elapsedTime);
+			int c = 0;
+			if(mTeamHealthText != null && mTeamHealthText.size() > 0){
+				for(OnScreenText t : mTeamHealthText){
+					String str = mTeamManager.getTeam(c).getTeamName();
+					String buffer = "";
+					if(str.length() > 20){
+						str = str.substring(0, 19);
+					}
+					else if(str.length() < 20) {
+						int difference =  (20 - str.length());
+						for(int i = 0; i < (difference); i ++){
+							buffer += " ";
+						}
+					}
+					StringBuilder sb = new StringBuilder();
+					sb.append(str);
+					sb.append(buffer);
+					sb.append(" " + Integer.toString(mTeamManager.getTeam(c).getCollectiveHealth()));
+					t.updateText(sb.toString());
+					t.update(elapsedTime);
+					c++;
+				}
+			}
 		}
 		catch (Exception e){
 			Log.e("Text Error", "Game screen timer error : " + e);
@@ -504,6 +537,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		}
 		
 		mDashboardTimer.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
+		if(mTeamHealthText != null && mTeamHealthText.size() > 0){
+			for(OnScreenText t : mTeamHealthText){
+				t.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
+			}
+		}
 		
 	}
 	

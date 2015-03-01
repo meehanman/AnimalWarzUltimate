@@ -15,7 +15,9 @@ public class OnScreenText extends BitmapFont{
 		//mFontSize = fontSize;
 		//resizeText();
 	}
-	public void resizeText(){
-		//mTextImage = Bitmap.createScaledBitmap(mTextImage, 400, 400, true);
+	
+	@Override
+	protected String buildString(String str) {
+		return str;
 	}
 }
