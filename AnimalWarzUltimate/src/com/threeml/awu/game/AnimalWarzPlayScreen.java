@@ -416,7 +416,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				 * if(mWeaponsCrateButton.isActivated()){ mGun.setPosition(500,
 				 * 120); }
 				 */
-
+				
+				// Checking the weapon menu bitmaps for a touch event and logging
+				// the type of bitmap (weapon) that was selected
 				for (int j = 0; j < mWeaponSelection.size(); j++) {
 					if (mWeaponSelection.get(j).isActivated()
 							&& mWeaponSelection.get(j) == mWeaponSelection.get(0)) {
