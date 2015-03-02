@@ -26,7 +26,7 @@ import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
 import com.threeml.awu.world.gameobject.player.TeamManager;
-import com.threeml.awu.world.gameobject.weapon.Gun;
+import com.threeml.awu.world.gameobject.weapon.Weapon;
 
 /**
  * Simple steering game world
@@ -43,10 +43,10 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private float LEVEL_WIDTH = 1600f;
 	/** Height of the level (Changed later by width/height of backgroundimage) */
 	private float LEVEL_HEIGHT = 580f;
-
-	/*
-	 * Define viewports for this layer and the associated screen projection
-	 */
+	/** Width of the weapon icon */
+	private final float WEAPON_WIDTH = getGame().getScreenWidth() / 5f;
+	/** Length of the weapon icon */
+	private final float WEAPON_HEIGHT = getGame().getScreenHeight() / 5f;
 	/** Viewport for device screen */
 	private ScreenViewport mScreenViewport;
 	/** Viewport for terrain - all game objects on this viewport */
@@ -55,18 +55,13 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private LayerViewport mBackgroundViewport;
 	/** Viewport for all user controls or information */
 	private LayerViewport mDashboardViewport;
-	/** Rectanlge used to display available weapons */
-
-	/*
-	 * Define game objects used within game
-	 */
+	/** Define game objects used within game */
 	private Map mCurrentMap;
 	/** Background image - not interactable */
 	private Background mBackground;
 	/** Terrain image, all game objects interact with this object */
 	private Terrain mTerrain;
-	
-	private Bitmap mBitmap;
+
 	// TODO MJ - Player management isn't complete
 	/** players */
 	// TODO MJ - remove this when completed team management
@@ -81,7 +76,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private List<Healthkit> healthPacks = new ArrayList<Healthkit>();
 	// TODO MP - there shouldn't be one global gun object, probably.
 	// - need more work on weapon management
-	private Gun mGun;
 	// TODO MJ - Player management
 	/*
 	 * private List<Player> mPlayers = new ArrayList<Player>(); private Player
@@ -89,14 +83,17 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 */
 	private TeamManager mTeamManager;
 
-	/*
-	 * Create touch controls for player input
-	 */
+	/** Touch controls for player input */
 	private Control mMoveLeftButton, mMoveRightButton, mJumpLeftButton,
 			mJumpRightButton, mWeaponSelect, mShootButton, mAimUpButton,
-			mAimDownButton, mWeaponsList;
+			mAimDownButton, mWeaponsList, mGun, mGrenade, mRocket, mBat;
+
 	/** List array to handle controls */
 	private List<Control> mControls = new ArrayList<Control>();
+
+	/** List array to handle weapon selection */
+	private List<Control> mWeaponSelection = new ArrayList<Control>();
+
 	/** count down timer to change active user after 30 seconds */
 	private GameCountDownTimer mCountDownTimer;
 	
@@ -266,10 +263,30 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mJumpLeftButton = new Control(x, y, width, height, "JumpLeft", this);
 		mControls.add(mJumpLeftButton);
 
-		y = (screenHeight - (screenHeightCell * 43.4f));
-		mWeaponsList = new Control(getGame().getScreenWidth() / 2, getGame()
-				.getScreenHeight() / 2, getGame().getScreenWidth() / 2,  getGame()
-				.getScreenHeight() / 2, "WeaponArchive", this);
+		mGun = new Control(getGame().getScreenWidth() / 5.2f, getGame()
+				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Gun",
+				this);
+		mWeaponSelection.add(mGun);
+
+		mGrenade = new Control(getGame().getScreenWidth() / 2.5f, getGame()
+				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT,
+				"Grenade", this);
+		mWeaponSelection.add(mGrenade);
+
+		mRocket = new Control(getGame().getScreenWidth() / 1.65f, getGame()
+				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Rocket",
+				this);
+		mWeaponSelection.add(mRocket);
+
+		mBat = new Control(getGame().getScreenWidth() / 1.20f, getGame()
+				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Bat",
+				this);
+		mWeaponSelection.add(mBat);
+		/*
+		 * mWeaponsList = new Control(getGame().getScreenWidth() / 2, getGame()
+		 * .getScreenHeight() / 2, getGame().getScreenWidth() / 2, getGame()
+		 * .getScreenHeight() / 2, "WeaponArchive", this);
+		 */
 		// mControls.add(mWeaponsList);
 		
 		x = screenWidthCell * 100.0f;
@@ -400,6 +417,21 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				 * 120); }
 				 */
 
+				for (int j = 0; j < mWeaponSelection.size(); j++) {
+					if (mWeaponSelection.get(j).isActivated()
+							&& mWeaponSelection.get(j) == mWeaponSelection.get(0)) {
+						Log.v("WEAPON CLICK", "GUN");
+					} else if (mWeaponSelection.get(j).isActivated()
+							&& mWeaponSelection.get(j) == mWeaponSelection.get(1)) {
+						Log.v("WEAPON CLICK", "GRENADE");
+					} else if (mWeaponSelection.get(j).isActivated()
+							&& mWeaponSelection.get(j) == mWeaponSelection.get(2)) {
+						Log.v("WEAPON CLICK", "ROCKET");
+					} else if (mWeaponSelection.get(j).isActivated()
+							&& mWeaponSelection.get(j) == mWeaponSelection.get(3)) {
+						Log.v("WEAPON CLICK", "BAT");
+					}
+				}
 				// Update Items
 				for (Healthkit h : healthPacks) {
 					h.update(elapsedTime, mTerrain);
@@ -526,16 +558,16 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		for (Control c : mControls) {
 			c.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 		}
-		
-		
-		
-		mWeaponsList.quarterBitmap(getGame().getAssetManager().getBitmap("WeaponArchive"));
+	
 		if (mWeaponSelect.isActivated()) {
-			mWeaponsList.draw(elapsedTime, graphics2D, mDashboardViewport,
-					mScreenViewport);
-		
+			for (Control n : mWeaponSelection) {
+				n.draw(elapsedTime, graphics2D, mDashboardViewport,
+						mScreenViewport);
+			}
+
+			// mWeaponsList.setPosition(getGame().getScreenWidth()/2,
+			// getGame().getScreenHeight()/2);
 		}
-		
 		mDashboardTimer.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 		if(mTeamHealthText != null && mTeamHealthText.size() > 0){
 			for(OnScreenText t : mTeamHealthText){
@@ -544,5 +576,4 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		}
 		
 	}
-	
 }
