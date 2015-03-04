@@ -210,6 +210,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				.getBitmap("Health"), this));
 
 		// Create Controls for game
+		//TODO DM - move this to the controls class
 		float x = 0, y = 0, width = 0, height = 0;
 		float screenWidthCell = (screenWidth / 100);
 		float screenHeightCell = (screenHeight / 100);
@@ -303,18 +304,20 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	}
 
 	// TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
-	public void createPlayersAndTeams(int Players, int Teams) {
+		public void createPlayersAndTeams(int Players, int Teams) {
 
-		try {
-			mTeamManager.createNewTeam("GOOD", 5, mCurrentMap, getGame(), this);
-			mTeamManager.createTestNewTeam("EVIL", 5, mCurrentMap, getGame(), this);
-			mTeamManager.createTestNewTeam2("THREEML", 5, mCurrentMap, getGame(), this);
-			
-		} catch (RuntimeException e) {
-			Log.e("TeamError", "AnimalWarzPlayScreen createPlayersAndTeams : " + e);
+			try {
+				//Come on MJ.. really going to do it manually.. 
+				//Changed implementation
+				for(int i = 0; i<=Teams;i++){
+					mTeamManager.createNewTeam("EVERYONE_LOVES_DEAN", Players, mCurrentMap, getGame(), this);
+				}
+				
+			} catch (RuntimeException e) {
+				Log.e("TeamError", "AnimalWarzPlayScreen createPlayersAndTeams : " + e);
+			}
+
 		}
-
-	}
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Support methods
@@ -408,7 +411,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				// Temporary solution to make the health pack appear
 				// to be collected by the user
 				
-				p.update(elapsedTime, false, false, false, false, mTerrain);
+				p.update(elapsedTime, false, false, false, false, false, mTerrain);
 
 				// Log.v("UpdateMethod", "Player ID : " + p.getId());
 
@@ -454,9 +457,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					}
 				}
 			}
-		mTeamManager.getActivePlayer().update(elapsedTime, mMoveLeftButton.isActivated(),
+		mTeamManager.getActivePlayer().update(elapsedTime, 
+				mMoveLeftButton.isActivated(),
 				mMoveRightButton.isActivated(),
 				mJumpLeftButton.isActivated(),
+				mJumpRightButton.isActivated(),
 				mWeaponSelect.isActivated(), mTerrain);
 		
 		for (Healthkit h : healthPacks) {
@@ -480,11 +485,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 		// TODO DM - More work needed to collect used up items
 		// Garbage Collection to remove objects from screen not being used
-		Iterator<Healthkit> iter = healthPacks.listIterator();
-		while (iter.hasNext()) {
+		Iterator<Healthkit> healthpackList = healthPacks.listIterator();
+		while (healthpackList.hasNext()) {
 			// If the healthkit is NOT active
-			if (!iter.next().isActive()) {
-				iter.remove(); // Remove
+			if (!healthpackList.next().isActive()) {
+				healthpackList.remove(); // Remove
 			}
 		}
 		try {
