@@ -53,50 +53,33 @@ public class Terrain extends Sprite {
 		//Initially create AABB bounding boxes for the terrain
 		//CreateTerrainPhysics();
 	}
+
 	/**
-	 *
-	 * Detects if the pixel at the collision point 
-	 *
-	 * @param SpriteBound
-	 * 				The Sprite to check if pixel collides with Terrain
-	 * @param SpriteCD
-	 * 				The direction to check
-	 * @return 
-	 * 				Return if there is a collision at this point
+	 * Detects if there is a pixel at the location X Y
+	 * NOTE: Applys scaling already and Y starts from bottom
+	 * @param x - x location of bound to check
 	 * 
-	 *  @author Dean
+	 * @param y - y location of bound to check
+	 * 
+	 * @return True if pixel is solid at location xy
+	 * 
+	 * @version 2
+	 * 
+	 * @author Dean
 	 */
-	public boolean isPixelSolid(BoundingBox SpriteBound, Vector2 velocity){
+	public boolean isPixelSolid(double x,double y){
 		
-		//Get the bounding box for the terrain for scaling
-		BoundingBox TerrainBoundingBox = this.getBound();
-		
-		//Search locations for pixels
-		//TOP
-		double spriteXPixel = SpriteBound.x;
-		double spriteYPixel = SpriteBound.y - SpriteBound.halfHeight*2;
-		
-		
-		//Change the velocity to an angle of direction in degrees
-		int directionAngle = (int)((Math.atan2(velocity.y,velocity.x))*(180/3.14));
-				
 		//Scale of Terrain image vs Viewport as we are searching Pixels within Viewport after
-		spriteXPixel *= mBitmap.getWidth() / TerrainBoundingBox.getWidth();
-		spriteYPixel *= mBitmap.getHeight() / TerrainBoundingBox.getHeight();
+		x *= mBitmap.getWidth() / this.getBound().getWidth();
+		y *= mBitmap.getHeight() / this.getBound().getHeight();
 		
 		//Change y position to accompany Y starting at 0 at the top of the screen  
-		spriteYPixel = mBitmap.getHeight() - spriteYPixel;
+		y = mBitmap.getHeight() - y;
 		
 		//Validation: If Pixel is outside of range then return false
-		if((spriteXPixel<0||spriteYPixel<0)||(spriteXPixel>mBitmap.getWidth()||spriteYPixel>mBitmap.getHeight())){return false;}
-		
-		//Logging of tests to determine direction and if alpha or not
-		//Log.v("IPSLocation", "x:"+(int)spriteXPixel+"px y:"+(int)spriteYPixel+"px: Angle:"+directionAngle);
-		//Log.v("IPSLocation",(int)SpriteBound.y+" "+(int)SpriteBound.x);
-		//Log.v("pixelColor","Alpha:"+Color.alpha(mBitmap.getPixel((int)spriteXPixel, (int)spriteYPixel)));
+		if((x<0||y<0)||(x>mBitmap.getWidth()||y>mBitmap.getHeight())){return false;}
 		
 		//Return if there is a collision at this point
-		return (Color.alpha(mBitmap.getPixel((int)spriteXPixel, (int)spriteYPixel)) > 150);
-		
+		return (Color.alpha(mBitmap.getPixel((int)x, (int)y)) > 150);
 	}
 }

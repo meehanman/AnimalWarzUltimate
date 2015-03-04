@@ -2,10 +2,10 @@ package com.threeml.awu.world;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
-import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.gameobject.map.Terrain;
@@ -139,26 +139,69 @@ public class Sprite extends GameObject {
 	 * 
 	 * @author Dean
 	 */
-	public Boolean checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
+	public void checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 		
-		Boolean collisionResolved = false;
-		BoundingBox SpriteBB = this.getBound();
+		//Setup values for X and y
+		//and SET to the CENTER of the object
+		double x = getX();
+		double y = getY();
 		
-		//TODO Need to work out the maths behind resolving a collision and refactor code
-		
-		if(TerrainObj.isPixelSolid(SpriteBB, velocity)){
-			//True if solid pixel detected
-			this.velocity.x = 0;
-			this.velocity.y = 0;
-			collisionResolved = true;
-			
-		}else{
-			//False if no collision detected
-			this.velocity.y = GRAVITY;
+		//if not moving or moving down
+		if(velocity.y <=0 ){
+			//Check pixel at bottom for collisions
+			if(TerrainObj.isPixelSolid(x,y-getBound().halfHeight)){
+				velocity.y = 0;
+			}
 		}
-			
-		return collisionResolved;
-	
+		
+		int direction = (int)Math.signum(velocity.x);
+		//if traveling left or right
+		if(true){//direction!=0){
+			//Create bitmask
+			int boundHeight = (int)getBound().halfHeight*2;
+			//Check if the player is stuck in some ground by checking left and right middle pixel values
+			if(TerrainObj.isPixelSolid(x+(getBound().halfWidth),y) 
+					&& TerrainObj.isPixelSolid(x-(getBound().halfWidth),y)){
+				//Move the player up 1/2 a space
+				position.y+=getBound().halfHeight;
+			}
+			boolean solidPixel;
+			int stage;
+			//Create a bitmask from top to bottom of the pixels 
+			for(int i=0;i<boundHeight;i++){
+				//If true then collision
+				solidPixel = TerrainObj.isPixelSolid(x+(getBound().halfWidth*direction),y-getBound().halfHeight+i);
+				Log.v("slope","Setting: slopepx: "+solidPixel+" i: "+i+
+						" val: "+getBound().halfHeight/4+" 2ndIf: "+(solidPixel && i >= getBound().halfHeight/4));
+				//if any of the pixels are solid then we've hit a wall
+				//so act accordingly and exit the application
+				if(solidPixel && i < getBound().halfHeight/4){
+					//
+					//Cannot move in the direction
+					//velocity.x = 0;
+				}
+				//if the bottom (left/right)quater of the sprite is
+				//solid then its a slope
+				if(solidPixel && i >= getBound().halfHeight/4){
+					//Position the item -(up) by the amount of pixels the 
+					//gradient is
+					//Could try velocity
+					position.y+=i;
+					Log.v("slope","Setting: "+(boundHeight-i));
+					break;
+				}
+			}
+			boolean debug = true;
+		}
+	}
+	/**
+	 * Method can be used to determine if the player should move left or right
+	 * checks if the pixel below it is solid (so cant move while in the air)
+	 * 
+	 * @return
+	 */
+	public boolean canMove(Terrain TerrainObj){
+		return TerrainObj.isPixelSolid(getX(),getY()-getBound().halfHeight);
 	}
 
 	/**

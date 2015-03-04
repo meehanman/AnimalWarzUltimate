@@ -66,11 +66,7 @@ public class Player extends Sprite {
 	
 	/** Instantaneous velocity with which the player jumps up */
 	private float JUMP_VELOCITY = 200.0f;
-	
-	/** Scale factor that is used to turn the x-velocity into an angular velocity to give the visual appearance
-	 * that the sphere is rotating as the player moves. */
-	private float ANGULAR_VELOCITY_SCALE = 1.5f;
-	
+		
 	/** The current weapon the Player is holding**/
 	private Weapon mCurrentWeapon;
 	
@@ -128,25 +124,24 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 *            	Array of platforms in the world
 	 */
 	public void update(ElapsedTime elapsedTime, boolean moveLeft,
-			boolean moveRight, boolean jumpUp, boolean weaponSelect,
+			boolean moveRight, boolean jumpLeft, boolean jumpRight, boolean weaponSelect,
 			Terrain TerrainObj) {
-
+		
 		// Depending upon the left and right movement touch controls
 		// set an appropriate x-acceleration. If the user does not
 		// want to move left or right, then the x-acceleration is zero
 		// and the velocity decays towards zero.
 		if (moveLeft && !moveRight) {
-			acceleration.x = -RUN_ACCELERATION;
-			acceleration.y = RUN_ACCELERATION;
+				acceleration.x = -RUN_ACCELERATION;
+
 			this.mFrameHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk"));
 			if(mFrameHandler != null && this.mFrameHandler.getRows() > 1){
 				this.mFrameHandler.nextFrameVertical();
 			}
 			
 		} else if (moveRight && !moveLeft) {
-			acceleration.x = RUN_ACCELERATION;
-			acceleration.y = RUN_ACCELERATION;
-			
+				acceleration.x = RUN_ACCELERATION;
+
 			Matrix matrix = new Matrix();
 			matrix.preScale(-1, 1);
 			Bitmap bitmap = mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk");
@@ -163,13 +158,18 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 
 		// If the user wants to jump up then providing an immediate
 		// boost to the y velocity.
-		if (jumpUp && velocity.y == 0.0f) {
+		if (jumpLeft && velocity.y == 0.0f) {
 			velocity.y = JUMP_VELOCITY;
+			velocity.x = -JUMP_VELOCITY;
+		
+		}else if (jumpRight && velocity.y == 0.0f) {
+			velocity.y = JUMP_VELOCITY;
+			velocity.x = -JUMP_VELOCITY;
 		}
 		else {
 			velocity.y = GRAVITY;
 		}
-
+	
 		// Call the sprite's update method to apply the defined 
 		// accelerations and velocities to provide a new position
 		// and orientation.
