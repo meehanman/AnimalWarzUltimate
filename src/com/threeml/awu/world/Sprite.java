@@ -180,7 +180,8 @@ public class Sprite extends GameObject {
 				if(solidPixel && i < getBound().halfHeight/4){
 					//
 					//Cannot move in the direction
-					//velocity.x = 0;
+					velocity.x*=-1;
+					break;
 				}
 				//if the bottom (left/right)quater of the sprite is
 				//solid then its a slope
@@ -188,7 +189,8 @@ public class Sprite extends GameObject {
 					//Position the item -(up) by the amount of pixels the 
 					//gradient is
 					//Could try velocity
-					velocity.y+=getBound().halfHeight-i;
+					position.y+=(getBound().halfHeight*2)-i;
+					Log.v("slope","moved up "+((getBound().halfHeight*2)-i)+"px;");
 					break;
 				}
 			}
