@@ -9,7 +9,6 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.gameobject.map.Map;
 
 import android.graphics.Bitmap;
-import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
 /**

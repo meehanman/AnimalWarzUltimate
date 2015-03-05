@@ -146,33 +146,35 @@ public class Sprite extends GameObject {
 		double x = getX();
 		double y = getY();
 		
-		//if not moving or moving down
-		if(velocity.y <=0 ){
+		//Vertical Collisions
+		int direction = (int)Math.signum(velocity.y);
 			//Check pixel at bottom for collisions
-			if(TerrainObj.isPixelSolid(x,y-getBound().halfHeight)){
+			if(TerrainObj.isPixelSolid(x,y+(getBound().halfHeight*direction))){
 				velocity.y = 0;
 			}
-		}
 		
-		int direction = (int)Math.signum(velocity.x);
+		direction = (int)Math.signum(velocity.x);
 		//if traveling left or right
 		if(true){//direction!=0){
 			//Create bitmask
 			int boundHeight = (int)getBound().halfHeight*2;
+			
+			//TO BE REMOVED
+			/*
 			//Check if the player is stuck in some ground by checking left and right middle pixel values
 			if(TerrainObj.isPixelSolid(x+(getBound().halfWidth),y) 
 					&& TerrainObj.isPixelSolid(x-(getBound().halfWidth),y)){
 				//Move the player up 1/2 a space
 				position.y+=getBound().halfHeight;
 			}
+			*/
+			
+			
 			boolean solidPixel;
-			int stage;
 			//Create a bitmask from top to bottom of the pixels 
 			for(int i=0;i<boundHeight;i++){
 				//If true then collision
 				solidPixel = TerrainObj.isPixelSolid(x+(getBound().halfWidth*direction),y-getBound().halfHeight+i);
-				Log.v("slope","Setting: slopepx: "+solidPixel+" i: "+i+
-						" val: "+getBound().halfHeight/4+" 2ndIf: "+(solidPixel && i >= getBound().halfHeight/4));
 				//if any of the pixels are solid then we've hit a wall
 				//so act accordingly and exit the application
 				if(solidPixel && i < getBound().halfHeight/4){
@@ -186,12 +188,10 @@ public class Sprite extends GameObject {
 					//Position the item -(up) by the amount of pixels the 
 					//gradient is
 					//Could try velocity
-					position.y+=i;
-					Log.v("slope","Setting: "+(boundHeight-i));
+					velocity.y+=getBound().halfHeight-i;
 					break;
 				}
 			}
-			boolean debug = true;
 		}
 	}
 	/**

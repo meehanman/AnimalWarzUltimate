@@ -365,7 +365,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-
+		
+		//Rotate players after timers finished
 		if (getActivePlayer() != null) {
 			if (mCountDownTimer.hasFinished()) {
 				changeActivePlayer();
@@ -410,7 +411,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				// for(Player p : mPlayers){
 				// Temporary solution to make the health pack appear
 				// to be collected by the user
-				
 				p.update(elapsedTime, false, false, false, false, false, mTerrain);
 
 				// Log.v("UpdateMethod", "Player ID : " + p.getId());
