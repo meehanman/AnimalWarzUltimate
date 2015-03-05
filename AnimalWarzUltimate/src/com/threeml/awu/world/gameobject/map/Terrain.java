@@ -77,7 +77,7 @@ public class Terrain extends Sprite {
 		y = mBitmap.getHeight() - y;
 		
 		//Validation: If Pixel is outside of range then return false
-		if((x<0||y<0)||(x>mBitmap.getWidth()||y>mBitmap.getHeight())){return false;}
+		if(((int)x<=0||(int)y<=0)||((int)x>=mBitmap.getWidth()||(int)y>=mBitmap.getHeight())){return false;}
 		
 		//Return if there is a collision at this point
 		return (Color.alpha(mBitmap.getPixel((int)x, (int)y)) > 150);

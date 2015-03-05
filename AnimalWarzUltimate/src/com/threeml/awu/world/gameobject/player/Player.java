@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
-import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.world.FrameHandler;
 import com.threeml.awu.world.GameScreen;
@@ -229,7 +228,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}
 		mHealthText.updateText(Integer.toString(mHealth));
 	}
-	
 	/**
 	 * Returns the health of the player
 	 * @return health
