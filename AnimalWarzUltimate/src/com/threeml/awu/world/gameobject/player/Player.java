@@ -207,7 +207,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			//change bitmap to grave
 		}
 		setAlive(false);
-		Log.v("Kill", this.mName + " has been KILLED");
 	}
 	
 	/**
@@ -248,12 +247,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public void setHealth(int value)
 	{
 		mHealth += value;
-		Log.v("Kill", "Health value of " + this.mHealth + " and value " + value);
 		if(mHealth >= (int)MAX_HEALTH){
 			mHealth = (int)MAX_HEALTH;
 		}
 		mHealthText.updateText(Integer.toString(mHealth));
-		Log.v("Kill", "Health value of " + this.mName + " has been updated to : " + this.mHealth);
 	}
 	/**
 	 * Returns the health of the player
