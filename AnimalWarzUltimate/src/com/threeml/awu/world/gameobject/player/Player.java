@@ -36,20 +36,20 @@ public class Player extends Sprite {
 	private Bitmap mFullImage;
 	
 	/** Player's health value */
-	private int mHealth = 100;
+	private int mHealth;
 	
 	/** Player's name */
 	private GameObjectText mNameText;
 	private String mName;
 	
 	/** SpritesheetHandler to handle spritesheet */
-	private SpritesheetHandler mFrameHandler;
+	private SpritesheetHandler mSpritesheetHandler;
 	
 	/** Health text that appears above the Player */
 	private GameObjectText mHealthText;
 	
 	/** Max Health the player can have */
-	private float MAX_HEALTH = 200.0f;
+	private int MAX_HEALTH = 100;
 	
 	/** Strength of gravity to apply along the y-axis */
 	private static float GRAVITY = -100.0f;
@@ -68,6 +68,9 @@ public class Player extends Sprite {
 		
 	/** The current weapon the Player is holding**/
 	private Weapon mCurrentWeapon;
+	
+	/** Boolean value determines whether Player is alive or dead */
+	private boolean mAlive;
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -94,14 +97,16 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mFullImage = bitmap;
 		try {
 			mName = name;
+			mHealth = MAX_HEALTH;
 			mHealthText = new GameObjectText(gameScreen, Integer.toString(mHealth), this, (int)this.getBound().halfHeight);
 			mNameText = new GameObjectText(gameScreen, mName, this, (int)this.getBound().halfHeight + 10);
+			setAlive(true);
 		}
 		catch(Exception e){
 			Log.e("Text Error", "Player constructor error : " + e);
 		}
 		
-		mFrameHandler = new SpritesheetHandler(mFullImage, rows, columns);
+		mSpritesheetHandler = new SpritesheetHandler(mFullImage, rows, columns);
 }
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -126,47 +131,54 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			boolean moveRight, boolean jumpLeft, boolean jumpRight, boolean weaponSelect,
 			Terrain TerrainObj) {
 		
-		// Depending upon the left and right movement touch controls
-		// set an appropriate x-acceleration. If the user does not
-		// want to move left or right, then the x-acceleration is zero
-		// and the velocity decays towards zero.
-		if (moveLeft && !moveRight) {
-				acceleration.x = -RUN_ACCELERATION;
-
-			this.mFrameHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk"));
-			if(mFrameHandler != null && this.mFrameHandler.getRows() > 1){
-				this.mFrameHandler.nextFrameVertical();
+		//if Player health is not full depleted
+		if(mHealth > 0){
+			// Depending upon the left and right movement touch controls
+			// set an appropriate x-acceleration. If the user does not
+			// want to move left or right, then the x-acceleration is zero
+			// and the velocity decays towards zero.
+			if (moveLeft && !moveRight) {
+					acceleration.x = -RUN_ACCELERATION;
+	
+				this.mSpritesheetHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk"));
+				if(mSpritesheetHandler != null && this.mSpritesheetHandler.getRows() > 1){
+					this.mSpritesheetHandler.nextFrameVertical();
+				}
+				
+			} else if (moveRight && !moveLeft) {
+					acceleration.x = RUN_ACCELERATION;
+	
+				Matrix matrix = new Matrix();
+				matrix.preScale(-1, 1);
+				Bitmap bitmap = mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk");
+				this.mSpritesheetHandler.setFullImage(Bitmap.createBitmap(bitmap, 0,
+						0, bitmap.getWidth(), bitmap.getHeight(), matrix, false));
+				if(mSpritesheetHandler != null && this.mSpritesheetHandler.getRows() > 1){
+					this.mSpritesheetHandler.nextFrameVertical();
+				}
+			} else {
+				acceleration.x = 0.0f;
+				acceleration.y = 0.0f;
+				velocity.x *= RUN_DECAY;
 			}
+	
+			// If the user wants to jump up then providing an immediate
+			// boost to the y velocity.
+			if (jumpLeft && velocity.y == 0.0f) {
+				velocity.y = JUMP_VELOCITY;
+				velocity.x = -JUMP_VELOCITY;
 			
-		} else if (moveRight && !moveLeft) {
-				acceleration.x = RUN_ACCELERATION;
-
-			Matrix matrix = new Matrix();
-			matrix.preScale(-1, 1);
-			Bitmap bitmap = mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk");
-			this.mFrameHandler.setFullImage(Bitmap.createBitmap(bitmap, 0,
-					0, bitmap.getWidth(), bitmap.getHeight(), matrix, false));
-			if(mFrameHandler != null && this.mFrameHandler.getRows() > 1){
-				this.mFrameHandler.nextFrameVertical();
+			}else if (jumpRight && velocity.y == 0.0f) {
+				velocity.y = JUMP_VELOCITY;
+				velocity.x = -JUMP_VELOCITY;
 			}
-		} else {
-			acceleration.x = 0.0f;
-			acceleration.y = 0.0f;
-			velocity.x *= RUN_DECAY;
-		}
-
-		// If the user wants to jump up then providing an immediate
-		// boost to the y velocity.
-		if (jumpLeft && velocity.y == 0.0f) {
-			velocity.y = JUMP_VELOCITY;
-			velocity.x = -JUMP_VELOCITY;
-		
-		}else if (jumpRight && velocity.y == 0.0f) {
-			velocity.y = JUMP_VELOCITY;
-			velocity.x = -JUMP_VELOCITY;
-		}
+			else {
+				velocity.y = GRAVITY;
+			}
+		} 
+		//if Player health is fully depleted
 		else {
-			velocity.y = GRAVITY;
+			kill();
 		}
 	
 		// Call the sprite's update method to apply the defined 
@@ -183,6 +195,19 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mNameText.update(elapsedTime);
 		
 		
+	}
+	/**
+	 * Does Player death animation, changes bitmap to grave and sets 
+	 * Alive to false
+	 */
+	public void kill(){
+		//if player is not in water/bottom of the screen
+		if(position.y != 0){
+			//do death animation
+			//change bitmap to grave
+		}
+		setAlive(false);
+		Log.v("Kill", this.mName + " has been KILLED");
 	}
 	
 	/**
@@ -206,7 +231,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 					screenViewport, drawSourceRect, drawScreenRect)) {
 	
 				// Draw the image
-				graphics2D.drawBitmap(mFrameHandler.getFrameImage(), drawSourceRect, drawScreenRect, null);
+				graphics2D.drawBitmap(mSpritesheetHandler.getFrameImage(), drawSourceRect, drawScreenRect, null);
 			}
 		}
 		catch (Exception e){
@@ -223,10 +248,12 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public void setHealth(int value)
 	{
 		mHealth += value;
-		if(mHealth <= (int)MAX_HEALTH){
+		Log.v("Kill", "Health value of " + this.mHealth + " and value " + value);
+		if(mHealth >= (int)MAX_HEALTH){
 			mHealth = (int)MAX_HEALTH;
 		}
 		mHealthText.updateText(Integer.toString(mHealth));
+		Log.v("Kill", "Health value of " + this.mName + " has been updated to : " + this.mHealth);
 	}
 	/**
 	 * Returns the health of the player
@@ -250,6 +277,24 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 */
 	public void setCurrentWeapon(Weapon mCurrentWeapon) {
 		this.mCurrentWeapon = mCurrentWeapon;
+	}
+
+	/**
+	 * Get if Player is alive
+	 * @return Alive
+	 * 				
+	 */
+	public boolean isAlive() {
+		return mAlive;
+	}
+
+	/**
+	 * Set if Player is alive
+	 * @param alive 
+	 * 				Set true or false, determines if Player is alive
+	 */
+	public void setAlive(boolean mAlive) {
+		this.mAlive = mAlive;
 	}
 
 }
