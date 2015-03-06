@@ -249,6 +249,25 @@ public class TeamManager {
 	}
 	
 	/**
+	 * Gets the teams with Players with Alive status
+	 * 
+	 * @return playable teams
+	 */
+	public List<Team> getTeamsWithAlivePlayers(){
+		List<Team> teams = new ArrayList<Team>();
+		for(Team t : mTeams){
+			if(t.hasAlivePlayers()){
+				teams.add(t);
+			}
+		}
+		return teams;
+	}
+	
+	public boolean hasPlayableTeams(){
+		return (getTeamsWithAlivePlayers().size() > 1);
+	}
+	
+	/**
 	 * Returns the active player
 	 * 
 	 * @return
@@ -257,7 +276,14 @@ public class TeamManager {
 	public Player getActivePlayer(){
 		return mActivePlayer;
 	}
-	
+	/**
+	 * Returns a team from the list of teams by its index, if it doesn't exist then method
+	 * returns the first team in the list
+	 * @param index
+	 * 				Index of team in list of teams
+	 * @return
+	 * 				Team
+	 */
 	public Team getTeam(int index){
 		try {
 			return mTeams.get(index);
@@ -266,7 +292,19 @@ public class TeamManager {
 			return mTeams.get(0);
 		}
 	}
+	/**
+	 * Returns a list of all teams
+	 * 
+	 * @return list of teams
+	 */
 	public List<Team> getTeams(){
 		return mTeams;
+	}
+	/**
+	 * Returns the currently active team
+	 * @return active team
+	 */
+	public Team getActiveTeam(){
+		return mActiveTeam;
 	}
 }

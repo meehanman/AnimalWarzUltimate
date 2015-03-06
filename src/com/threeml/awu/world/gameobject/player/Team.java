@@ -1,5 +1,6 @@
 package com.threeml.awu.world.gameobject.player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
@@ -69,8 +70,13 @@ public class Team {
 		} else {
 			try {
 				if (mPlayers.indexOf(mLastActivePlayer) < (mPlayers.size() - 1)) {
-					mLastActivePlayer = mPlayers.get(mPlayers
-							.indexOf(mLastActivePlayer) + 1);
+					if(getAlivePlayers() != null && getAlivePlayers().size() > 0){
+						mLastActivePlayer = mPlayers.get(mPlayers
+								.indexOf(mLastActivePlayer) + 1);
+					}
+					else {
+						return null;
+					}
 				} else {
 					mLastActivePlayer = mPlayers.get(0);
 				}
@@ -80,6 +86,28 @@ public class Team {
 			}
 		}
 		return mLastActivePlayer;
+	}
+	/**
+	 * Get all the Players whose Alive status is true
+	 * 
+	 * @return list of alive players
+	 */
+	public List<Player> getAlivePlayers(){
+		List<Player> players = new ArrayList<Player>();
+		for(Player p : mPlayers){
+			if(p.isAlive()){
+				players.add(p);
+			}
+		}
+		return players;
+	}
+	/**
+	 * Get if the team contains any Alive Players
+	 * 
+	 * @return if team has any Alive Players
+	 */
+	public boolean hasAlivePlayers(){
+		return (getAlivePlayers() != null);
 	}
 	
 	/**

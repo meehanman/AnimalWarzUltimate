@@ -51,7 +51,8 @@ public class Healthkit extends Item{
 	// /////////////////////////////////////////////////////////////////////////
 	private void setHealthValue(int healthValue){
 		if(healthValue < 0){
-			mHealthValue = 0;
+			//TODO MJ - change this back to be mHealthValue = 0, once you finish testing kill method
+			mHealthValue = healthValue;
 		}
 		else{
 			mHealthValue = healthValue;

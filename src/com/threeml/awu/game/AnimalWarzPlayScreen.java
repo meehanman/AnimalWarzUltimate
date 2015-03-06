@@ -206,7 +206,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		 * mPlayers.add(mPlayer2);
 		 */
 
-		healthPacks.add(new Healthkit(50, 750, 300, getGame().getAssetManager()
+		healthPacks.add(new Healthkit(-100, 750, 100, getGame().getAssetManager()
 				.getBitmap("Health"), this));
 
 		// Create Controls for game
@@ -365,41 +365,57 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-		
-		//Rotate players after timers finished
-		if (getActivePlayer() != null) {
-			if (mCountDownTimer.hasFinished()) {
-				changeActivePlayer();
+		if(getActivePlayer().isAlive()){
+			//Rotate players after timers finished
+			if (getActivePlayer() != null) {
+				if (mCountDownTimer.hasFinished()) {
+					changeActivePlayer();
+				}
+				// Ensure the player cannot leave the confines of the world
+				BoundingBox playerBound = getActivePlayer().getBound();
+				if (playerBound.getLeft() < 0)
+					getActivePlayer().position.x -= playerBound.getLeft();
+				else if (playerBound.getRight() > LEVEL_WIDTH)
+					getActivePlayer().position.x -= (playerBound.getRight() - LEVEL_WIDTH);
+	
+				if (playerBound.getBottom() < 0)
+					getActivePlayer().position.y -= playerBound.getBottom();
+				else if (playerBound.getTop() > LEVEL_HEIGHT)
+					getActivePlayer().position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
+	
+				// Focus the layer viewport on the player
+				mBackgroundViewport.x = getActivePlayer().position.x;
+				mBackgroundViewport.y = getActivePlayer().position.y;
+	
+				// Ensure the viewport cannot leave the confines of the world
+				if (mBackgroundViewport.getLeft() < 0)
+					mBackgroundViewport.x -= mBackgroundViewport.getLeft();
+				else if (mBackgroundViewport.getRight() > LEVEL_WIDTH)
+					mBackgroundViewport.x -= (mBackgroundViewport.getRight() - LEVEL_WIDTH);
+	
+				if (mBackgroundViewport.getBottom() < 0)
+					mBackgroundViewport.y -= mBackgroundViewport.getBottom();
+				else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
+					mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
+			} else {
+				Log.v("Error",
+						"Error occurred in AnimalWarzPlayScreen: update method. No active player");
 			}
-			// Ensure the player cannot leave the confines of the world
-			BoundingBox playerBound = getActivePlayer().getBound();
-			if (playerBound.getLeft() < 0)
-				getActivePlayer().position.x -= playerBound.getLeft();
-			else if (playerBound.getRight() > LEVEL_WIDTH)
-				getActivePlayer().position.x -= (playerBound.getRight() - LEVEL_WIDTH);
-
-			if (playerBound.getBottom() < 0)
-				getActivePlayer().position.y -= playerBound.getBottom();
-			else if (playerBound.getTop() > LEVEL_HEIGHT)
-				getActivePlayer().position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
-
-			// Focus the layer viewport on the player
-			mBackgroundViewport.x = getActivePlayer().position.x;
-			mBackgroundViewport.y = getActivePlayer().position.y;
-
-			// Ensure the viewport cannot leave the confines of the world
-			if (mBackgroundViewport.getLeft() < 0)
-				mBackgroundViewport.x -= mBackgroundViewport.getLeft();
-			else if (mBackgroundViewport.getRight() > LEVEL_WIDTH)
-				mBackgroundViewport.x -= (mBackgroundViewport.getRight() - LEVEL_WIDTH);
-
-			if (mBackgroundViewport.getBottom() < 0)
-				mBackgroundViewport.y -= mBackgroundViewport.getBottom();
-			else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
-				mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
-		} else {
-			Log.v("Error",
-					"Error occurred in AnimalWarzPlayScreen: update method. No active player");
+		}
+		else {
+			//if the current active team has no more alive players
+			/*if(!mTeamManager.getActiveTeam().hasAlivePlayers()){
+				//TODO - add notification that team is out
+				//if team manager has playable teams, i.e. if any more
+				if(mTeamManager.hasPlayableTeams()){
+					changeActivePlayer();
+				}
+				//if no more playable teams
+				else {
+					//find winning team and do game over
+				}
+			}*/
+			changeActivePlayer();
 		}
 
 		// Until we have a paralex effect, lets position forground and
