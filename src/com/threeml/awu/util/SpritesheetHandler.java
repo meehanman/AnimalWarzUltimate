@@ -1,16 +1,16 @@
-package com.threeml.awu.world;
+package com.threeml.awu.util;
 
 import android.graphics.Bitmap;
 import android.util.Log;
 /**
- * FrameHandler takes in a larger image and returns a smaller subimage
+ * SpritesheetHandler takes in a larger image and returns a smaller subimage
  * 
  * Initialise with a sprite sheet with a number of rows and columns
  * 
  * @author Mary-Jane
  *
  */
-public class FrameHandler {
+public class SpritesheetHandler {
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Attributes
@@ -32,7 +32,7 @@ public class FrameHandler {
 	// /////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Creates FrameHandler object
+	 * Creates SpritesheetHandler object
 	 * 
 	 * @param fullImage
 	 * 				Bitmap spritesheet that can be divided into frames
@@ -41,7 +41,7 @@ public class FrameHandler {
 	 * @param columns
 	 * 				Number of columns in the spritesheet
 	 */
-	public FrameHandler(Bitmap fullImage, int rows, int columns){
+	public SpritesheetHandler(Bitmap fullImage, int rows, int columns){
 		this.mFullImage = fullImage;
 		this.mRows = rows;
 		this.mColumns = columns;
