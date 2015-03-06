@@ -9,8 +9,7 @@ import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
-import com.threeml.awu.world.FrameHandler;
-import com.threeml.awu.world.GameObject;
+import com.threeml.awu.util.SpritesheetHandler;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -30,8 +29,8 @@ public class BitmapFont extends Sprite {
 	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
 	
-	/** FrameHandler used to handle the font spritesheet */
-	FrameHandler mFrameHandler;
+	/** SpritesheetHandler used to handle the font spritesheet */
+	SpritesheetHandler mFrameHandler;
 	/** Image used to represent this object */
 	protected Bitmap mTextImage;
 	/** Width of characters in font spritesheet */
@@ -73,7 +72,7 @@ public class BitmapFont extends Sprite {
 			mFont = gameScreen.getGame().getAssetManager().getBitmap("Font");
 			mFontSize = mTextCellheight;
 			// Create a default string
-			mFrameHandler = new FrameHandler(mFont, 2, 53);
+			mFrameHandler = new SpritesheetHandler(mFont, 2, 53);
 			mText = buildString(str);
 			createNewTextBitmap();
 			
@@ -106,7 +105,7 @@ public class BitmapFont extends Sprite {
 			mFont = gameScreen.getGame().getAssetManager().getBitmap("Font");
 			mFontSize = fontSize;
 			// Create a default string
-			mFrameHandler = new FrameHandler(mFont, 2, 53);
+			mFrameHandler = new SpritesheetHandler(mFont, 2, 53);
 			mText = buildString(str);
 			createNewTextBitmap();
 		} catch (Exception e) {

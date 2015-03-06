@@ -7,7 +7,7 @@ import android.util.Log;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.GraphicsHelper;
-import com.threeml.awu.world.FrameHandler;
+import com.threeml.awu.util.SpritesheetHandler;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -42,8 +42,8 @@ public class Player extends Sprite {
 	private GameObjectText mNameText;
 	private String mName;
 	
-	/** FrameHandler to handle spritesheet */
-	private FrameHandler mFrameHandler;
+	/** SpritesheetHandler to handle spritesheet */
+	private SpritesheetHandler mFrameHandler;
 	
 	/** Health text that appears above the Player */
 	private GameObjectText mHealthText;
@@ -101,7 +101,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			Log.e("Text Error", "Player constructor error : " + e);
 		}
 		
-		mFrameHandler = new FrameHandler(mFullImage, rows, columns);
+		mFrameHandler = new SpritesheetHandler(mFullImage, rows, columns);
 }
 
 	// /////////////////////////////////////////////////////////////////////////
