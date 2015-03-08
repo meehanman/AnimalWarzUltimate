@@ -260,6 +260,14 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	{
 		return mHealth;
 	}
+	
+	/**
+	 * Returns the name of the Player
+	 * @return name
+	 */
+	public String getName(){
+		return mName;
+	}
 
 	/**
 	 * Returns the current weapon the player is holding
