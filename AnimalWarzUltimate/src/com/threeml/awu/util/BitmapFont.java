@@ -36,7 +36,7 @@ public class BitmapFont extends Sprite {
 	/** Width of characters in font spritesheet */
 	protected final static int mTextCellwidth = 12;
 	/** Height of characters in font spritesheet */
-	private final static int mTextCellheight = 19;
+	protected final static int mTextCellheight = 19;
 	/** List that holds the individual characters */
 	List<Bitmap> BitmapList = new ArrayList<Bitmap>();
 	/** Size of font, as it appears on the screen */
@@ -146,7 +146,7 @@ public class BitmapFont extends Sprite {
 	 * Creates a new Bitmap that is mutable then calls method 
 	 * to create the bitmap that will represent this object
 	 */
-	private void createNewTextBitmap(){
+	protected void createNewTextBitmap(){
 		mTextImage = Bitmap.createBitmap((int)(mText.length() * mTextCellwidth),
 				mTextCellheight, Bitmap.Config.ARGB_8888);
 		getTextAsImage();
@@ -158,7 +158,7 @@ public class BitmapFont extends Sprite {
 	  * @return
 	  * 			Bitmap text
 	  */
-	private Bitmap getTextAsImage() {
+	protected Bitmap getTextAsImage() {
 		try {
 			updateString();
 			

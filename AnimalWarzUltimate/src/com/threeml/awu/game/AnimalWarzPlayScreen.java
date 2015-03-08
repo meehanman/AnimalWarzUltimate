@@ -13,10 +13,12 @@ import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.BoundingBox;
+import com.threeml.awu.util.InGameText;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
+import com.threeml.awu.world.dashboardobject.BannerNotification;
 import com.threeml.awu.world.dashboardobject.Control;
 import com.threeml.awu.world.dashboardobject.OnScreenText;
 import com.threeml.awu.world.gameobject.droppable.Healthkit;
@@ -61,6 +63,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private Background mBackground;
 	/** Terrain image, all game objects interact with this object */
 	private Terrain mTerrain;
+	/** Banner Notification will appear when there is a notification for the user */
+	private BannerNotification mNotification;
 
 	// TODO MJ - Player management isn't complete
 	/** players */
@@ -96,6 +100,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 	/** count down timer to change active user after 30 seconds */
 	private GameCountDownTimer mCountDownTimer;
+	
+	private GameCountDownTimer mNotificationTimer;
 	
 	private OnScreenText mDashboardTimer;
 	List<OnScreenText> mTeamHealthText;
@@ -165,6 +171,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 		CreateGameObjects(screenHeight, screenWidth, Players, Teams);
 		mCountDownTimer = game.getPlayerCountDown();
+		mNotificationTimer = game.getNotificationTimer();
 		mCountDownTimer.start();
 	}
 
@@ -290,8 +297,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		 */
 		// mControls.add(mWeaponsList);
 		
+		x = screenWidthCell * 10.0f;
+		y = (screenHeight - 300.0f);
+		mNotification = new BannerNotification(x, y, this);
 		x = screenWidthCell * 100.0f;
-		y = (screenHeight - 200);
+		y = (screenHeight - 200.0f);
 		mDashboardTimer = new OnScreenText(x, y, this, "0", 250);
 		
 		x = screenWidthCell * 100.0f;
@@ -307,7 +317,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		public void createPlayersAndTeams(int Players, int Teams) {
 
 			try {
-				//Come on MJ.. really going to do it manually.. 
+				//Come on MJ.. really going to do it manually.. shh dean. shh.
 				//Changed implementation
 				for(int i = 0; i<=Teams;i++){
 					mTeamManager.createNewTeam("EVERYONE_LOVES_DEAN", Players, mCurrentMap, getGame(), this);
@@ -338,19 +348,28 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 	// MJ ~
 	private void changeActivePlayer() {
-
-		// TODO MJ - This is really hacked together, I'm gonna fix it to be more
-		// scalable
-		/*
-		 * if(getActivePlayer().getId() == 0){ mPlayers.get(1).setActive(true);
-		 * mPlayers.get(0).setActive(false); mCountDownTimer.cancel();
-		 * mCountDownTimer.start(); } else{ mPlayers.get(0).setActive(true);
-		 * mPlayers.get(1).setActive(false); mCountDownTimer.cancel();
-		 * mCountDownTimer.start(); }
-		 */
 		mTeamManager.changeActivePlayer();
+		displayNotification(InGameText.generateChangePlayerText(getActivePlayer().getName()));
 		mCountDownTimer.cancel();
 		mCountDownTimer.start();
+	}
+	/**
+	 * Displays a notification for the user
+	 * @param text
+	 * 				Text to be displayed
+	 */
+	private void displayNotification(String text){
+		mNotification.updateText(text);
+		mNotification.setVisible(true);
+		mNotificationTimer.start();
+	}
+	/**
+	 * Hides the notification for the user
+	 */
+	private void hideNotification(){
+		if(mNotificationTimer.hasFinished()){
+			mNotification.setVisible(false);
+		}
 	}
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -365,6 +384,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
+		hideNotification();
 		if(getActivePlayer().isAlive()){
 			//Rotate players after timers finished
 			if (getActivePlayer() != null) {
@@ -406,6 +426,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			//if the current active team has no more alive players
 			/*if(!mTeamManager.getActiveTeam().hasAlivePlayers()){
 				//TODO - add notification that team is out
+				//TODO - kill player movement. player keeps moving for whatever reason
 				//if team manager has playable teams, i.e. if any more
 				if(mTeamManager.hasPlayableTeams()){
 					changeActivePlayer();
@@ -415,6 +436,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					//find winning team and do game over
 				}
 			}*/
+			displayNotification(InGameText.generateDeathText(getActivePlayer().getName()));
 			changeActivePlayer();
 		}
 
@@ -468,6 +490,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					if (p.getBound().intersects(healthBound)) {
 						// Apply health to player
 						p.setHealth(h.getHealthValue());
+						displayNotification(InGameText.generateCollectedHealthText(getActivePlayer().getName(), h.getHealthValue()));
 						// Remove from list
 						h.setActive(false);
 					}
@@ -597,6 +620,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				t.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 			}
 		}
+		
+		mNotification.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 		
 	}
 }
