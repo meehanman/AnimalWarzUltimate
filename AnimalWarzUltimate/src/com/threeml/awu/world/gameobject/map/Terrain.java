@@ -73,7 +73,7 @@ public class Terrain extends Sprite {
 		x *= mBitmap.getWidth() / this.getBound().getWidth();
 		y *= mBitmap.getHeight() / this.getBound().getHeight();
 		
-		//Change y position to accompany Y starting at 0 at the top of the screen  
+		// I don't know why I need this, but it stops the people being upside-down
 		y = mBitmap.getHeight() - y;
 		
 		//Validation: If Pixel is outside of range then return false

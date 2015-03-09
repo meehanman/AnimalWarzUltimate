@@ -68,7 +68,8 @@ public class Weapon extends Sprite {
 	 */
 	public void update(ElapsedTime elapsedTime)
 	{
-		
+		/* Halley's comment */
+
 	}
 	
 	/**

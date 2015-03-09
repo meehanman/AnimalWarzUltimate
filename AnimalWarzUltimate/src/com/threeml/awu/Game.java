@@ -586,6 +586,7 @@ public abstract class Game extends Fragment {
 				}
 
 			} catch (InterruptedException e) {
+				//Move along, nothing to see here. 
 			}
 		}
 
@@ -627,8 +628,7 @@ public abstract class Game extends Fragment {
 					renderThread.join();
 					return;
 				} catch (InterruptedException e) {
-					// Log something here
-					// retry
+					 // move along, nothing to see here. 
 				}
 			}
 		}
