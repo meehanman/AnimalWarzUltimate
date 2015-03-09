@@ -11,8 +11,17 @@ import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.gameobject.map.Terrain;
 
 /**
- * Simple sprite class (supporting rotation)
- * 
+ *  
+ * I went to the shop to buy 6 cans of
+ *                                _|    _|                
+ *   _|_|_|  _|_|_|    _|  _|_|      _|_|_|_|    _|_|    
+ * _|_|      _|    _|  _|_|      _|    _|      _|_|_|_|  
+ *     _|_|  _|    _|  _|        _|    _|      _|        
+ * _|_|_|    _|_|_|    _|        _|      _|_|    _|_|_| .... 
+ *           _|                                          
+ *           _|   
+ *             					only to realise when I got home i had picked 7up.
+ *             
  * @version 1.0
  */
 public class Sprite extends GameObject {
@@ -67,7 +76,11 @@ public class Sprite extends GameObject {
 	public float maxAngularAcceleration = DEFAULT_MAX_ANGULAR_ACCELERATION;
 	/** Max Angular Velocity of Sprite */
 	public float maxAngularVelocity = DEFAULT_MAX_ANGULAR_VELOCITY;
-
+	
+	/** Previous Position used for Collision Detection **/
+	public float previousPositionX = position.x;
+	public float previousPositionY = position.y;
+	
 	/**
 	 * Internal matrix use to support draw requests
 	 */
@@ -143,57 +156,64 @@ public class Sprite extends GameObject {
 		
 		//Setup values for X and y
 		//and SET to the CENTER of the object
-		double x = getX();
-		double y = getY();
+		double x = this.getBound().x;
+		double y = this.getBound().y;
 		
+		boolean yCollision = false;
+	
 		//Vertical Collisions
 		int direction = (int)Math.signum(velocity.y);
 			//Check pixel at bottom for collisions
 			if(TerrainObj.isPixelSolid(x,y+(getBound().halfHeight*direction))){
-				velocity.y = 0;
+				yCollision=true;
 			}
 		
+		/**
+		 * Worms wouldn't be very fun if your worm stopped moving every time a pixel got in your way. 
+		 * So to keep movement smoother, the game's physics coding initiates upto an 8 pixel check to 
+		 * see if your worm can be moved ontop of the collided pixel(s). Your worm gets shifted upwards 
+		 * if a negative collision is returned from the loop (1 to 8). If not, your worm will stop moving.
+		 * The above image demonstrates how the game calculates what to do when a collision occurs in the walking 
+		 * sequence. White refers to the worm mask, Green refers to the terrain mask, Blue refers to pixels where the 
+		 * two layers have collided, and the Red Arrow refers to the horizontal shift occuring in the frame.
+ 		*/
+		String output="[";
+		int boundHeight = (int)getBound().halfHeight*2;
 		direction = (int)Math.signum(velocity.x);
-		//if traveling left or right
-		if(true){//direction!=0){
-			//Create bitmask
-			int boundHeight = (int)getBound().halfHeight*2;
-			
-			//TO BE REMOVED
-			/*
-			//Check if the player is stuck in some ground by checking left and right middle pixel values
-			if(TerrainObj.isPixelSolid(x+(getBound().halfWidth),y) 
-					&& TerrainObj.isPixelSolid(x-(getBound().halfWidth),y)){
-				//Move the player up 1/2 a space
-				position.y+=getBound().halfHeight;
-			}
-			*/
-			
-			
-			boolean solidPixel;
-			//Create a bitmask from top to bottom of the pixels 
-			for(int i=0;i<boundHeight;i++){
-				//If true then collision
-				solidPixel = TerrainObj.isPixelSolid(x+(getBound().halfWidth*direction),y-getBound().halfHeight+i);
-				//if any of the pixels are solid then we've hit a wall
-				//so act accordingly and exit the application
-				if(solidPixel && i < getBound().halfHeight/4){
-					//
-					//Cannot move in the direction
-					velocity.x*=-1;
-					break;
-				}
-				//if the bottom (left/right)quater of the sprite is
-				//solid then its a slope
-				if(solidPixel && i >= getBound().halfHeight/4){
-					//Position the item -(up) by the amount of pixels the 
-					//gradient is
-					//Could try velocity
-					position.y+=(getBound().halfHeight*2)-i;
-					Log.v("slope","moved up "+((getBound().halfHeight*2)-i)+"px;");
-					break;
+		//if moving left or right
+		if(direction!=0){
+			//For top to bottom
+			for(int i = 0; i < boundHeight; i++){
+				//if solid pixel and...
+				output+=(int)(y+getBound().halfHeight-i)+",";
+				//DM - Halfwidth/2 due to size of worms being small
+				if(TerrainObj.isPixelSolid(x+((getBound().halfWidth/3)*direction),y+getBound().halfHeight-i)){
+					//we're looking at the first 2/3rds
+					if(i<((boundHeight/2))){
+						//we're solid
+						Log.v("slope","blocked! (Shouldn't move)");
+						getBound().x = previousPositionX;
+						velocity.x = 0;
+						break;
+						//else we're at the last bit
+					}else{
+						//We need to move up
+						position.y+=boundHeight-(i);
+						Log.v("slope","free! Moved up " + boundHeight);
+						break;
+					}
 				}
 			}
+		}
+		
+		//if(output!="["){Log.v("deanLog",output+"]");}
+					
+		//y Collisions done after xCollisions are looked at
+		//If there should be a yCollision, do it now!
+		if(yCollision){
+			//Log.v("slope","prevY");
+			getBound().y = previousPositionY;
+			velocity.y = 0;
 		}
 	}
 	/**
@@ -212,8 +232,8 @@ public class Sprite extends GameObject {
 	 * @param elapsedTime
 	 * 				Elapsed time information
 	 */
-	@Override
-	public void update(ElapsedTime elapsedTime) {
+	//@Override
+	public void update(ElapsedTime elapsedTime,String s, Terrain TerrainObj) {
 
 		float dt = (float) elapsedTime.stepTime;
 
@@ -241,7 +261,7 @@ public class Sprite extends GameObject {
 			angularAcceleration = Math.signum(angularAcceleration)
 					* maxAngularAcceleration;
 		}
-
+		
 		// Update the angular velocity using the angular acceleration and 
 		// ensure the maximum angular velocity has not been exceeded		
 		angularVelocity += angularAcceleration * dt;
@@ -254,16 +274,22 @@ public class Sprite extends GameObject {
 		// Update the orientation using the angular velocity
 		orientation += angularVelocity * dt;
 		
+		checkForAndResolveTerrainCollisions(TerrainObj);
 
-			
+		
+		//Save this position to be used as the previous position
+		previousPositionX = this.position.x;
+		previousPositionY = this.position.y;
 	}
+	
 	//DM - update method that takes in TerrainObject to resolve collisions
 	public void update(ElapsedTime elapsedTime, Terrain TerrainObj) {
+		
 		//Check and Resolve Collisions
 		checkForAndResolveTerrainCollisions(TerrainObj);
-		
 		//Update
-		update(elapsedTime);
+		update(elapsedTime,"",TerrainObj);
+
 	}
 
 	/**
@@ -299,7 +325,7 @@ public class Sprite extends GameObject {
 			drawMatrix.postRotate(orientation, scaleX * mBitmap.getWidth()
 					/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
 			drawMatrix.postTranslate(drawScreenRect.left, drawScreenRect.top);
-
+			
 			// Draw the image
 			graphics2D.drawBitmap(mBitmap, drawMatrix, null);
 		}

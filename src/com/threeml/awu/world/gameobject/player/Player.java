@@ -70,6 +70,8 @@ public class Player extends Sprite {
 	private Weapon mCurrentWeapon;
 	
 	/** Boolean value determines whether Player is alive or dead */
+	/*DM - What if ghosts say "Boo" because they only haunt people they don't like, and all they do is 
+	"Boo" them from the afterlife. So its not to scare you, its to show that they think you suck*/
 	private boolean mAlive;
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -103,6 +105,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			setAlive(true);
 		}
 		catch(Exception e){
+			//Move on, Nothing to see here
 			Log.e("Text Error", "Player constructor error : " + e);
 		}
 		
@@ -138,7 +141,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			// want to move left or right, then the x-acceleration is zero
 			// and the velocity decays towards zero.
 			if (moveLeft && !moveRight) {
-					acceleration.x = -RUN_ACCELERATION;
+				acceleration.x = -RUN_ACCELERATION;
 	
 				this.mSpritesheetHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk"));
 				if(mSpritesheetHandler != null && this.mSpritesheetHandler.getRows() > 1){
@@ -165,12 +168,12 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			// If the user wants to jump up then providing an immediate
 			// boost to the y velocity.
 			if (jumpLeft && velocity.y == 0.0f) {
-				velocity.y = JUMP_VELOCITY;
-				velocity.x = -JUMP_VELOCITY;
+				acceleration.y = JUMP_VELOCITY;
+				acceleration.x = -JUMP_VELOCITY;
 			
 			}else if (jumpRight && velocity.y == 0.0f) {
-				velocity.y = JUMP_VELOCITY;
-				velocity.x = -JUMP_VELOCITY;
+				acceleration.y = JUMP_VELOCITY;
+				acceleration.x = JUMP_VELOCITY;
 			}
 			else {
 				velocity.y = GRAVITY;
@@ -234,7 +237,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			}
 		}
 		catch (Exception e){
-			Log.v("Text Error", e + " : Error in Player draw method");
+			 // move along, nothing to see here. 
 		}
 		
 		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
