@@ -25,6 +25,8 @@ import com.threeml.awu.world.ScreenViewport;
  */
 public class Control extends GameObject {
 
+	/** Boolean to release the weapons menu upon selection */
+	private boolean wasSelected = false;
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -70,12 +72,12 @@ public class Control extends GameObject {
 		BoundingBox bound = getBound();
 		for (int idx = 0; idx < TouchHandler.MAX_TOUCHPOINTS; idx++) {
 			if (input.existsTouch(idx)) {
+				wasSelected = false;
 				if (bound.contains(input.getTouchX(idx), input.getTouchY(idx))) {
 					return true;
 				}
 			}
 		}
-
 		return false;
 	}
 	
@@ -88,12 +90,11 @@ public class Control extends GameObject {
 				for (int idx = 0; idx < TouchHandler.MAX_TOUCHPOINTS; idx++) {
 					if (input.existsTouch(idx)) {
 						if (bound.contains(input.getTouchX(idx), input.getTouchY(idx))) {
-							return true;
+							wasSelected = true;
 						}
 					}
 				}
-
-				return false;
+				return wasSelected;
 	}
 
 	/**

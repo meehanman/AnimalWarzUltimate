@@ -605,7 +605,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			c.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 		}
 	
-		if (mWeaponSelect.isActivated()) {
+		if (mWeaponSelect.isTouched()) {
 			for (Control n : mWeaponSelection) {
 				n.draw(elapsedTime, graphics2D, mDashboardViewport,
 						mScreenViewport);
