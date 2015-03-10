@@ -78,8 +78,8 @@ public class Sprite extends GameObject {
 	public float maxAngularVelocity = DEFAULT_MAX_ANGULAR_VELOCITY;
 	
 	/** Previous Position used for Collision Detection **/
-	public float previousPositionX = position.x;
-	public float previousPositionY = position.y;
+	public float mPreviousPositionX = position.x;
+	public float mPreviousPositionY = position.y;
 	
 	/**
 	 * Internal matrix use to support draw requests
@@ -192,7 +192,7 @@ public class Sprite extends GameObject {
 					if(i<((boundHeight/2))){
 						//we're solid
 						Log.v("slope","blocked! (Shouldn't move)");
-						getBound().x = previousPositionX;
+						this.position = new Vector2(mPreviousPositionX, mPreviousPositionY);
 						velocity.x = 0;
 						break;
 						//else we're at the last bit
@@ -212,7 +212,7 @@ public class Sprite extends GameObject {
 		//If there should be a yCollision, do it now!
 		if(yCollision){
 			//Log.v("slope","prevY");
-			getBound().y = previousPositionY;
+			this.position = new Vector2(mPreviousPositionX, mPreviousPositionY);
 			velocity.y = 0;
 		}
 	}
@@ -278,8 +278,8 @@ public class Sprite extends GameObject {
 
 		
 		//Save this position to be used as the previous position
-		previousPositionX = this.position.x;
-		previousPositionY = this.position.y;
+		mPreviousPositionX = this.position.x;
+		mPreviousPositionY = this.position.y;
 	}
 	
 	//DM - update method that takes in TerrainObject to resolve collisions
