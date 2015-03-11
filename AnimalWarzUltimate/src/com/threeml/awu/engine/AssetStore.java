@@ -139,7 +139,8 @@ public class AssetStore {
 		boolean success = true;
 		try {
 			Bitmap bitmap = mFileIO.loadBitmap(bitmapFile, null,inMutable);
-			success = add(assetName, bitmap);
+			Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+			success = add(assetName, mutableBitmap);
 		} catch (IOException e) {
 			Log.e("Gage", "AssetStore.loadAndAddBitmap: Cannot load ["
 					+ bitmapFile + "]");

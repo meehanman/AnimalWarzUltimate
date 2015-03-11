@@ -69,6 +69,57 @@ public class Terrain extends Sprite {
 	 */
 	public boolean isPixelSolid(double x,double y){
 		
+		Vector2 scaledValues = fixVectorScaling(x,y);
+		x=scaledValues.x;
+		y=scaledValues.y;
+		
+    	if(!outOfBoundsValadation(x,y)){return false;}
+		
+		//Return if there is a collision at this point
+		return (Color.alpha(mBitmap.getPixel((int)x, (int)y)) > 150);
+	}
+	
+	/**
+	 * Deforms a circle around a point x,y or Radius R
+	 * 
+	 * http://stackoverflow.com/questions/1201200/fast-algorithm-for-drawing-filled-circles
+	 * @param x
+	 * @param y
+	 * @param radius
+	 */
+	public void deformCircle(double x0, double y0, int radius){
+		Log.v("slope","deformCircle() fired at "+x0+", "+y0);
+		
+		Vector2 scaledValues = fixVectorScaling(x0,y0);
+		x0=scaledValues.x;
+		y0=scaledValues.y;
+		
+		for(int y=-radius; y<=radius; y++){
+		    for(int x=-radius; x<=radius; x++){
+		        if(x*x+y*y <= radius*radius){
+		        	
+		        	if(!outOfBoundsValadation(x0+x,y0+y)){continue;};
+		        	
+		        	mBitmap.setPixel((int)x0+x, (int)y0+y, Color.argb(0, 0, 0, 0));
+		        }
+		    }
+		}
+		
+		
+	}
+	
+	/**
+	 * 
+	 * Fixes scaling to move from actual position to position on the bitmap
+	 * 
+	 * @param x 
+	 * @param y
+	 * @return Vector2 with new location
+	 * 
+	 * @author Dean
+	 */
+	public Vector2 fixVectorScaling(double x, double y){
+		
 		//Scale of Terrain image vs Viewport as we are searching Pixels within Viewport after
 		x *= mBitmap.getWidth() / this.getBound().getWidth();
 		y *= mBitmap.getHeight() / this.getBound().getHeight();
@@ -76,10 +127,27 @@ public class Terrain extends Sprite {
 		// I don't know why I need this, but it stops the people being upside-down
 		y = mBitmap.getHeight() - y;
 		
-		//Validation: If Pixel is outside of range then return false
-		if(((int)x<=0||(int)y<=0)||((int)x>=mBitmap.getWidth()||(int)y>=mBitmap.getHeight())){return false;}
-		
-		//Return if there is a collision at this point
-		return (Color.alpha(mBitmap.getPixel((int)x, (int)y)) > 150);
+		return new Vector2(x,y);
 	}
+	
+	/**
+	 * 
+	 * Fixes
+	 * @param x
+	 * @param y
+	 * @return True if the values supplied works
+	 * 
+	 * @author Dean
+	 */
+	public Boolean outOfBoundsValadation(double x, double y){
+		
+    	if(((int)x<=0||(int)y<=0)||((int)x>=mBitmap.getWidth()||(int)y>=mBitmap.getHeight())){
+    		return false;
+		}else{
+    		return true;
+    	}
+
+	}
+	
+	
 }

@@ -78,7 +78,7 @@ public class AssetsHelper {
 		//Game Assets
 		AssetStore assetManager = mGame.getAssetManager();
 		assetManager.loadAndAddBitmap("smallMapImage", "img/TerrainImages/small/"+MapName+"Map.png");
-		assetManager.loadAndAddBitmap("TerrainImage", "img/TerrainImages/large/"+MapName+"Map.png");
+		assetManager.loadAndAddBitmap("TerrainImage", "img/TerrainImages/large/"+MapName+"Map.png",true);
 		assetManager.loadAndAddBitmap("TerrainBackground", "img/TerrainImages/background/MapBackgroundDefault.png");
 		
 		//TODO - Find Backgrounds to Match Other Images
