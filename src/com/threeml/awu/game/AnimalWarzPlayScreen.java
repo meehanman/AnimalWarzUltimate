@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.graphics.IGraphics2D;
-import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.InGameText;
-import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -28,7 +25,7 @@ import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
 import com.threeml.awu.world.gameobject.player.TeamManager;
-import com.threeml.awu.world.gameobject.weapon.Weapon;
+import com.threeml.awu.world.gameobject.weapon.Projectile;
 
 /**
  * Simple steering game world
@@ -65,7 +62,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private Terrain mTerrain;
 	/** Banner Notification will appear when there is a notification for the user */
 	private BannerNotification mNotification;
-
+	
+	private Projectile mProjectile;
 	// TODO MJ - Player management isn't complete
 	/** players */
 	// TODO MJ - remove this when completed team management
@@ -290,6 +288,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Bat",
 				this);
 		mWeaponSelection.add(mBat);
+		
+		mProjectile = new Projectile(mTeamManager.getActivePlayer().getX(), mTeamManager.getActivePlayer().getY(), 
+				20f, 5f, getGame().getAssetManager().getBitmap("Projectile"), this);
 		/*
 		 * mWeaponsList = new Control(getGame().getScreenWidth() / 2, getGame()
 		 * .getScreenHeight() / 2, getGame().getScreenWidth() / 2, getGame()
@@ -406,7 +407,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				// Focus the layer viewport on the player
 				mBackgroundViewport.x = getActivePlayer().position.x;
 				mBackgroundViewport.y = getActivePlayer().position.y;
-	
+				
 				// Ensure the viewport cannot leave the confines of the world
 				if (mBackgroundViewport.getLeft() < 0)
 					mBackgroundViewport.x -= mBackgroundViewport.getLeft();
@@ -457,6 +458,14 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				 * if(mWeaponsCrateButton.isActivated()){ mGun.setPosition(500,
 				 * 120); }
 				 */
+				
+				mProjectile.setPosition(mTeamManager.getActivePlayer().getX(),
+						mTeamManager.getActivePlayer().getY());
+				if (mShootButton.isActivated()) {
+					mProjectile.shoot(10);
+				}
+				
+				
 				
 				// Checking the weapon menu bitmaps for a touch event and logging
 				// the type of bitmap (weapon) that was selected
@@ -588,7 +597,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 						mScreenViewport);
 
 			}
-
+		
+		mProjectile.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		// mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport,
 		// mScreenViewport);
 		for (Healthkit h : healthPacks) {
