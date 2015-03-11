@@ -78,8 +78,7 @@ public class Sprite extends GameObject {
 	public float maxAngularVelocity = DEFAULT_MAX_ANGULAR_VELOCITY;
 	
 	/** Previous Position used for Collision Detection **/
-	public float mPreviousPositionX = position.x;
-	public float mPreviousPositionY = position.y;
+	public Vector2 mPreviousPosition = position;
 	
 	/**
 	 * Internal matrix use to support draw requests
@@ -154,19 +153,11 @@ public class Sprite extends GameObject {
 	 */
 	public void checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 		
+		int direction;
 		//Setup values for X and y
 		//and SET to the CENTER of the object
-		double x = this.getBound().x;
-		double y = this.getBound().y;
-		
-		boolean yCollision = false;
-	
-		//Vertical Collisions
-		int direction = (int)Math.signum(velocity.y);
-			//Check pixel at bottom for collisions
-			if(TerrainObj.isPixelSolid(x,y+(getBound().halfHeight*direction))){
-				yCollision=true;
-			}
+		double x = this.position.x;
+		double y = this.position.y;
 		
 		/**
 		 * Worms wouldn't be very fun if your worm stopped moving every time a pixel got in your way. 
@@ -177,7 +168,6 @@ public class Sprite extends GameObject {
 		 * sequence. White refers to the worm mask, Green refers to the terrain mask, Blue refers to pixels where the 
 		 * two layers have collided, and the Red Arrow refers to the horizontal shift occuring in the frame.
  		*/
-		String output="[";
 		int boundHeight = (int)getBound().halfHeight*2;
 		direction = (int)Math.signum(velocity.x);
 		//if moving left or right
@@ -185,20 +175,19 @@ public class Sprite extends GameObject {
 			//For top to bottom
 			for(int i = 0; i < boundHeight; i++){
 				//if solid pixel and...
-				output+=(int)(y+getBound().halfHeight-i)+",";
 				//DM - Halfwidth/2 due to size of worms being small
 				if(TerrainObj.isPixelSolid(x+((getBound().halfWidth/3)*direction),y+getBound().halfHeight-i)){
 					//we're looking at the first 2/3rds
 					if(i<((boundHeight/2))){
 						//we're solid
 						Log.v("slope","blocked! (Shouldn't move)");
-						this.position = new Vector2(mPreviousPositionX, mPreviousPositionY);
+						this.position = new Vector2(mPreviousPosition.x, mPreviousPosition.y);
 						velocity.x = 0;
 						break;
 						//else we're at the last bit
 					}else{
 						//We need to move up
-						position.y+=boundHeight-(i);
+						this.position = new Vector2(position.x, position.y+boundHeight-(i));
 						Log.v("slope","free! Moved up " + boundHeight);
 						break;
 					}
@@ -206,13 +195,27 @@ public class Sprite extends GameObject {
 			}
 		}
 		
+
+		
+		boolean yCollision = false;
+	
+		//Vertical Collisions
+		direction = (int)Math.signum(velocity.y);
+			//Check pixel at bottom for collisions
+			if(TerrainObj.isPixelSolid(x,y+(getBound().halfHeight*direction))){
+				yCollision=true;
+			}
+		
+			
+		
 		//if(output!="["){Log.v("deanLog",output+"]");}
 					
 		//y Collisions done after xCollisions are looked at
 		//If there should be a yCollision, do it now!
 		if(yCollision){
 			//Log.v("slope","prevY");
-			this.position = new Vector2(mPreviousPositionX, mPreviousPositionY);
+			//this.position = new Vector2(mPreviousPosition.x, mPreviousPosition.y);
+			this.position = new Vector2(position.x, mPreviousPosition.y);
 			velocity.y = 0;
 		}
 	}
@@ -278,8 +281,7 @@ public class Sprite extends GameObject {
 
 		
 		//Save this position to be used as the previous position
-		mPreviousPositionX = this.position.x;
-		mPreviousPositionY = this.position.y;
+		mPreviousPosition = this.position;
 	}
 	
 	//DM - update method that takes in TerrainObject to resolve collisions
@@ -342,7 +344,7 @@ public class Sprite extends GameObject {
 	 * @return x position
 	 */
 	public float getX(){
-		return this.mBound.x;
+		return this.position.x;
 	}
 	/**
 	 * set x position
@@ -350,7 +352,7 @@ public class Sprite extends GameObject {
 	 * @param x
 	 */
 	public void setX(float x){
-		this.mBound.x = x;
+		this.position.x = x;
 	}
 	
 	/*
@@ -364,7 +366,7 @@ public class Sprite extends GameObject {
 	 * @return y position
 	 */
 	public float getY(){
-		return this.mBound.y;
+		return this.position.y;
 	}
 	/**
 	 * set y position
@@ -372,6 +374,6 @@ public class Sprite extends GameObject {
 	 * @param y
 	 */
 	public void setY(float y){
-		this.mBound.y = y;
+		this.position.y = y;
 	}
 }
