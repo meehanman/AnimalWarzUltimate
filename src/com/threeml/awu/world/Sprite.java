@@ -59,7 +59,7 @@ public class Sprite extends GameObject {
 	public float maxVelocity = DEFAULT_MAX_VELOCITY;
 	
 	/** Strength of gravity to apply along the y-axis*/
-	public float GRAVITY = -200.0f;
+	public float GRAVITY = -400.0f;
 	
 	/*
 	 * Orientation alongside angular velocity and acceleration, with maximum
@@ -141,7 +141,6 @@ public class Sprite extends GameObject {
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
 	
-	//TODO DM - Write a JavaDoc description for this method
 	/**
 	 * 
 	 * @param TerrainObj
@@ -152,72 +151,6 @@ public class Sprite extends GameObject {
 	 * @author Dean
 	 */
 	public void checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
-		
-		int direction;
-		//Setup values for X and y
-		//and SET to the CENTER of the object
-		double x = this.position.x;
-		double y = this.position.y;
-		
-		/**
-		 * Worms wouldn't be very fun if your worm stopped moving every time a pixel got in your way. 
-		 * So to keep movement smoother, the game's physics coding initiates upto an 8 pixel check to 
-		 * see if your worm can be moved ontop of the collided pixel(s). Your worm gets shifted upwards 
-		 * if a negative collision is returned from the loop (1 to 8). If not, your worm will stop moving.
-		 * The above image demonstrates how the game calculates what to do when a collision occurs in the walking 
-		 * sequence. White refers to the worm mask, Green refers to the terrain mask, Blue refers to pixels where the 
-		 * two layers have collided, and the Red Arrow refers to the horizontal shift occuring in the frame.
- 		*/
-		int boundHeight = (int)getBound().halfHeight*2;
-		direction = (int)Math.signum(velocity.x);
-		//if moving left or right
-		if(direction!=0){
-			//For top to bottom
-			for(int i = 0; i < boundHeight; i++){
-				//if solid pixel and...
-				//DM - Halfwidth/2 due to size of worms being small
-				if(TerrainObj.isPixelSolid(x+((getBound().halfWidth/3)*direction),y+getBound().halfHeight-i)){
-					//we're looking at the first 2/3rds
-					if(i<((boundHeight/2))){
-						//we're solid
-						Log.v("slope","blocked! (Shouldn't move)");
-						this.position = new Vector2(mPreviousPosition.x, mPreviousPosition.y);
-						velocity.x = 0;
-						break;
-						//else we're at the last bit
-					}else{
-						//We need to move up
-						this.position = new Vector2(position.x, position.y+boundHeight-(i));
-						Log.v("slope","free! Moved up " + boundHeight);
-						break;
-					}
-				}
-			}
-		}
-		
-
-		
-		boolean yCollision = false;
-	
-		//Vertical Collisions
-		direction = (int)Math.signum(velocity.y);
-			//Check pixel at bottom for collisions
-			if(TerrainObj.isPixelSolid(x,y+(getBound().halfHeight*direction))){
-				yCollision=true;
-			}
-		
-			
-		
-		//if(output!="["){Log.v("deanLog",output+"]");}
-					
-		//y Collisions done after xCollisions are looked at
-		//If there should be a yCollision, do it now!
-		if(yCollision){
-			//Log.v("slope","prevY");
-			//this.position = new Vector2(mPreviousPosition.x, mPreviousPosition.y);
-			this.position = new Vector2(position.x, mPreviousPosition.y);
-			velocity.y = 0;
-		}
 	}
 	/**
 	 * Method can be used to determine if the player should move left or right
@@ -237,7 +170,16 @@ public class Sprite extends GameObject {
 	 */
 	//@Override
 	public void update(ElapsedTime elapsedTime,String s, Terrain TerrainObj) {
-
+		
+		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+		//If there should be a yCollision, do it now!
+		if(TerrainObj.isPixelSolid(position.x,position.y+(getBound().halfHeight*(int)Math.signum(velocity.y)))){
+			//Log.v("slope","prevY");
+			this.position = new Vector2(position.x, mPreviousPosition.y);
+			velocity.y = 0;
+		}
+		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+		
 		float dt = (float) elapsedTime.stepTime;
 
 		// Ensure the maximum acceleration isn't exceeded
@@ -277,8 +219,43 @@ public class Sprite extends GameObject {
 		// Update the orientation using the angular velocity
 		orientation += angularVelocity * dt;
 		
-		checkForAndResolveTerrainCollisions(TerrainObj);
-
+		//checkForAndResolveTerrainCollisions(TerrainObj);
+		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+		/**
+		 * Worms wouldn't be very fun if your worm stopped moving every time a pixel got in your way. 
+		 * So to keep movement smoother, the game's physics coding initiates upto an 8 pixel check to 
+		 * see if your worm can be moved ontop of the collided pixel(s). Your worm gets shifted upwards 
+		 * if a negative collision is returned from the loop (1 to 8). If not, your worm will stop moving.
+		 * The above image demonstrates how the game calculates what to do when a collision occurs in the walking 
+		 * sequence. White refers to the worm mask, Green refers to the terrain mask, Blue refers to pixels where the 
+		 * two layers have collided, and the Red Arrow refers to the horizontal shift occuring in the frame.
+ 		*/
+		int boundHeight = (int)getBound().halfHeight*2;
+		int direction = (int)Math.signum(velocity.x);
+		//if moving left or right
+		if(direction!=0){
+			//For top to bottom
+			for(int i = 0; i < boundHeight; i++){
+				//if solid pixel and...
+				if(TerrainObj.isPixelSolid(position.x+((getBound().halfWidth/3)*direction),position.y+getBound().halfHeight-i)){
+					//we're looking at the first 2/3rds
+					if(i<((boundHeight/10)*6)){
+						//we're solid
+						//Log.v("slope","blocked! (Shouldn't move)");
+						this.position = new Vector2(mPreviousPosition.x, position.y);
+						velocity.x = 0;
+						break;
+						//else we're at the last bit
+					}else{
+						//We need to move up
+						this.position = new Vector2(position.x, mPreviousPosition.y+boundHeight-(i+1));
+						Log.v("slope","free! Moved up " + boundHeight);
+						break;
+					}
+				}
+			}
+		}
+		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 		
 		//Save this position to be used as the previous position
 		mPreviousPosition = this.position;

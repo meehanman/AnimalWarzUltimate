@@ -463,6 +463,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 						mTeamManager.getActivePlayer().getY());
 				if (mShootButton.isActivated()) {
 					mProjectile.shoot(10);
+					//DM TODO - Testing
+					mTerrain.deformCircle(mTeamManager.getActivePlayer().getX(), mTeamManager.getActivePlayer().getY(), 20);
 				}
 				
 				

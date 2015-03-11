@@ -58,13 +58,13 @@ public class Player extends Sprite {
 	private float RUN_ACCELERATION = 200.0f;
 	
 	/** Maximum velocity of the player along the x-axis */
-	private float MAX_X_VELOCITY = 300.0f;
+	private float MAX_X_VELOCITY = 200.0f;
 	
 	/** Scale factor that is applied to the x-velocity when the player is not moving left or right */
 	private float RUN_DECAY = 0.8f;
 	
 	/** Instantaneous velocity with which the player jumps up */
-	private float JUMP_VELOCITY = 200.0f;
+	private float JUMP_VELOCITY = 300.0f;
 		
 	/** The current weapon the Player is holding**/
 	private Weapon mCurrentWeapon;
