@@ -450,7 +450,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				// for(Player p : mPlayers){
 				// Temporary solution to make the health pack appear
 				// to be collected by the user
-				p.update(elapsedTime, false, false, false, false, false, mTerrain);
+				p.update(elapsedTime, false, false, false, false, false, false, false, mTerrain);
 
 				// Log.v("UpdateMethod", "Player ID : " + p.getId());
 
@@ -513,6 +513,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				mMoveRightButton.isActivated(),
 				mJumpLeftButton.isActivated(),
 				mJumpRightButton.isActivated(),
+				mAimUpButton.isActivated(),
+				mAimDownButton.isActivated(),
 				mWeaponSelect.isActivated(), mTerrain);
 		
 		for (Healthkit h : healthPacks) {
