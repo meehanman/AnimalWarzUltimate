@@ -1,7 +1,5 @@
 package com.threeml.awu.world.dashboardobject;
 
-import android.graphics.Bitmap;
-
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.engine.input.Input;
