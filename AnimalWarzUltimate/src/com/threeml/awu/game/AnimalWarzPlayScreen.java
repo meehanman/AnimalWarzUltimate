@@ -440,7 +440,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			displayNotification(InGameText.generateDeathText(getActivePlayer().getName()));
 			changeActivePlayer();
 		}
-
+ 
 		// Until we have a paralex effect, lets position forground and
 		// background together
 		mTerrainViewport.x = mBackgroundViewport.x;
