@@ -12,6 +12,7 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
+import com.threeml.awu.world.dashboardobject.Control;
 import com.threeml.awu.world.gameobject.GameObjectText;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.weapon.Target;
@@ -152,8 +153,9 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 *            	Array of platforms in the world
 	 */
 	public void update(ElapsedTime elapsedTime, boolean moveLeft,
-			boolean moveRight, boolean jumpLeft, boolean jumpRight, boolean weaponSelect,
-			Terrain TerrainObj) {
+			boolean moveRight, boolean jumpLeft, boolean jumpRight,
+			boolean aimUp, boolean aimDown,
+			boolean weaponSelect, Terrain TerrainObj) {
 		
 		//if Player health is not full depleted
 		if(mHealth > 0){
@@ -203,6 +205,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			else {
 				velocity.y = GRAVITY;
 			}
+			
 		} 
 		//if Player health is fully depleted
 		else {
@@ -221,7 +224,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
-		playerTarget.update(elapsedTime);
+		playerTarget.update(elapsedTime, aimUp, aimDown);
 		
 		
 	}
@@ -341,7 +344,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 
 	/**
 	 * Place in a direction string and sets direction to that string
-	 * -1 for Left and 1 for Right
+	 * -1 for Left and 1 for Right, 2 for aiming up and 3 for aiming down
 	 * 
 	 * @param playerDirection the playerDirection to set
 	 */
