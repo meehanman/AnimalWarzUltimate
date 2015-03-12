@@ -77,7 +77,7 @@ public class Map {
 				temp.x/=4;
 				temp.y/=4;
 				SpawnLocations[i] = null;
-				Log.v("SpawnLocation",i+") Spawned Player: "+temp.x+" "+temp.y);
+				Log.v("SpawnLocation",(i+1)+") Spawned Player: "+temp.x+" "+temp.y);
 				return temp;
 		 	}
 		}	

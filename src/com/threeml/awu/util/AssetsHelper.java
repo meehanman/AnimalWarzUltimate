@@ -52,6 +52,10 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("Rocket", "img/weapons/rocket.png");
 		assetManager.loadAndAddBitmap("Bat", "img/weapons/bat.png");
 		
+		//Crosshair
+		assetManager.loadAndAddBitmap("Crosshair", "img/weapons/crshairrSingle.png");
+		//assetManager.loadAndAddBitmap("Bat", "img/weapons/crshairr.png");
+		
 		//Weapon and Projectile images
 		assetManager.loadAndAddBitmap("Projectile", "img/weapons/Projectile.png");
 		//Main Menu Items

@@ -14,6 +14,7 @@ import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.GameObjectText;
 import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.weapon.Target;
 import com.threeml.awu.world.gameobject.weapon.Weapon;
 
 
@@ -69,6 +70,22 @@ public class Player extends Sprite {
 	/** The current weapon the Player is holding**/
 	private Weapon mCurrentWeapon;
 	
+	/** The current Direction the Player is Facing **/
+	private int playerDirection = 0;
+	
+	/** The Players Target Indicator **/
+	private Target playerTarget;
+	
+	
+	
+	/**
+	 * Returns the player Target
+	 * @return the playerTarget
+	 */
+	public Target getPlayerTarget() {
+		return this.playerTarget;
+	}
+
 	/** Boolean value determines whether Player is alive or dead */
 	/*DM - What if ghosts say "Boo" because they only haunt people they don't like, and all they do is 
 	"Boo" them from the afterlife. So its not to scare you, its to show that they think you suck*/
@@ -103,6 +120,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			mHealthText = new GameObjectText(gameScreen, Integer.toString(mHealth), this, (int)this.getBound().halfHeight);
 			mNameText = new GameObjectText(gameScreen, mName, this, (int)this.getBound().halfHeight + 10);
 			setAlive(true);
+			
+			//Setup Crosshair
+			playerTarget = new Target(this,	gameScreen);
+
 		}
 		catch(Exception e){
 			//Move on, Nothing to see here
@@ -141,6 +162,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			// want to move left or right, then the x-acceleration is zero
 			// and the velocity decays towards zero.
 			if (moveLeft && !moveRight) {
+				//Set direction
+				setPlayerDirection("left");
 				acceleration.x = -RUN_ACCELERATION;
 	
 				this.mSpritesheetHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk"));
@@ -149,7 +172,9 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 				}
 				
 			} else if (moveRight && !moveLeft) {
-					acceleration.x = RUN_ACCELERATION;
+				//Set direction
+				setPlayerDirection("right");
+				acceleration.x = RUN_ACCELERATION;
 	
 				Matrix matrix = new Matrix();
 				matrix.preScale(-1, 1);
@@ -196,6 +221,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
+		playerTarget.update(elapsedTime);
 		
 		
 	}
@@ -242,6 +268,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		
 		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		mNameText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		playerTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 	}
 	
 	/**
@@ -303,6 +330,29 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 */
 	public void setAlive(boolean mAlive) {
 		this.mAlive = mAlive;
+	}
+
+	/**
+	 * @return the playerDirection
+	 */
+	public int getPlayerDirection() {
+		return playerDirection;
+	}
+
+	/**
+	 * Place in a direction string and sets direction to that string
+	 * -1 for Left and 1 for Right
+	 * 
+	 * @param playerDirection the playerDirection to set
+	 */
+	public void setPlayerDirection(String direction) {
+		if(direction=="left"){
+			this.playerDirection = -1;
+		}else if(direction=="right"){
+			this.playerDirection = 1;
+		}else{
+			this.playerDirection = 0;	
+		}
 	}
 
 }
