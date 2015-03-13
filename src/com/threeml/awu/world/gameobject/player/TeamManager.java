@@ -37,9 +37,9 @@ public class TeamManager {
 	
 	
 	//TESTING PURPOSES ONLY
-	private String [] villains = new String [] {"Cyberman", "Dalek", "The Master", "Weeping Angel", "The Silence"};
-	private String [] heroes = new String [] {"The Doctor", "Amy", "Jack", "Rose", "Clara"};
-	private String [] threeml = new String [] {"MayJay", "Mark", "Dean", "Lisa", "Jade"};
+	private String [] villains = new String [] {"Cyberman", "Dalek", "The Master", "Weeping Angel", "The Silence", "Cyberman", "Dalek", "The Master", "Weeping Angel", "The Silence"};
+	private String [] heroes = new String [] {"The Doctor", "Amy", "Jack", "Rose", "Clara", "The Doctor", "Amy", "Jack", "Rose", "Clara"};
+	private String [] threeml = new String [] {"MayJay", "Mark", "Dean", "Lisa", "Jade", "MayJay", "Mark", "Dean", "Lisa", "Jade"};
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -178,10 +178,8 @@ public class TeamManager {
 						gameScreen, threeml[i]));
 			}
 			mTeams.add(new Team(players, n));
-			if(mActivePlayer == null){
-				mActiveTeam = mTeams.get(0);
-				mActivePlayer = mTeams.get(0).getPlayers().get(0);
-			}
+			mActiveTeam = mTeams.get(0);
+			mActivePlayer = mTeams.get(0).getPlayers().get(0);
 		}
 		catch(Exception e){
 			Log.e("TeamError", "Error in TeamManager createNewTeam : " + e);

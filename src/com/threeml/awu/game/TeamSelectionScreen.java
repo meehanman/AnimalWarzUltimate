@@ -5,6 +5,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
@@ -13,6 +14,12 @@ import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.engine.input.Input;
 import com.threeml.awu.engine.input.TouchEvent;
 import com.threeml.awu.world.GameScreen;
+import com.threeml.awu.world.LayerViewport;
+import com.threeml.awu.world.ScreenViewport;
+import com.threeml.awu.world.dashboardobject.Control;
+import com.threeml.awu.world.dashboardobject.OnScreenText;
+import com.threeml.awu.world.gameobject.map.Map;
+import com.threeml.awu.world.gameobject.player.TeamManager;
 
 /**
  * Team Selection Menu allowing user to choose settings before 
@@ -28,6 +35,16 @@ public class TeamSelectionScreen extends GameScreen {
 	private Rect mPlayGameBound;
 	private Rect mBackgroundBound, mBackgroundLogoBound;
 	
+	private ScreenViewport mScreenViewport;
+	private LayerViewport mDashboardViewport;
+	
+	private OnScreenText mChooseNoOfPlayers;
+	
+	private TeamManager mTeamManager;
+	
+	private int mNoOfPlayers = 4;
+	private Control mIncreaseButton, mDecreaseButton;
+	
 	/**
 	 * Define Assets to be used in Main Menu
 	 */
@@ -42,7 +59,29 @@ public class TeamSelectionScreen extends GameScreen {
 	public TeamSelectionScreen(Game game) {
 		super("TeamSelectionScreen", game);
 		
+		int screenWidth = game.getScreenWidth();
+		int screenHeight = game.getScreenHeight();
+		
+		mScreenViewport = new ScreenViewport(0, 0, screenWidth, screenHeight);
+		mDashboardViewport = new LayerViewport(0, 0, screenWidth, screenHeight);
+		
 		//loadAssets();
+		
+		float screenWidthCell = (screenWidth / 100);
+		float screenHeightCell = (screenHeight / 100);
+		
+		float x = screenWidthCell * 10;
+		float y = screenHeightCell * -35;
+		mChooseNoOfPlayers = new OnScreenText(x, y, this, "No. of Players per Team 		" + mNoOfPlayers, 250);
+		float height = screenWidthCell * 4f;
+		float width = height * 2f;
+		
+		x = screenWidthCell * 56;
+		y = screenHeightCell * 60;
+		mIncreaseButton = new Control(x, y, width, height, "AimUp", this);
+		y = screenHeightCell * 80;
+		mDecreaseButton = new Control(x, y, width, height, "AimDown", this);
+		
 	}
 
 	/*
@@ -54,7 +93,8 @@ public class TeamSelectionScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-
+		mChooseNoOfPlayers.updateText("No. of Players per Team 		" + mNoOfPlayers);
+		mChooseNoOfPlayers.update(elapsedTime);
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
 		List<TouchEvent> touchEvents = input.getTouchEvents();
@@ -72,12 +112,31 @@ public class TeamSelectionScreen extends GameScreen {
 				
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
+				Map map = new Map("Castles", 1600f, 580f, mGame,
+						this);
+				mTeamManager = new TeamManager();
+				mTeamManager.createNewTeam("Threeml", mNoOfPlayers, map, mGame, this);
+				mTeamManager.createNewTeam("This shit is BANANAS", mNoOfPlayers, map, mGame, this);
 				//Where the Map and Team Selection is passed
-				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame,"Castles",2,2);
+				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame, map.getName(), mTeamManager);
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
 			}
+			if(mIncreaseButton.isActivated()){
+				if(mNoOfPlayers < 8){
+					mNoOfPlayers ++;
+					Log.v("TeamError", "Players updated : " + mNoOfPlayers);
+				}
+			}
+			else if(mDecreaseButton.isActivated()){
+				if(mNoOfPlayers > 1){
+					mNoOfPlayers --;
+					Log.v("TeamError", "Players updated : " + mNoOfPlayers);
+				}
+			}
 		}
+		mChooseNoOfPlayers.updateText("No. of Players per Team 		" + mNoOfPlayers);
+		mChooseNoOfPlayers.update(elapsedTime);
 	}
 
 	/*
@@ -89,7 +148,7 @@ public class TeamSelectionScreen extends GameScreen {
 	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
-
+		mChooseNoOfPlayers.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 		Bitmap Background = mGame.getAssetManager().getBitmap("TSBackground");
 		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap("TSTitle"); 
 		Bitmap playGame = mGame.getAssetManager().getBitmap("ContinueButton");
@@ -130,6 +189,10 @@ public class TeamSelectionScreen extends GameScreen {
 		graphics2D.drawBitmap(Background, null, mBackgroundBound, null);
 		graphics2D.drawBitmap(BackgroundLogo, null, mBackgroundLogoBound, null);
 		graphics2D.drawBitmap(playGame, null, mPlayGameBound, null);
+		
+		mChooseNoOfPlayers.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
+		mIncreaseButton.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
+		mDecreaseButton.draw(elapsedTime, graphics2D, mDashboardViewport, mScreenViewport);
 	}
 	
 	/**
