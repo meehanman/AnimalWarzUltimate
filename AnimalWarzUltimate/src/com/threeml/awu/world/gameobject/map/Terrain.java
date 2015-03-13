@@ -88,8 +88,7 @@ public class Terrain extends Sprite {
 	 * @param radius
 	 */
 	public void deformCircle(double x0, double y0, int radius){
-		Log.v("slope","deformCircle() fired at "+x0+", "+y0);
-		
+	
 		Vector2 scaledValues = fixVectorScaling(x0,y0);
 		x0=scaledValues.x;
 		y0=scaledValues.y;

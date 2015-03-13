@@ -2,7 +2,6 @@ package com.threeml.awu.world;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
@@ -174,7 +173,6 @@ public class Sprite extends GameObject {
 		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 		//If there should be a yCollision, do it now!
 		if(TerrainObj.isPixelSolid(position.x,position.y+(getBound().halfHeight*(int)Math.signum(velocity.y)))){
-			//Log.v("slope","prevY");
 			this.position = new Vector2(position.x, mPreviousPosition.y);
 			velocity.y = 0;
 		}
@@ -241,7 +239,6 @@ public class Sprite extends GameObject {
 					//we're looking at the first 2/3rds
 					if(i<((boundHeight/10)*6)){
 						//we're solid
-						//Log.v("slope","blocked! (Shouldn't move)");
 						this.position = new Vector2(mPreviousPosition.x, position.y);
 						velocity.x = 0;
 						break;
@@ -249,7 +246,6 @@ public class Sprite extends GameObject {
 					}else{
 						//We need to move up
 						this.position = new Vector2(position.x, mPreviousPosition.y+boundHeight-(i+1));
-						Log.v("slope","free! Moved up " + boundHeight);
 						break;
 					}
 				}
