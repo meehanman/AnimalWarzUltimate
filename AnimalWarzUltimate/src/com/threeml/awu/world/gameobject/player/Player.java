@@ -1,11 +1,11 @@
 package com.threeml.awu.world.gameobject.player;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
+import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.util.SpritesheetHandler;
 import com.threeml.awu.util.Vector2;
@@ -152,8 +152,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 *            	True if the move left control is active
 	 * @param moveRight
 	 *            	True if the move right control is active
-	 * @param jumpUp
-	 *            	True if the jump up control is active
+	 * @param jumpLeft | jumpRight
+	 *            	True if the jump control are active
+	 * @param aimUp | aimDown
+	 * 				True if the aim controls are active
 	 * @param platforms
 	 *            	Array of platforms in the world
 	 */
@@ -161,7 +163,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			boolean moveRight, boolean jumpLeft, boolean jumpRight,
 			boolean aimUp, boolean aimDown,
 			boolean weaponSelect, Terrain TerrainObj) {
-		
 		//if Player health is not full depleted
 		if(mHealth > 0){
 			// Depending upon the left and right movement touch controls
@@ -172,40 +173,29 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 				//Set direction
 				setPlayerDirection("left");
 				acceleration.x = -RUN_ACCELERATION;
-	
-				this.mSpritesheetHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk"));
-				if(mSpritesheetHandler != null && this.mSpritesheetHandler.getRows() > 1){
-					this.mSpritesheetHandler.nextFrameVertical();
-				}
+				mSpritesheetHandler.updatePlayerSprite(-1,mSpritesheetHandler,mGameScreen);
+
 				
 			} else if (moveRight && !moveLeft) {
 				//Set direction
 				setPlayerDirection("right");
 				acceleration.x = RUN_ACCELERATION;
+				mSpritesheetHandler.updatePlayerSprite(1,mSpritesheetHandler,mGameScreen);
 	
-				Matrix matrix = new Matrix();
-				matrix.preScale(-1, 1);
-				Bitmap bitmap = mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk");
-				this.mSpritesheetHandler.setFullImage(Bitmap.createBitmap(bitmap, 0,
-						0, bitmap.getWidth(), bitmap.getHeight(), matrix, false));
-				if(mSpritesheetHandler != null && this.mSpritesheetHandler.getRows() > 1){
-					this.mSpritesheetHandler.nextFrameVertical();
-				}
 			} else {
 				acceleration.x = 0.0f;
-				acceleration.y = 0.0f;
 				velocity.x *= RUN_DECAY;
 			}
 	
 			// If the user wants to jump up then providing an immediate
 			// boost to the y velocity.
 			if (jumpLeft && velocity.y == 0.0f) {
-				acceleration.y = JUMP_VELOCITY;
-				acceleration.x = -JUMP_VELOCITY;
+				velocity.y = JUMP_VELOCITY;
+				velocity.x = -JUMP_VELOCITY;
 			
 			}else if (jumpRight && velocity.y == 0.0f) {
-				acceleration.y = JUMP_VELOCITY;
-				acceleration.x = JUMP_VELOCITY;
+				velocity.y = JUMP_VELOCITY;
+				velocity.x = JUMP_VELOCITY;
 			}
 			else {
 				velocity.y = GRAVITY;
@@ -217,20 +207,22 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		// accelerations and velocities to provide a new position
 		// and orientation.
 		super.update(elapsedTime,TerrainObj);
-
-		// The player's sphere is constrained by a maximum x-velocity,
-		// but not a y-velocity. Make sure we have not exceeded this.
-		if (Math.abs(velocity.x) > MAX_X_VELOCITY)
-			velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
+		
+		checkForAndResolveHorozontalCollisions(TerrainObj);
 		} 
 		//if Player health is fully depleted
 		else {
 			kill();
 		}
+		
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
 		playerTarget.update(elapsedTime, aimUp, aimDown);
 		mProjectile.update(elapsedTime, this);
+		
+		//Keep previous Position
+		//Save this position to be used as the previous position
+		mPreviousPosition = this.position;
 	}
 	/**
 	 * Does Player death animation, changes bitmap to grave and sets 
@@ -370,5 +362,47 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			this.playerDirection = 0;
 		}
 	}
-
+	
+	
+	
+	
+	private void checkForAndResolveHorozontalCollisions(Terrain TerrainObj){
+		
+		//checkForAndResolveTerrainCollisions(TerrainObj);
+		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+		/**
+		 * Worms wouldn't be very fun if your worm stopped moving every time a pixel got in your way. 
+		 * So to keep movement smoother, the game's physics coding initiates upto an 8 pixel check to 
+		 * see if your worm can be moved ontop of the collided pixel(s). Your worm gets shifted upwards 
+		 * if a negative collision is returned from the loop (1 to 8). If not, your worm will stop moving.
+		 * The above image demonstrates how the game calculates what to do when a collision occurs in the walking 
+		 * sequence. White refers to the worm mask, Green refers to the terrain mask, Blue refers to pixels where the 
+		 * two layers have collided, and the Red Arrow refers to the horizontal shift occuring in the frame.
+ 		*/
+		int boundHeight = (int)getBound().halfHeight*2;
+		int direction = (int)Math.signum(velocity.x);
+		//if moving left or right
+		if(direction!=0){
+			//For top to bottom
+			for(int i = 0; i < boundHeight; i++){
+				//if solid pixel and...
+				if(TerrainObj.isPixelSolid(position.x+((getBound().halfWidth/3)*direction),position.y+getBound().halfHeight-i)){
+					//we're looking at the first 2/3rds
+					if(i<((boundHeight/10)*6)){
+						//we're solid
+						this.position = new Vector2(mPreviousPosition.x, position.y);
+						velocity.x = 0;
+						break;
+						//else we're at the last bit
+					}else{
+						//We need to move up
+						this.position = new Vector2(position.x, mPreviousPosition.y+boundHeight-(i+1));
+						break;
+					}
+				}
+			}
+		}
+		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+	}
+	
 }

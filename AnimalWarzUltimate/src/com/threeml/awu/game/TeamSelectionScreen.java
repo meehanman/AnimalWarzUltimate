@@ -13,6 +13,7 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.engine.input.Input;
 import com.threeml.awu.engine.input.TouchEvent;
+import com.threeml.awu.util.PreferenceStore;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -42,9 +43,10 @@ public class TeamSelectionScreen extends GameScreen {
 	
 	private TeamManager mTeamManager;
 	
-	private int mNoOfPlayers = 4;
+	private int mNoOfPlayers = 5;
 	private Control mIncreaseButton, mDecreaseButton;
 	
+	private PreferenceStore mPreferenceStore;
 	/**
 	 * Define Assets to be used in Main Menu
 	 */
@@ -65,7 +67,18 @@ public class TeamSelectionScreen extends GameScreen {
 		mScreenViewport = new ScreenViewport(0, 0, screenWidth, screenHeight);
 		mDashboardViewport = new LayerViewport(0, 0, screenWidth, screenHeight);
 		
+		//Get Number of players stored in device
+		mPreferenceStore = new PreferenceStore(game.getActivity().getApplicationContext());
+		int storePlayers = mPreferenceStore.RetrieveInt("NoOfPlayers");
+		//When first run, set a default value
+		if(storePlayers!=-1){
+			mNoOfPlayers = storePlayers;
+		}else{
+			mNoOfPlayers = 5;
+		}
+		
 		//loadAssets();
+		Log.v("slope","Value of mNoOfPlayers is: "+mNoOfPlayers);
 		
 		float screenWidthCell = (screenWidth / 100);
 		float screenHeightCell = (screenHeight / 100);
@@ -112,11 +125,15 @@ public class TeamSelectionScreen extends GameScreen {
 				
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
+				//TODO MJ This really should be in the GameScreen
 				Map map = new Map("Castles", 1600f, 580f, mGame,
 						this);
 				mTeamManager = new TeamManager();
 				mTeamManager.createNewTeam("Threeml", mNoOfPlayers, map, mGame, this);
 				mTeamManager.createNewTeam("This shit is BANANAS", mNoOfPlayers, map, mGame, this);
+				//Store the mNoOfPlayers to file
+				//Save the Number of Players for next time
+				mPreferenceStore.Save("NoOfPlayers",mNoOfPlayers);
 				//Where the Map and Team Selection is passed
 				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame, map.getName(), mTeamManager);
 				// As it's the only added screen it will become active.

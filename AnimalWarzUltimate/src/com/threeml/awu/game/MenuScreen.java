@@ -25,7 +25,7 @@ public class MenuScreen extends GameScreen {
 	/**
 	 * Define the trigger touch region for playing the 'games'
 	 */
-	private Rect mPlayGameBound;
+	private Rect mPlayGameBound, mOptionsButtonBound;
 	private Rect mBackgroundBound, mBackgroundLogoBound;
 	
 	/**
@@ -87,6 +87,27 @@ public class MenuScreen extends GameScreen {
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(TeamSelectionScreen);
 			}
+			
+			if (mOptionsButtonBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
+				
+				assetManager.getMusic("Dungeon_Boss").pause();
+				assetManager.getSound("ButtonClick").play();
+				
+				/*
+				// If the play game area has been touched then swap screens
+				mGame.getScreenManager().removeScreen(this.getName());
+				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
+				// As it's the only added screen it will become active.
+				mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
+				*/
+				//DM - Testing intermediate screen
+				// If the play game area has been touched then swap screens
+				mGame.getScreenManager().removeScreen(this.getName());
+				//AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
+				OptionsScreen optionsScreen = new OptionsScreen(mGame);
+				// As it's the only added screen it will become active.
+				mGame.getScreenManager().addScreen(optionsScreen);
+			}
 		}
 	}
 
@@ -103,6 +124,7 @@ public class MenuScreen extends GameScreen {
 		Bitmap Background = mGame.getAssetManager().getBitmap("MainMenuBackground");
 		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap("MainMenuLogo"); 
 		Bitmap playGame = mGame.getAssetManager().getBitmap("NewGameButton");
+		Bitmap OptionsButton = mGame.getAssetManager().getBitmap("OptionsButton");
 		
 		// Determine a center location of the play region
 		if (mPlayGameBound == null) {
@@ -120,6 +142,12 @@ public class MenuScreen extends GameScreen {
 			right = left + pageColumns*3;
 			bottom = top + ((pageColumns*3)/scaling);
 			mPlayGameBound = new Rect(left, top, right, bottom);
+			
+			//Options Button
+			scaling = playGame.getWidth() / OptionsButton.getHeight();
+			top += (OptionsButton.getHeight() * 2.5);
+			bottom = top + ((pageColumns*3)/scaling);
+			mOptionsButtonBound = new Rect(left, top, right, bottom);
 			
 			//Background Game Logo
 			scaling = BackgroundLogo.getWidth() / BackgroundLogo.getHeight();
@@ -140,6 +168,7 @@ public class MenuScreen extends GameScreen {
 		graphics2D.drawBitmap(Background, null, mBackgroundBound, null);
 		graphics2D.drawBitmap(BackgroundLogo, null, mBackgroundLogoBound, null);
 		graphics2D.drawBitmap(playGame, null, mPlayGameBound, null);
+		graphics2D.drawBitmap(OptionsButton, null, mOptionsButtonBound, null);
 	}
 	
 	/**
