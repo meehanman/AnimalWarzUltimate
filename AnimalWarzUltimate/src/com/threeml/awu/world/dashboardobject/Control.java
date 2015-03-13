@@ -94,7 +94,7 @@ public class Control extends GameObject {
 				}
 				return wasSelected;
 	}
-
+	
 	/**
 	 * Overrides the draw method from GameObject class
 	 * 				Draws Control object on the game screen

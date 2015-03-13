@@ -63,7 +63,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	/** Banner Notification will appear when there is a notification for the user */
 	private BannerNotification mNotification;
 	
-	private Projectile mProjectile;
+	
 	// TODO MJ - Player management isn't complete
 	/** players */
 	// TODO MJ - remove this when completed team management
@@ -286,8 +286,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				this);
 		mWeaponSelection.add(mBat);
 		
-		mProjectile = new Projectile(mTeamManager.getActivePlayer().getX(), mTeamManager.getActivePlayer().getY(), 
-				20f, 5f, getGame().getAssetManager().getBitmap("Projectile"), this);
+	//	mProjectile = new Projectile(mTeamManager.getActivePlayer().getX(), mTeamManager.getActivePlayer().getY(), 
+		//		20f, 5f, getGame().getAssetManager().getBitmap("Projectile"), this); 
 		/*
 		 * mWeaponsList = new Control(getGame().getScreenWidth() / 2, getGame()
 		 * .getScreenHeight() / 2, getGame().getScreenWidth() / 2, getGame()
@@ -439,16 +439,15 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				 * 120); }
 				 */
 				
-				mProjectile.setPosition(mTeamManager.getActivePlayer().getX(),
-						mTeamManager.getActivePlayer().getY());
+				//mProjectile.setPosition(mTeamManager.getActivePlayer().getX(),
+					//	mTeamManager.getActivePlayer().getY());
 				if (mShootButton.isActivated()) {
-					mProjectile.shoot(10);
+					mTeamManager.getActivePlayer().getProjectile().shoot();
 					//DM TODO - Testing the deform circle method
 					mTerrain.deformCircle(mTeamManager.getActivePlayer().getPlayerTarget().getX(),
 							mTeamManager.getActivePlayer().getPlayerTarget().getY(), 20);
-				}
-				
-				
+					
+				}				
 				
 				// Checking the weapon menu bitmaps for a touch event and logging
 				// the type of bitmap (weapon) that was selected
@@ -596,7 +595,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			mTeamManager.getActivePlayer().draw(elapsedTime, graphics2D, mBackgroundViewport,
 					mScreenViewport, true);
 		
-		mProjectile.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+	//	mProjectile.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		// mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport,
 		// mScreenViewport);
 		for (Healthkit h : healthPacks) {
