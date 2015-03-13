@@ -63,6 +63,7 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("MainMenuBackground", "img/MainMenu/MenuBackground.jpg");
 		assetManager.loadAndAddBitmap("MainMenuLogo", "img/MainMenu/menulogo.png");
 		assetManager.loadAndAddBitmap("NewGameButton", "img/MainMenu/newGameButton.png");
+		assetManager.loadAndAddBitmap("OptionsButton", "img/MainMenu/OptionsButton.png");
 		assetManager.loadAndAddMusic("Dungeon_Boss", "music/Video_Dungeon_Boss.mp3");
 		assetManager.loadAndAddSound("ButtonClick", "sfx/CursorSelect.wav");
 		//DM - Lower this annoying Music
@@ -74,6 +75,14 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("TSBackground", "img/TeamSelectionImages/MenuBackground.jpg");
 		assetManager.loadAndAddBitmap("TSTitle", "img/TeamSelectionImages/TeamSelectionTitle.png");
 		assetManager.loadAndAddBitmap("ContinueButton", "img/TeamSelectionImages/continue.png");
+		
+		//Options Menu
+		assetManager.loadAndAddBitmap("BackButton", "img/OptionsMenuControls/BackButton.png");
+		assetManager.loadAndAddBitmap("SoundYButton", "img/OptionsMenuControls/SoundY.png");
+		assetManager.loadAndAddBitmap("SoundNButton", "img/OptionsMenuControls/SoundN.png");
+		assetManager.loadAndAddBitmap("AudioYButton", "img/OptionsMenuControls/AudioY.png");
+		assetManager.loadAndAddBitmap("AudioNButton", "img/OptionsMenuControls/AudioN.png");
+		
 
 	}
 

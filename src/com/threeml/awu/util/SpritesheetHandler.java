@@ -1,7 +1,9 @@
 package com.threeml.awu.util;
 
 import android.graphics.Bitmap;
-import android.util.Log;
+import android.graphics.Matrix;
+
+import com.threeml.awu.world.GameScreen;
 /**
  * SpritesheetHandler takes in a larger image and returns a smaller subimage
  * 
@@ -212,6 +214,30 @@ public class SpritesheetHandler {
 		mCurrentRow = currentRow;
 	}
 	
+	/**
+	 * Changes player sprite depending on direction
+	 * Created to clean up player update method
+	 * 
+	 * 
+	 * @author Dean
+	 */
+	public void updatePlayerSprite(int playerDirection, SpritesheetHandler mSpritesheetHandler, GameScreen mGameScreen){
+		if(playerDirection == -1){
+			mSpritesheetHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk"));
+			if(mSpritesheetHandler != null && mSpritesheetHandler.getRows() > 1){
+				mSpritesheetHandler.nextFrameVertical();
+			}
+		}else{
+			Matrix matrix = new Matrix();
+			matrix.preScale(-1, 1);
+			Bitmap bitmap = mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk");
+			mSpritesheetHandler.setFullImage(Bitmap.createBitmap(bitmap, 0,
+					0, bitmap.getWidth(), bitmap.getHeight(), matrix, false));
+			if(mSpritesheetHandler != null && mSpritesheetHandler.getRows() > 1){
+				mSpritesheetHandler.nextFrameVertical();
+			}
+		}
+	}
 	
 	
 }

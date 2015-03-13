@@ -148,5 +148,41 @@ public class Terrain extends Sprite {
 
 	}
 	
+	/**
+	 * Returns a bit-map of the pixels in Terrain that 
+	 * intersect the boundingbox
+	 * 
+	 * @param bb
+	 * @return 2D boolean array containing values from [0,0].[max,max]
+	 * 
+	 * @author Dean
+	 */
+	public boolean[][] getBitmapInBound(BoundingBox bb){
+		//Create an array of size of the boundingBox passed in
+		boolean[][] bitmap = new boolean[(int) (bb.halfWidth*2)][(int) (bb.halfHeight*2)];
+		
+
+		//Scale values to match size of bitmap
+		Vector2 scaledValues = fixVectorScaling(bb.x-bb.halfWidth,
+												bb.y-bb.halfHeight);
+		double Searchx=scaledValues.x;
+		double Searchy=scaledValues.y;
+		
+		
+		        	
+		//Go through each pixel and write if its solid at that location or not
+    	for(int x=0;x<=bb.halfWidth*2;x++){
+    		for(int y=0;y<=bb.halfHeight*2;y++){
+    			
+    			if(!outOfBoundsValadation(Searchx+x,Searchy+y)){continue;};
+    			
+	        	bitmap[x][y] = (Color.alpha(mBitmap.getPixel((int)Searchx+x, (int)Searchy+y)) > 150);
+    		}
+		}
+		
+		
+		return bitmap; 
+	}
+	
 	
 }

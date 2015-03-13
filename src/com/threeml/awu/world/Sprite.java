@@ -170,13 +170,11 @@ public class Sprite extends GameObject {
 	//@Override
 	public void update(ElapsedTime elapsedTime,String s, Terrain TerrainObj) {
 		
-		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 		//If there should be a yCollision, do it now!
 		if(TerrainObj.isPixelSolid(position.x,position.y+(getBound().halfHeight*(int)Math.signum(velocity.y)))){
 			this.position = new Vector2(position.x, mPreviousPosition.y);
 			velocity.y = 0;
 		}
-		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 		
 		float dt = (float) elapsedTime.stepTime;
 
@@ -216,52 +214,12 @@ public class Sprite extends GameObject {
 
 		// Update the orientation using the angular velocity
 		orientation += angularVelocity * dt;
-		
-		//checkForAndResolveTerrainCollisions(TerrainObj);
-		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-		/**
-		 * Worms wouldn't be very fun if your worm stopped moving every time a pixel got in your way. 
-		 * So to keep movement smoother, the game's physics coding initiates upto an 8 pixel check to 
-		 * see if your worm can be moved ontop of the collided pixel(s). Your worm gets shifted upwards 
-		 * if a negative collision is returned from the loop (1 to 8). If not, your worm will stop moving.
-		 * The above image demonstrates how the game calculates what to do when a collision occurs in the walking 
-		 * sequence. White refers to the worm mask, Green refers to the terrain mask, Blue refers to pixels where the 
-		 * two layers have collided, and the Red Arrow refers to the horizontal shift occuring in the frame.
- 		*/
-		int boundHeight = (int)getBound().halfHeight*2;
-		int direction = (int)Math.signum(velocity.x);
-		//if moving left or right
-		if(direction!=0){
-			//For top to bottom
-			for(int i = 0; i < boundHeight; i++){
-				//if solid pixel and...
-				if(TerrainObj.isPixelSolid(position.x+((getBound().halfWidth/3)*direction),position.y+getBound().halfHeight-i)){
-					//we're looking at the first 2/3rds
-					if(i<((boundHeight/10)*6)){
-						//we're solid
-						this.position = new Vector2(mPreviousPosition.x, position.y);
-						velocity.x = 0;
-						break;
-						//else we're at the last bit
-					}else{
-						//We need to move up
-						this.position = new Vector2(position.x, mPreviousPosition.y+boundHeight-(i+1));
-						break;
-					}
-				}
-			}
-		}
-		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-		
-		//Save this position to be used as the previous position
-		mPreviousPosition = this.position;
+
 	}
 	
 	//DM - update method that takes in TerrainObject to resolve collisions
 	public void update(ElapsedTime elapsedTime, Terrain TerrainObj) {
 		
-		//Check and Resolve Collisions
-		checkForAndResolveTerrainCollisions(TerrainObj);
 		//Update
 		update(elapsedTime,"",TerrainObj);
 
