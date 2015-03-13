@@ -32,6 +32,8 @@ public class TeamManager {
 	private Team mActiveTeam;
 	/** The current Player the user interacts with */
 	private Player mActivePlayer;
+	/** Stores the winning team, only initialised once the game has ended */
+	private Team mWinningTeam;
 	
 	
 	//TESTING PURPOSES ONLY
@@ -60,6 +62,7 @@ public class TeamManager {
 		//TODO MJ FIX THIS
 		mActiveTeam = mTeams.get(0);
 		mActivePlayer = mTeams.get(0).getPlayers().get(0);
+		mWinningTeam = null;
 	}
 	
 	/**
@@ -172,7 +175,7 @@ public class TeamManager {
 				players.add(new Player(spawnLocation.x, spawnLocation.y, 1,
 						15,
 						game.getAssetManager().getBitmap("PlayerWalk"),
-						gameScreen, heroes[i]));
+						gameScreen, threeml[i]));
 			}
 			mTeams.add(new Team(players, n));
 			if(mActivePlayer == null){
@@ -263,8 +266,28 @@ public class TeamManager {
 		return teams;
 	}
 	
+	/**
+	 * Determines if the game is over by counting the number of teams
+	 * with alive players remaining
+	 * 
+	 * @return 
+	 * 			if the game contains playable teams
+	 */
 	public boolean hasPlayableTeams(){
-		return (getTeamsWithAlivePlayers().size() > 1);
+		if(getTeamsWithAlivePlayers().size() > 1){
+			return true;
+		} else {
+			mWinningTeam = getTeamsWithAlivePlayers().get(0);
+			return false;
+		}
+	}
+	/**
+	 * Returns the winning team, if no winning team then returns null
+	 * 
+	 * @return winning team
+	 */
+	public Team getWinningTeam(){
+		return mWinningTeam;
 	}
 	
 	/**

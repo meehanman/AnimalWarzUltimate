@@ -17,15 +17,15 @@ public class SpritesheetHandler {
 	// /////////////////////////////////////////////////////////////////////////
 	
 	/** Bitmap Full Image */
-	Bitmap mFullImage;
+	protected Bitmap mFullImage;
 	/** int No. of rows in image */
-	int mRows;
+	protected int mRows;
 	/** int No. of columns in image */
-	int mColumns;
+	protected int mColumns;
 	/** int Current column in use */
-	int mCurrentColumn;
+	protected int mCurrentColumn;
 	/** int Current row in use */
-	int mCurrentRow;
+	protected int mCurrentRow;
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructor
