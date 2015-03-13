@@ -57,7 +57,7 @@ public class AssetsHelper {
 		//assetManager.loadAndAddBitmap("Bat", "img/weapons/crshairr.png");
 		
 		//Weapon and Projectile images
-		assetManager.loadAndAddBitmap("Projectile", "img/weapons/Projectile.png");
+		assetManager.loadAndAddBitmap("Bullet", "img/weapons/Bullet.png");
 		//Main Menu Items
 		//Load in BG Image and assets
 		assetManager.loadAndAddBitmap("MainMenuBackground", "img/MainMenu/MenuBackground.jpg");

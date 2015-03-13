@@ -13,9 +13,9 @@ import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
-import com.threeml.awu.world.dashboardobject.Control;
 import com.threeml.awu.world.gameobject.GameObjectText;
 import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.weapon.Projectile;
 import com.threeml.awu.world.gameobject.weapon.Target;
 import com.threeml.awu.world.gameobject.weapon.Weapon;
 
@@ -79,7 +79,7 @@ public class Player extends Sprite {
 	/** The Players Target Indicator **/
 	private Target playerTarget;
 	
-	
+	private Projectile mProjectile;
 	
 	/**
 	 * Returns the player Target
@@ -88,7 +88,10 @@ public class Player extends Sprite {
 	public Target getPlayerTarget() {
 		return this.playerTarget;
 	}
-
+	
+	public Projectile getProjectile() {
+		return this.mProjectile;
+	}
 	/** Boolean value determines whether Player is alive or dead */
 	/*DM - What if ghosts say "Boo" because they only haunt people they don't like, and all they do is 
 	"Boo" them from the afterlife. So its not to scare you, its to show that they think you suck*/
@@ -126,7 +129,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			
 			//Setup Crosshair
 			playerTarget = new Target(this,	gameScreen);
-
+			mProjectile = new Projectile(this, gameScreen);
 		}
 		catch(Exception e){
 			//Move on, Nothing to see here
@@ -227,8 +230,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
 		playerTarget.update(elapsedTime, aimUp, aimDown);
-		
-		
+		mProjectile.update(elapsedTime, this);
 	}
 	/**
 	 * Does Player death animation, changes bitmap to grave and sets 
@@ -276,6 +278,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mNameText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		if(active){
 			playerTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+			mProjectile.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		}
 	}
 	
