@@ -3,11 +3,12 @@
  */
 package com.threeml.awu.world.gameobject.weapon;
 
+import android.util.Log;
+
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
-import com.threeml.awu.world.dashboardobject.Control;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 
@@ -16,9 +17,6 @@ import com.threeml.awu.world.gameobject.player.Player;
  * Aiming for the worm
  * 
  * @author Dean
- *
- */
-/**
  * @author Mark
  *
  */
@@ -27,17 +25,22 @@ public class Target extends Sprite {
     // Aiming
 	private Terrain mTerrain;
     private Vector2 targetDirection;
+    private double aimAngle = 0.0d;
+    private static int radius = 20;
     private Player player;
     private int playerDirection;
+    private int PrevPDirection;
     
 
 	public Target(Player player, GameScreen gameScreen) {
-		super(player.position.x+10,player.position.y,10,10,gameScreen.getGame().getAssetManager()
+		super(player.position.x+radius,player.position.y,10,10,gameScreen.getGame().getAssetManager()
 				.getBitmap("Crosshair"), gameScreen);
 		
 		this.targetDirection = new Vector2(1,0.0);
 		this.player = player;
 		this.playerDirection = player.getPlayerDirection();
+		this.PrevPDirection = player.getPlayerDirection();
+		
 	}
 	
 	
@@ -56,28 +59,37 @@ public class Target extends Sprite {
 		 *  left of the player, if the player direction is 1 the target will
 		 *   be displayed to the right of the player
 		 */
-		if (player.getPlayerDirection() == -1) {
-			this.position.set(player.position.x-20, player.position.y);
-		}
-		else if (player.getPlayerDirection() == 1) {
-			this.position.set(player.position.x+20, player.position.y);
-		}
+		playerDirection = player.getPlayerDirection();
+		
+
+
 		
 		/** Conditional if statements to make the target move up or down
 		 * according to the boolean parameter passed and also the current
 		 * direction the player is facing in. Not incremental at this stage
 		 */
-		if(aimUp == true && player.getPlayerDirection() == 1) {
-			this.position.set(player.position.x+20, player.position.y+20);
+		//Angles are in format 1.8 = (180)^o
+		if(aimUp == true){
+				aimAngle-=(0.25*playerDirection);
+		}else if(aimDown == true){
+				aimAngle+=(0.25*playerDirection);
+
 		}
-		else if(aimDown == true && player.getPlayerDirection() == 1) {
-			this.position.set(player.position.x+20, player.position.y - 20);
+
+		
+		/*
+		//If direction changes
+		if(PrevPDirection < playerDirection){// -->
+			aimAngle = .9+(1.8-(aimAngle+0.9));
+		}else if(PrevPDirection < playerDirection){// <--
+			aimAngle = .9-(1.8-(aimAngle-0.9));
 		}
-		else if(aimUp == true && player.getPlayerDirection() == -1) {
-			this.position.set(player.position.x-20, player.position.y + 20);
-		}
-		else if(aimDown == true && player.getPlayerDirection() == -1) {
-			this.position.set(player.position.x-20, player.position.y - 20);
-		}
+		*/
+				
+		this.position.set((float)(player.getX() - radius*Math.cos(aimAngle)),
+				(float)(player.getY() + radius*Math.sin(aimAngle)));
+		
+		PrevPDirection = playerDirection;
+
 	}
 }

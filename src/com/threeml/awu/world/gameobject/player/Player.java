@@ -73,7 +73,8 @@ public class Player extends Sprite {
 	private Weapon mCurrentWeapon;
 	
 	/** The current Direction the Player is Facing **/
-	private int playerDirection = 0;
+	/* All players spawn facing left(-1)*/
+	private int playerDirection = -1;
 	
 	/** The Players Target Indicator **/
 	private Target playerTarget;
@@ -340,7 +341,12 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	}
 
 	/**
-	 * @return the playerDirection
+	 * 
+	 * 	Return a direction string and sets direction to that string
+	 * -1 for Left and 1 for Right, 2 for aiming up and 3 for aiming down
+	 * 
+	 * 
+	 * @return the current Direction the Player is Facing
 	 */
 	public int getPlayerDirection() {
 		return playerDirection;
@@ -358,7 +364,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}else if(direction=="right"){
 			this.playerDirection = 1;
 		}else{
-			this.playerDirection = 0;	
+			this.playerDirection = 0;
 		}
 	}
 
