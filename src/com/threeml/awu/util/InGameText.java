@@ -153,8 +153,8 @@ public class InGameText {
 		return surrenderedTeamName + General.surrendered.getText() + " " + winningTeamName + General.teamWins.getText();
 	}
 	/** Generates string for when game is over to display winning team */
-	public static String generateWinText(String losingTeamName, String winningTeamName){
-		return losingTeamName + General.teamSucks.getText() + " " + winningTeamName + General.teamWins.getText();
+	public static String generateWinText(String winningTeamName){
+		return winningTeamName + General.teamWins.getText();
 	}
 	/** Generates a string for when player collects health pack */
 	public static String generateCollectedHealthText(String playerName, int health){

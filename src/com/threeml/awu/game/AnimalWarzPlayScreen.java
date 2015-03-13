@@ -102,7 +102,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private GameCountDownTimer mNotificationTimer;
 	
 	private OnScreenText mDashboardTimer;
-	List<OnScreenText> mTeamHealthText;
+	private List<OnScreenText> mTeamHealthText;
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -424,19 +424,18 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			}
 		}
 		else {
+			//TODO - kill player movement. player keeps moving for whatever reason
 			//if the current active team has no more alive players
-			/*if(!mTeamManager.getActiveTeam().hasAlivePlayers()){
-				//TODO - add notification that team is out
-				//TODO - kill player movement. player keeps moving for whatever reason
+			if(!mTeamManager.getActiveTeam().hasAlivePlayers()){
 				//if team manager has playable teams, i.e. if any more
 				if(mTeamManager.hasPlayableTeams()){
 					changeActivePlayer();
 				}
 				//if no more playable teams
 				else {
-					//find winning team and do game over
+					gameOver(false);
 				}
-			}*/
+			}
 			displayNotification(InGameText.generateDeathText(getActivePlayer().getName()));
 			changeActivePlayer();
 		}
@@ -565,7 +564,12 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					StringBuilder sb = new StringBuilder();
 					sb.append(str);
 					sb.append(buffer);
-					sb.append(" " + Integer.toString(mTeamManager.getTeam(c).getCollectiveHealth()));
+					if(mTeamManager.getTeam(c).getCollectiveHealth() > 0){
+						sb.append(" " + Integer.toString(mTeamManager.getTeam(c).getCollectiveHealth()));
+					}
+					else {
+						sb.append(" OUT");
+					}
 					t.updateText(sb.toString());
 					t.update(elapsedTime);
 					c++;
@@ -576,6 +580,12 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			Log.e("Text Error", "Game screen timer error : " + e);
 		}
 }
+
+	private void gameOver(boolean surrender) {
+		if(!surrender){
+			displayNotification(InGameText.generateWinText(mTeamManager.getWinningTeam().getTeamName()));
+		}
+	}
 
 	/**
 	 * Overrides the draw method from GameScreen class Draws all gameobjects on
@@ -596,12 +606,14 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				mScreenViewport);
 
 		
-			for (Player p : mTeamManager.getAllPlayers()) {
+			for (Player p : mTeamManager.getAllNotActivePlayers()) {
 				// for(Player p : mPlayers){
 				p.draw(elapsedTime, graphics2D, mBackgroundViewport,
-						mScreenViewport);
+						mScreenViewport, false);
 
 			}
+			mTeamManager.getActivePlayer().draw(elapsedTime, graphics2D, mBackgroundViewport,
+					mScreenViewport, true);
 		
 		mProjectile.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 		// mPlayer.draw(elapsedTime, graphics2D, mBackgroundViewport,

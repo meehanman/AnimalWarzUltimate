@@ -8,6 +8,7 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.util.SpritesheetHandler;
+import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -206,11 +207,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 				velocity.y = GRAVITY;
 			}
 			
-		} 
-		//if Player health is fully depleted
-		else {
-			kill();
-		}
+		
 	
 		// Call the sprite's update method to apply the defined 
 		// accelerations and velocities to provide a new position
@@ -221,7 +218,11 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		// but not a y-velocity. Make sure we have not exceeded this.
 		if (Math.abs(velocity.x) > MAX_X_VELOCITY)
 			velocity.x = Math.signum(velocity.x) * MAX_X_VELOCITY;
-
+		} 
+		//if Player health is fully depleted
+		else {
+			kill();
+		}
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
 		playerTarget.update(elapsedTime, aimUp, aimDown);
@@ -238,6 +239,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			//do death animation
 			//change bitmap to grave
 		}
+		velocity = new Vector2(0,0);
 		setAlive(false);
 	}
 	
@@ -254,9 +256,9 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 * @param screenViewport
 	 *            Screen viewport
 	 */
-	@Override
+	
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
-			LayerViewport layerViewport, ScreenViewport screenViewport) {
+			LayerViewport layerViewport, ScreenViewport screenViewport, boolean active) {
 		try {
 			if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 					screenViewport, drawSourceRect, drawScreenRect)) {
@@ -271,7 +273,9 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		
 		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		mNameText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
-		playerTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		if(active){
+			playerTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		}
 	}
 	
 	/**
