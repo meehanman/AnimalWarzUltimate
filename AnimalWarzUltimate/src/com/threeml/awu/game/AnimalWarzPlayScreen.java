@@ -114,10 +114,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 * @param game
 	 *            Game to which this screen belongs
 	 */
-	public AnimalWarzPlayScreen(Game game, String MapName, int Teams,
-			int Players) {
+	public AnimalWarzPlayScreen(Game game, String MapName, TeamManager teamManager) {
 		super("AnimalWarzPlayScreen", game);
-		mTeamManager = new TeamManager();
+		mTeamManager = teamManager;
 		// Get the current Map Ready
 		mCurrentMap = new Map(MapName, LEVEL_WIDTH, LEVEL_HEIGHT, mGame, this);
 
@@ -167,7 +166,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					240);
 		}
 
-		CreateGameObjects(screenHeight, screenWidth, Players, Teams);
+		CreateGameObjects(screenHeight, screenWidth);
 		mCountDownTimer = game.getPlayerCountDown();
 		mNotificationTimer = game.getNotificationTimer();
 		mCountDownTimer.start();
@@ -183,8 +182,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 * @param screenHeight
 	 *            Height of the screen
 	 */
-	private void CreateGameObjects(int screenHeight, int screenWidth,
-			int Players, int Teams) {
+	private void CreateGameObjects(int screenHeight, int screenWidth) {
 
 		// Create the terrain and background for the game
 		Map mCurrentMap = new Map("Castles", LEVEL_WIDTH, LEVEL_HEIGHT, mGame,
@@ -195,7 +193,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mBackground = mCurrentMap.getBackground();
 
 		// Create the objects
-		createPlayersAndTeams(Players, Teams);
 
 		// TODO - Add recursive loop to add players setting first player active
 		// to coincide with
@@ -313,22 +310,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			y -= 100;
 		}
 	}
-
-	// TODO MJ - TEMPORARY SOLUTION UNTIL SETUP SCREEN IS CREATED
-		public void createPlayersAndTeams(int Players, int Teams) {
-
-			try {
-				//Come on MJ.. really going to do it manually.. shh dean. shh.
-				//Changed implementation
-				for(int i = 0; i<=Teams;i++){
-					mTeamManager.createNewTeam("EVERYONE_LOVES_DEAN", Players, mCurrentMap, getGame(), this);
-				}
-				
-			} catch (RuntimeException e) {
-				Log.e("TeamError", "AnimalWarzPlayScreen createPlayersAndTeams : " + e);
-			}
-
-		}
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Support methods
