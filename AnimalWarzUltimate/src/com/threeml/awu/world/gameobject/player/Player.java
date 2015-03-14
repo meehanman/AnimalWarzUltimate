@@ -74,7 +74,7 @@ public class Player extends Sprite {
 	
 	/** The current Direction the Player is Facing **/
 	/* All players spawn facing left(-1)*/
-	private int playerDirection = -1;
+	private float playerDirection = -1;
 	
 	/** The Players Target Indicator **/
 	private Target playerTarget;
@@ -218,7 +218,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
 		playerTarget.update(elapsedTime, aimUp, aimDown);
-		mProjectile.update(elapsedTime, this);
+		mProjectile.update(elapsedTime, this, this.position, playerTarget);
 		
 		//Keep previous Position
 		//Save this position to be used as the previous position
@@ -343,7 +343,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 * 
 	 * @return the current Direction the Player is Facing
 	 */
-	public int getPlayerDirection() {
+	public float getPlayerDirection() {
 		return playerDirection;
 	}
 

@@ -1,15 +1,10 @@
 package com.threeml.awu.world.gameobject.weapon;
 
-import android.graphics.Bitmap;
-
 import com.threeml.awu.engine.ElapsedTime;
-import com.threeml.awu.engine.graphics.IGraphics2D;
+import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
-import com.threeml.awu.world.LayerViewport;
-import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.player.Player;
-import com.threeml.awu.world.gameobject.player.TeamManager;
 
 /**
  * Projectile class to create, assign and fire a 
@@ -21,10 +16,12 @@ import com.threeml.awu.world.gameobject.player.TeamManager;
 public class Projectile extends Sprite {
 	
 	/** Speed the projectile will travel at */
-	private float projSpeed = 7.5f;
-	
+	private float projSpeed = 1.0f;
+	private float smoothSpeed;
 	/** Boolean variable to store if the shot method has been called*/
 	private boolean shot = false;
+	
+	private Vector2 mDirection;
 //	private TeamManager mTeamManager;
 
 	/**
@@ -46,32 +43,67 @@ public class Projectile extends Sprite {
 	 * @param player
 	 * 			Player that will have the projectile assigned to it.
 	 */
-	public void update(ElapsedTime elapsedTime, Player player) {
+	public void update(ElapsedTime elapsedTime, Player player, Vector2 playerPos, Target targetPos) {
 		super.update(elapsedTime);
-		/*
-		 * If shot is pressed and player is facing right (1), the bullet will fire
-		 * along incrementaly along x axis. If shot is pressed and player is facing
-		 * left (-1) then the bullet travels decrementaly along the x axis.
-		 */
-		if (shot && player.getPlayerDirection() == 1) {
-			this.position.x += projSpeed;
-		} else if (shot && player.getPlayerDirection() == -1) {
-			this.position.x -= projSpeed;
-		}
 		
 		/*
-		 * If no bullets have been fired, position the bullet beside the player.
+		 * If statement to check if shot is true. If it is the speed at which the 
+		 * projectile will fire is multiplied by elapsedTime.totalTime for smoothness.
+		 * The shootProjectile method is then called to calculate the aiming and motion
+		 * of the projectile.
+		 */
+		if (shot){
+				smoothSpeed = (float) (projSpeed*elapsedTime.totalTime);
+				shootProjectile(player, playerPos, targetPos, smoothSpeed);
+		}
+		/*
+		 * If no projectile has been fired, position the projectile beside the player.
 		 */
 		if (!shot) {
 		this.setPosition(player.position.x, player.position.y);
+			
+		
+		/**	/*	if (shot && player.getPlayerDirection() == 1) {
+				this.position.x += projSpeed;
+			} else if (shot && player.getPlayerDirection() == -1) {
+				this.position.x -= projSpeed;
+			} */
 	}
 }	
 	
 	/**
-	 * Shoot method which initialises the boolean variable 'shot'
+	 * loadProjectile() method which initialises the boolean variable 'shot'
 	 * to true when called. 
 	 */
-	public void shoot() {
+	public void loadProjectile() {
 		shot = true;
+	}
+	
+	/** shootProjectile method
+	 * 
+	 * @param player
+	 * 			player which the projectile is associated with.
+	 * @param playerPos
+	 * 			position vector of the player.
+	 * @param targetPos
+	 * 			position of the target at present. 
+	 * @param speed
+	 * 			speed with which the projectile will fire
+	 */
+	public void shootProjectile(Player player, Vector2 playerPos, Target targetPos, Float speed) {
+		/* 
+		 * Iniatilizing mDiretion to the product of targetPos.position - playerPos.
+		 * (If targetPos was a vector as opposed to Target object the target would not display)
+		 */
+		mDirection = targetPos.position.sub(playerPos);
+		mDirection.normalise();
+		/*
+		 * Setting the position of the projectile(x,y) to the product of mDirection(x,y) x speed
+		 */
+		this.position.x += mDirection.x * speed;
+		this.position.y += mDirection.y * speed;
+		/*this.position.add(mDirection);
+		this.position.multiply(2.0f); */
+
 	}
 }
