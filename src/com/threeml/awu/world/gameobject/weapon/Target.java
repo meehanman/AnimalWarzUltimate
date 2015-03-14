@@ -28,8 +28,8 @@ public class Target extends Sprite {
 	private double aimAngle = 0.0d;
 	private static int radius = 20;
 	private Player player;
-	private int playerDirection;
-	private int PrevPDirection;
+	private float playerDirection;
+	private float PrevPDirection;
 
 	public Target(Player player, GameScreen gameScreen) {
 		super(player.position.x + radius, player.position.y, 10, 10, gameScreen

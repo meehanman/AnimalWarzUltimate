@@ -442,7 +442,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				//mProjectile.setPosition(mTeamManager.getActivePlayer().getX(),
 					//	mTeamManager.getActivePlayer().getY());
 				if (mShootButton.isActivated()) {
-					mTeamManager.getActivePlayer().getProjectile().shoot();
+					mTeamManager.getActivePlayer().getProjectile().loadProjectile();
 					//DM TODO - Testing the deform circle method
 					mTerrain.deformCircle(mTeamManager.getActivePlayer().getPlayerTarget().getX(),
 							mTeamManager.getActivePlayer().getPlayerTarget().getY(), 20);

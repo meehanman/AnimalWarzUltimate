@@ -20,6 +20,7 @@ public class Vector2 {
 	// Properties
 	// /////////////////////////////////////////////////////////////////////////
 	
+	public Vector2 temp;
 	/**
 	 * x component of this vector
 	 */
@@ -163,7 +164,12 @@ public class Vector2 {
 		this.x -= other.x;
 		this.y -= other.y;
 	}
-		
+	
+	public Vector2 sub(Vector2 other) {
+		float x = this.x -= other.x;
+		float y = this.y -= other.y;
+		return temp = new Vector2(x,y);
+	}
 	/**
 	 * Multiple the vector components by the specified scalar
 	 * 
