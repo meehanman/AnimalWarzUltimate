@@ -53,19 +53,13 @@ public class Projectile extends Sprite {
 		if (shot){
 				shootProjectile(player, playerPos, targetPos, projSpeed);
 		}
+		
 		/*
 		 * If no projectile has been fired, position the projectile beside the player.
 		 */
 		if (!shot) {
 		this.setPosition(player.position.x, player.position.y);
-			
-		
-		/**	/*	if (shot && player.getPlayerDirection() == 1) {
-				this.position.x += projSpeed;
-			} else if (shot && player.getPlayerDirection() == -1) {
-				this.position.x -= projSpeed;
-			} */
-	}
+	}	
 }	
 	
 	/**
@@ -92,7 +86,7 @@ public class Projectile extends Sprite {
 		 * Iniatilizing mDiretion to the product of targetPos.position - playerPos.
 		 * (If targetPos was a vector as opposed to Target object the target would not display)
 		 */
-		mDirection = targetPos.position.sub(playerPos);
+		mDirection = new Vector2(targetPos.position.x - playerPos.x,targetPos.position.y - playerPos.y);
 		mDirection.normalise();
 		/*
 		 * Setting the position of the projectile(x,y) to the product of mDirection(x,y) x speed
