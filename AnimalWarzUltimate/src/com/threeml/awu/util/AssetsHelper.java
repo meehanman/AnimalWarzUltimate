@@ -77,6 +77,8 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("ContinueButton", "img/TeamSelectionImages/continue.png");
 		
 		//Options Menu
+		assetManager.loadAndAddBitmap("OptionsBackground", "img/OptionsMenuControls/OptionsMenuBackground.jpg");
+		assetManager.loadAndAddBitmap("OptionsTitle", "img/OptionsMenuControls/OptionsMenuTitle.png");
 		assetManager.loadAndAddBitmap("BackButton", "img/OptionsMenuControls/BackButton.png");
 		assetManager.loadAndAddBitmap("SoundYButton", "img/OptionsMenuControls/SoundY.png");
 		assetManager.loadAndAddBitmap("SoundNButton", "img/OptionsMenuControls/SoundN.png");

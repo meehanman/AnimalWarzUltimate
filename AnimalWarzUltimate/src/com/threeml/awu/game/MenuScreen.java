@@ -13,6 +13,7 @@ import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.engine.input.Input;
 import com.threeml.awu.engine.input.TouchEvent;
 import com.threeml.awu.util.AssetsHelper;
+import com.threeml.awu.util.PreferenceStore;
 import com.threeml.awu.world.GameScreen;
 
 /**
@@ -27,7 +28,8 @@ public class MenuScreen extends GameScreen {
 	 */
 	private Rect mPlayGameBound, mOptionsButtonBound;
 	private Rect mBackgroundBound, mBackgroundLogoBound;
-	
+	private PreferenceStore mPreferenceStore;
+
 	/**
 	 * Define Assets to be used in Main Menu
 	 */
@@ -43,8 +45,10 @@ public class MenuScreen extends GameScreen {
 		super("MenuScreen", game);
 		
 		//Loads all the assets for the game
-		//TODO DM - See Trello for changes to be made
 		AssetsHelper.loadAllAssets(game);
+		
+		//Get Number of players stored in device
+		mPreferenceStore = new PreferenceStore(game.getActivity().getApplicationContext());
 	}
 
 	/*
@@ -56,6 +60,7 @@ public class MenuScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
+		
 
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
@@ -69,8 +74,8 @@ public class MenuScreen extends GameScreen {
 
 			if (mPlayGameBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
 				
-				assetManager.getMusic("Dungeon_Boss").pause();
 				assetManager.getSound("ButtonClick").play();
+				
 				
 				/*
 				// If the play game area has been touched then swap screens
@@ -90,7 +95,6 @@ public class MenuScreen extends GameScreen {
 			
 			if (mOptionsButtonBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
 				
-				assetManager.getMusic("Dungeon_Boss").pause();
 				assetManager.getSound("ButtonClick").play();
 				
 				/*
@@ -109,6 +113,9 @@ public class MenuScreen extends GameScreen {
 				mGame.getScreenManager().addScreen(optionsScreen);
 			}
 		}
+		
+		//Process user preferences for sound and music playing
+		musicPreferences();
 	}
 
 	/*
@@ -182,7 +189,8 @@ public class MenuScreen extends GameScreen {
 	public void resume() {
 		super.resume();
 		
-		assetManager.getMusic("Dungeon_Boss").play();
+		assetManager.getMusic("Dungeon_Boss").play();	
+
 		/*
 		if(mMediaAvailable){
 			this.FadeIn(3);
@@ -215,6 +223,26 @@ public class MenuScreen extends GameScreen {
 			}
 		}
 		*/
+	}
+	
+	/**
+	 * Sets the volume for sounds and music on this screen
+	 * as stated by the user preferences
+	 * 
+	 * @author Dean
+	 */
+	private void musicPreferences(){
+		if(mPreferenceStore.RetrieveBoolean("PlaySound")){
+			assetManager.getSound("ButtonClick").unmute();
+		}else{
+			assetManager.getSound("ButtonClick").mute();
+		}
+		
+		if(mPreferenceStore.RetrieveBoolean("PlayMusic")){
+			assetManager.getMusic("Dungeon_Boss").unmute();
+		}else{
+			assetManager.getMusic("Dungeon_Boss").mute();
+		}
 	}
 	
 }

@@ -196,7 +196,6 @@ public class Music implements OnCompletionListener {
 	 * @author Mary-Jane
 	 * @author Dean
 	 */
-
 		private void FadeOut(float deltaTime)
 		{
 			/*
@@ -213,6 +212,21 @@ public class Music implements OnCompletionListener {
 			setVolume(volume, volume);
 		    volume += speed* deltaTime;
 		    */
+		}
+		
+		/**
+		 * Mutes all music
+		 * @author Dean
+		 */
+		public void mute(){
+			setVolume(0);
+		}
+		/**
+		 * Mutes all music
+		 * @author Dean
+		 */
+		public void unmute(){
+			setVolume(100);
 		}
 
 }
