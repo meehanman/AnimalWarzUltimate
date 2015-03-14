@@ -121,7 +121,11 @@ public class TeamSelectionScreen extends GameScreen {
 			if (mPlayGameBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
 				
 				assetManager.getMusic("Dungeon_Boss").pause();
-				assetManager.getSound("ButtonClick").play();
+				//Process user preferences for sound and music playing
+				if(mPreferenceStore.RetrieveBoolean("PlaySound")){
+					assetManager.getSound("ButtonClick").play();
+				}
+				
 				
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
@@ -144,11 +148,21 @@ public class TeamSelectionScreen extends GameScreen {
 					mNoOfPlayers ++;
 					Log.v("TeamError", "Players updated : " + mNoOfPlayers);
 				}
+				
+				//Process user preferences for sound and music playing
+				if(mPreferenceStore.RetrieveBoolean("PlaySound")){
+					assetManager.getSound("ButtonClick").play();
+				}
 			}
 			else if(mDecreaseButton.isActivated()){
 				if(mNoOfPlayers > 1){
 					mNoOfPlayers --;
 					Log.v("TeamError", "Players updated : " + mNoOfPlayers);
+				}
+				
+				//Process user preferences for sound and music playing
+				if(mPreferenceStore.RetrieveBoolean("PlaySound")){
+					assetManager.getSound("ButtonClick").play();
 				}
 			}
 		}
@@ -223,7 +237,10 @@ public class TeamSelectionScreen extends GameScreen {
 	public void resume() {
 		super.resume();
 		
-		assetManager.getMusic("Dungeon_Boss").play();
+		//Process user preferences for sound and music playing
+		if(mPreferenceStore.RetrieveBoolean("PlayMusic")){
+			assetManager.getSound("Dungeon_Boss").play();
+		}
 		/*
 		if(mMediaAvailable){
 			this.FadeIn(3);

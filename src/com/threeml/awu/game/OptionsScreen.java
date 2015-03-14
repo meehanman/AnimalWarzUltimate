@@ -5,6 +5,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
@@ -14,9 +15,6 @@ import com.threeml.awu.engine.input.Input;
 import com.threeml.awu.engine.input.TouchEvent;
 import com.threeml.awu.util.PreferenceStore;
 import com.threeml.awu.world.GameScreen;
-import com.threeml.awu.world.LayerViewport;
-import com.threeml.awu.world.ScreenViewport;
-import com.threeml.awu.world.dashboardobject.OnScreenText;
 
 /**
  * Options Menu allowing user to choose settings before 
@@ -57,7 +55,7 @@ public class OptionsScreen extends GameScreen {
 		mPreferenceStore = new PreferenceStore(game.getActivity().getApplicationContext());
 		PlaySounds = mPreferenceStore.RetrieveBoolean("PlaySounds");
 		PlayMusic = mPreferenceStore.RetrieveBoolean("PlayMusic");
-		
+				
 	}
 
 	/*
@@ -81,7 +79,6 @@ public class OptionsScreen extends GameScreen {
 
 			if (mBackButtonBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
 				
-				assetManager.getMusic("Dungeon_Boss").pause();
 				assetManager.getSound("ButtonClick").play();
 
 				// If the play game area has been touched then swap screens
@@ -94,11 +91,11 @@ public class OptionsScreen extends GameScreen {
 			
 			if (mPlaySoundBound.contains((int) touchEvent.x,(int) touchEvent.y)) {
 				
-				assetManager.getMusic("Dungeon_Boss").pause();
 				assetManager.getSound("ButtonClick").play();
-				
+
+				Log.v("slope","PlaySounds "+PlaySounds);
 				PlaySounds = !PlaySounds;
-				
+				Log.v("slope","PlaySounds "+PlaySounds);
 				mPreferenceStore.Save("PlaySounds",PlaySounds);
 
 				
@@ -115,6 +112,8 @@ public class OptionsScreen extends GameScreen {
 
 			}
 		}
+		//
+		musicPreferences();
 	}
 
 	/*
@@ -127,8 +126,8 @@ public class OptionsScreen extends GameScreen {
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
 
-		Bitmap Background = mGame.getAssetManager().getBitmap("TSBackground");
-		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap("TSTitle"); 
+		Bitmap Background = mGame.getAssetManager().getBitmap("OptionsBackground");
+		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap("OptionsTitle"); 
 		Bitmap BackButton = mGame.getAssetManager().getBitmap("BackButton");
 		Bitmap AudioButtonY = mGame.getAssetManager().getBitmap("AudioYButton");
 		Bitmap AudioButtonN = mGame.getAssetManager().getBitmap("AudioNButton");
@@ -186,12 +185,12 @@ public class OptionsScreen extends GameScreen {
 		graphics2D.drawBitmap(BackgroundLogo, null, mBackgroundLogoBound, null);
 		graphics2D.drawBitmap(BackButton, null, mBackButtonBound, null);
 		
-		if(!PlaySounds){ 
+		if(PlaySounds){ 
 			graphics2D.drawBitmap(SoundsButtonY, null, mPlaySoundBound, null);
 		}else{
 			graphics2D.drawBitmap(SoundsButtonN, null, mPlaySoundBound, null);
 		}
-		if(!PlayMusic){ 
+		if(PlayMusic){ 
 			graphics2D.drawBitmap(AudioButtonY, null, mPlayMusicBound, null);
 		}else{
 			graphics2D.drawBitmap(AudioButtonN, null, mPlayMusicBound, null);
@@ -209,7 +208,7 @@ public class OptionsScreen extends GameScreen {
 	public void resume() {
 		super.resume();
 		
-		assetManager.getMusic("Dungeon_Boss").play();
+		assetManager.getSound("Dungeon_Boss").play();
 		/*
 		if(mMediaAvailable){
 			this.FadeIn(3);
@@ -244,4 +243,23 @@ public class OptionsScreen extends GameScreen {
 		*/
 	}
 	
+	/**
+	 * Sets the volume for sounds and music on this screen
+	 * as stated by the user preferences
+	 * 
+	 * @author Dean
+	 */
+	private void musicPreferences(){
+		if(mPreferenceStore.RetrieveBoolean("PlaySound")){
+			assetManager.getSound("ButtonClick").unmute();
+		}else{
+			assetManager.getSound("ButtonClick").mute();
+		}
+		
+		if(mPreferenceStore.RetrieveBoolean("PlayMusic")){
+			assetManager.getMusic("Dungeon_Boss").unmute();
+		}else{
+			assetManager.getMusic("Dungeon_Boss").mute();
+		}
+	}
 }
