@@ -16,8 +16,7 @@ import com.threeml.awu.world.gameobject.player.Player;
 public class Projectile extends Sprite {
 	
 	/** Speed the projectile will travel at */
-	private float projSpeed = 1.0f;
-	private float smoothSpeed;
+	private float projSpeed = 20.0f;
 	/** Boolean variable to store if the shot method has been called*/
 	private boolean shot = false;
 	
@@ -47,14 +46,12 @@ public class Projectile extends Sprite {
 		super.update(elapsedTime);
 		
 		/*
-		 * If statement to check if shot is true. If it is the speed at which the 
-		 * projectile will fire is multiplied by elapsedTime.totalTime for smoothness.
+		 * If statement to check if shot is true. 
 		 * The shootProjectile method is then called to calculate the aiming and motion
 		 * of the projectile.
 		 */
 		if (shot){
-				smoothSpeed = (float) (projSpeed*elapsedTime.totalTime);
-				shootProjectile(player, playerPos, targetPos, smoothSpeed);
+				shootProjectile(player, playerPos, targetPos, projSpeed);
 		}
 		/*
 		 * If no projectile has been fired, position the projectile beside the player.
