@@ -227,7 +227,14 @@ public class SpritesheetHandler {
 			if(mSpritesheetHandler != null && mSpritesheetHandler.getRows() > 1){
 				mSpritesheetHandler.nextFrameVertical();
 			}
-		}else{
+		}else if(playerDirection == 0){
+			mSpritesheetHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerGrave"));
+			mSpritesheetHandler.setRows(17);
+			if(mSpritesheetHandler != null && mSpritesheetHandler.getRows() > 1){
+				mSpritesheetHandler.nextFrameVertical();
+			}
+		}
+		else{
 			Matrix matrix = new Matrix();
 			matrix.preScale(-1, 1);
 			Bitmap bitmap = mGameScreen.getGame().getAssetManager().getBitmap("PlayerWalk");

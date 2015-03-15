@@ -219,7 +219,7 @@ public abstract class Game extends Fragment {
 		mScreenManager = new ScreenManager();		
 		
 		countDownTimer = new GameCountDownTimer(20000, 1000);
-		notificationTimer = new GameCountDownTimer(5000, 1000);
+		notificationTimer = new GameCountDownTimer(3000, 1000);
 		
 		// Request control of the volume
 		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -316,6 +316,7 @@ public abstract class Game extends Fragment {
 	public GameCountDownTimer getPlayerCountDown(){
 		return countDownTimer;
 	}
+	
 	public GameCountDownTimer getNotificationTimer(){
 		return notificationTimer;
 	}

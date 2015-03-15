@@ -1,6 +1,7 @@
 package com.threeml.awu.world.gameobject.player;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
@@ -169,7 +170,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			// set an appropriate x-acceleration. If the user does not
 			// want to move left or right, then the x-acceleration is zero
 			// and the velocity decays towards zero.
-			if (moveLeft && !moveRight) {
+			if(!isAlive()){
+				acceleration.x = 0;
+				mSpritesheetHandler.updatePlayerSprite(0,mSpritesheetHandler,mGameScreen);
+			} else if (moveLeft && !moveRight) {
 				//Set direction
 				setPlayerDirection("left");
 				acceleration.x = -RUN_ACCELERATION;
@@ -236,6 +240,28 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}
 		velocity = new Vector2(0,0);
 		setAlive(false);
+		mFullImage = mGameScreen.getGame().getAssetManager().getBitmap("PlayerGrave");
+		mSpritesheetHandler.setFullImage(mFullImage);
+		mSpritesheetHandler.setRows(20);
+		setPlayerDirection("0");
+	}
+	
+	/**
+	 * Does Player death animation, changes bitmap empty bitmap and sets 
+	 * Alive to false
+	 */
+	public void killByWater(){
+		//if player is not in water/bottom of the screen
+		if(position.y != 0){
+			//do death animation
+			//change bitmap to grave
+		}
+		velocity = new Vector2(0,0);
+		setAlive(false);
+		mFullImage = Bitmap.createBitmap((int)this.getBound().getWidth(), (int)this.getBound().getHeight(), Config.ALPHA_8);
+		mSpritesheetHandler.setFullImage(mFullImage);
+		mSpritesheetHandler.setRows(1);
+		setPlayerDirection("0");
 	}
 	
 	/**

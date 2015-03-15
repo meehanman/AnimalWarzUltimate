@@ -25,6 +25,7 @@ public class GameCountDownTimer extends CountDownTimer{
 	/** Used to determine if the count down has finished */
 	private boolean finished = false;
 	private long count = 0;
+	private boolean running = false;
 	
 	// ///////////////////////////////////////////////////////////////////////// 
 	// Constructors 
@@ -47,17 +48,17 @@ public class GameCountDownTimer extends CountDownTimer{
 	 */
 	@Override
 	public void onTick(long millisUntilFinished) {
-    	 //Log.v("CountDownTimer", "Count Down : " + Long.toString(millisUntilFinished/1000));
     	 finished = false;
     	 count = (millisUntilFinished/1000);
+    	 running = true;
      }
 	/**
 	 * Called when count down has finished
 	 */
 	@Override
      public void onFinish() {
-		 //Log.v("CountDownTimer", "Count Down : Finished");
 		 finished = true;
+		 running = false;
      }
 	/**
 	 * Returns value of finished to determine whether countdown has finished
@@ -70,5 +71,9 @@ public class GameCountDownTimer extends CountDownTimer{
 	
 	public long getCountDownInSeconds(){
 		return count;
+	}
+	
+	public boolean isRunning(){
+		return running;
 	}
 }

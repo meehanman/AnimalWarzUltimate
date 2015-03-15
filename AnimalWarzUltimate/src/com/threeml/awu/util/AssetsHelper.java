@@ -30,6 +30,8 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("PlayerWin", "img/player/wwinner.png");
 		assetManager.loadAndAddBitmap("PlayerUp", "img/player/wflyup.png");
 		assetManager.loadAndAddBitmap("PlayerFall", "img/player/wfall.png");
+		assetManager.loadAndAddBitmap("PlayerDie", "img/player/wdie.png");
+		assetManager.loadAndAddBitmap("PlayerGrave", "img/player/grave1.png");
 		
 		//Game Objects
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
