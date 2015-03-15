@@ -39,7 +39,7 @@ public class TeamManager {
 	//TESTING PURPOSES ONLY
 	private String [] villains = new String [] {"Cyberman", "Dalek", "The Master", "Weeping Angel", "The Silence", "Cyberman", "Dalek", "The Master", "Weeping Angel", "The Silence"};
 	private String [] heroes = new String [] {"The Doctor", "Amy", "Jack", "Rose", "Clara", "The Doctor", "Amy", "Jack", "Rose", "Clara"};
-	private String [] threeml = new String [] {"MayJay", "Mark", "Dean", "Lisa", "Jade", "MayJay", "Mark", "Dean", "Lisa", "Jade"};
+	private String [] threeml = new String [] {"MayJay!", "Mark??", "Dean :)", "Lisa *.*", "Jade", "MayJay", "Mark", "Dean", "Lisa", "Jade"};
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -272,6 +272,7 @@ public class TeamManager {
 	 * 			if the game contains playable teams
 	 */
 	public boolean hasPlayableTeams(){
+		Log.v("PlayerDeath", "No. of playable teams : " + getTeamsWithAlivePlayers().size() + "");
 		if(getTeamsWithAlivePlayers().size() > 1){
 			return true;
 		} else {

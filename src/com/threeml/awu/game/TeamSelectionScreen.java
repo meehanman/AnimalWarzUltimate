@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
@@ -47,6 +48,8 @@ public class TeamSelectionScreen extends GameScreen {
 	private Control mIncreaseButton, mDecreaseButton;
 	
 	private PreferenceStore mPreferenceStore;
+	
+	//private EditText mTextName;
 	/**
 	 * Define Assets to be used in Main Menu
 	 */
@@ -79,6 +82,8 @@ public class TeamSelectionScreen extends GameScreen {
 		
 		//loadAssets();
 		Log.v("slope","Value of mNoOfPlayers is: "+mNoOfPlayers);
+		
+		//mTextName = new EditText(this.getGame().getActivity());
 		
 		float screenWidthCell = (screenWidth / 100);
 		float screenHeightCell = (screenHeight / 100);

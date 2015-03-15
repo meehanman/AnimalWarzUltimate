@@ -228,7 +228,61 @@ public class BitmapFont extends Sprite {
 					c = (int) ch - 49;
 				}
 				r = 1;
-			} else {
+			} else if (ch >= 33 && ch <= 64){
+				r = 1;
+				switch(ch){
+				case 46 :
+					c = 10;
+					break;
+				case 58 :
+					c = 11;
+					break;
+				case 44 :
+					c = 12;
+					break;
+				case 59 :
+					c = 13;
+					break;
+				case 39 :
+					c = 15;
+					break;
+				case 34 :
+					c = 17;
+					break;
+				case 40 :
+					c = 19;
+					break;
+				case 33 :
+					c = 20;
+					break;
+				case 63 :
+					c = 21;
+					break;
+				case 41 :
+					c = 22;
+					break;
+				case 43 :
+					c = 24;
+					break;
+				case 45 :
+					c = 25;
+					break;
+				case 42 :
+					c = 26;
+					break;
+				case 47 :
+					c = 27;
+					break;
+				case 61 :
+					c = 28;
+					break;
+					default :
+						c = 26;
+						r = 0;
+						break;
+				}
+				
+			}else {
 				boolean found = false;
 				/*
 				 * for(int i = 0;i<special.length;i++){ if(special[i]==ch){

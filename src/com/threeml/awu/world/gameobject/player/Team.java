@@ -107,7 +107,7 @@ public class Team {
 	 * @return if team has any Alive Players
 	 */
 	public boolean hasAlivePlayers(){
-		return (getAlivePlayers() != null);
+		return (getAlivePlayers().size() > 0);
 	}
 	
 	/**

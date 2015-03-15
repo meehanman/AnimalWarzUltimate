@@ -12,6 +12,7 @@ import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.InGameText;
+import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
@@ -63,6 +64,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	/** Banner Notification will appear when there is a notification for the user */
 	private BannerNotification mNotification;
 	
+	private Vector2 mBottomOfScreen;
+	
 	
 	// TODO MJ - Player management isn't complete
 	/** players */
@@ -103,6 +106,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	
 	private OnScreenText mDashboardTimer;
 	private List<OnScreenText> mTeamHealthText;
+	private boolean mGameOver = false;
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -145,6 +149,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		// Create the screen viewport
 		mScreenViewport = new ScreenViewport(0, 0, screenWidth, screenHeight);
 		mDashboardViewport = new LayerViewport(0, 0, screenWidth, screenHeight);
+		
+		
 
 		// Create the layer viewport, taking into account the orientation
 		// and aspect ratio of the screen.
@@ -165,7 +171,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					240.0f * mScreenViewport.height / mScreenViewport.width,
 					240);
 		}
-
+		
+		mBottomOfScreen = new Vector2(mTerrainViewport.getLeft(), (mTerrainViewport.getBottom() + getActivePlayer().getBound().getHeight()));
 		CreateGameObjects(screenHeight, screenWidth);
 		mCountDownTimer = game.getPlayerCountDown();
 		mNotificationTimer = game.getNotificationTimer();
@@ -366,88 +373,129 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-		hideNotification();
-		if(getActivePlayer().isAlive()){
-			//Rotate players after timers finished
-			if (getActivePlayer() != null) {
-				if (mCountDownTimer.hasFinished()) {
-					changeActivePlayer();
-				}
-				// Ensure the player cannot leave the confines of the world
-				BoundingBox playerBound = getActivePlayer().getBound();
-				if (playerBound.getLeft() < 0)
-					getActivePlayer().position.x -= playerBound.getLeft();
-				else if (playerBound.getRight() > LEVEL_WIDTH)
-					getActivePlayer().position.x -= (playerBound.getRight() - LEVEL_WIDTH);
-	
-				if (playerBound.getBottom() < 0)
-					getActivePlayer().position.y -= playerBound.getBottom();
-				else if (playerBound.getTop() > LEVEL_HEIGHT)
-					getActivePlayer().position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
-	
-				// Focus the layer viewport on the player
-				mBackgroundViewport.x = getActivePlayer().position.x;
-				mBackgroundViewport.y = getActivePlayer().position.y;
-				
-				// Ensure the viewport cannot leave the confines of the world
-				if (mBackgroundViewport.getLeft() < 0)
-					mBackgroundViewport.x -= mBackgroundViewport.getLeft();
-				else if (mBackgroundViewport.getRight() > LEVEL_WIDTH)
-					mBackgroundViewport.x -= (mBackgroundViewport.getRight() - LEVEL_WIDTH);
-	
-				if (mBackgroundViewport.getBottom() < 0)
-					mBackgroundViewport.y -= mBackgroundViewport.getBottom();
-				else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
-					mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
-			} else {
-				Log.v("Error",
-						"Error occurred in AnimalWarzPlayScreen: update method. No active player");
-			}
-		}
-		else {
-			//TODO - kill player movement. player keeps moving for whatever reason
-			//if the current active team has no more alive players
-			if(!mTeamManager.getActiveTeam().hasAlivePlayers()){
-				//if team manager has playable teams, i.e. if any more
-				if(mTeamManager.hasPlayableTeams()){
-					changeActivePlayer();
-				}
-				//if no more playable teams
-				else {
-					gameOver(false);
+		
+			hideNotification();
+			if(!mNotificationTimer.isRunning()){
+			if(!mGameOver){
+			if(getActivePlayer().isAlive()){
+				//Rotate players after timers finished
+				if (getActivePlayer() != null) {
+					if (mCountDownTimer.hasFinished()) {
+						changeActivePlayer();
+					}
+					// Ensure the player cannot leave the confines of the world
+					BoundingBox playerBound = getActivePlayer().getBound();
+					if (playerBound.getLeft() < 0)
+						getActivePlayer().position.x -= playerBound.getLeft();
+					else if (playerBound.getRight() > LEVEL_WIDTH)
+						getActivePlayer().position.x -= (playerBound.getRight() - LEVEL_WIDTH);
+		
+					if (playerBound.getBottom() < 0)
+						getActivePlayer().position.y -= playerBound.getBottom();
+					else if (playerBound.getTop() > LEVEL_HEIGHT)
+						getActivePlayer().position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
+		
+					// Focus the layer viewport on the player
+					mBackgroundViewport.x = getActivePlayer().position.x;
+					mBackgroundViewport.y = getActivePlayer().position.y;
+					
+					// Ensure the viewport cannot leave the confines of the world
+					if (mBackgroundViewport.getLeft() < 0)
+						mBackgroundViewport.x -= mBackgroundViewport.getLeft();
+					else if (mBackgroundViewport.getRight() > LEVEL_WIDTH)
+						mBackgroundViewport.x -= (mBackgroundViewport.getRight() - LEVEL_WIDTH);
+		
+					if (mBackgroundViewport.getBottom() < 0)
+						mBackgroundViewport.y -= mBackgroundViewport.getBottom();
+					else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
+						mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
+				} else {
+					Log.v("Error",
+							"Error occurred in AnimalWarzPlayScreen: update method. No active player");
 				}
 			}
-			displayNotification(InGameText.generateDeathText(getActivePlayer().getName()));
-			changeActivePlayer();
-		}
- 
-		// Until we have a paralex effect, lets position forground and
-		// background together
-		mTerrainViewport.x = mBackgroundViewport.x;
-		mTerrainViewport.y = mBackgroundViewport.y;
-
-			for (Player p : mTeamManager.getAllNotActivePlayers()) {
-				// for(Player p : mPlayers){
-				// Temporary solution to make the health pack appear
-				// to be collected by the user
-				p.update(elapsedTime, false, false, false, false, false, false, false, mTerrain);
-
-				// Log.v("UpdateMethod", "Player ID : " + p.getId());
-
-				/*
-				 * if(mWeaponsCrateButton.isActivated()){ mGun.setPosition(500,
-				 * 120); }
-				 */
+			else {
+				mCountDownTimer.cancel();
+				Log.v("PlayerDeath", "Has alive players" + "");
+				//if the current active team has no more alive players
+				if(!mTeamManager.getActiveTeam().hasAlivePlayers()){
+					Log.v("PlayerDeath", "Has no alive players" + "");
+					//if team manager has playable teams, i.e. if any more
+					if(mTeamManager.hasPlayableTeams()){
+						Log.v("PlayerDeath", "Has playable teams" + "");
+						changeActivePlayer();
+					}
+					//if no more playable teams
+					else {
+						Log.v("PlayerDeath", "game over" + "");
+						gameOver(false);
+					}
+				}
+				displayNotification(InGameText.generateDeathText(getActivePlayer().getName()));
+				if(!mGameOver){
+					changeActivePlayer();
+				}
+			}
+	 
+			// Until we have a paralex effect, lets position forground and
+			// background together
+			mTerrainViewport.x = mBackgroundViewport.x;
+			mTerrainViewport.y = mBackgroundViewport.y;
+	
+				for (Player p : mTeamManager.getAllNotActivePlayers()) {
+					
+					
+					p.update(elapsedTime, false, false, false, false, false, false, false, mTerrain);
+	
+					// Log.v("UpdateMethod", "Player ID : " + p.getId());
+	
+					/*
+					 * if(mWeaponsCrateButton.isActivated()){ mGun.setPosition(500,
+					 * 120); }
+					 */
+					
+					//mProjectile.setPosition(mTeamManager.getActivePlayer().getX(),
+						//	mTeamManager.getActivePlayer().getY());
+									
+					
+					
+					// Update Items
+					for (Healthkit h : healthPacks) {
+						h.update(elapsedTime, mTerrain);
+	
+						// Ensure healthpacks cannot leave the confines of the world
+						// TODO this should be applied to sprite/item class
+						BoundingBox healthBound = h.getBound();
+						if (healthBound.getBottom() < 0) {
+							h.position.y -= healthBound.getBottom();
+						}
+	
+						// Checks for any collisions
+						if (p.getBound().intersects(healthBound)) {
+							// Apply health to player
+							p.setHealth(h.getHealthValue());
+							displayNotification(InGameText.generateCollectedHealthText(getActivePlayer().getName(), h.getHealthValue()));
+							// Remove from list
+							h.setActive(false);
+						}
+					}
+					if(p.position == mBottomOfScreen){
+						Log.v("PlayerDeath", p.getName() + " died in water. Much tragedy. Wow.");
+						p.setHealth(0);
+						p.killByWater();
+					}
+					else if(p.getHealth() <= 0){
+						p.kill();
+					}
+				}
 				
-				//mProjectile.setPosition(mTeamManager.getActivePlayer().getX(),
-					//	mTeamManager.getActivePlayer().getY());
 				if (mShootButton.isActivated()) {
 					mTeamManager.getActivePlayer().getProjectile().loadProjectile();
 					//DM TODO - Testing the deform circle method
 					mTerrain.deformCircle(mTeamManager.getActivePlayer().getPlayerTarget().getX(),
 							mTeamManager.getActivePlayer().getPlayerTarget().getY(), 20);
 					
-				}				
+				}
 				
 				// Checking the weapon menu bitmaps for a touch event and logging
 				// the type of bitmap (weapon) that was selected
@@ -466,105 +514,88 @@ public class AnimalWarzPlayScreen extends GameScreen {
 						Log.v("WEAPON CLICK", "BAT");
 					}
 				}
-				// Update Items
-				for (Healthkit h : healthPacks) {
-					h.update(elapsedTime, mTerrain);
-
-					// Ensure healthpacks cannot leave the confines of the world
-					// TODO this should be applied to sprite/item class
-					BoundingBox healthBound = h.getBound();
-					if (healthBound.getBottom() < 0) {
-						h.position.y -= healthBound.getBottom();
-					}
-
-					// Checks for any collisions
-					if (p.getBound().intersects(healthBound)) {
-						// Apply health to player
-						p.setHealth(h.getHealthValue());
-						displayNotification(InGameText.generateCollectedHealthText(getActivePlayer().getName(), h.getHealthValue()));
-						// Remove from list
-						h.setActive(false);
-					}
+			mTeamManager.getActivePlayer().update(elapsedTime, 
+					mMoveLeftButton.isActivated(),
+					mMoveRightButton.isActivated(),
+					mJumpLeftButton.isActivated(),
+					mJumpRightButton.isActivated(),
+					mAimUpButton.isActivated(),
+					mAimDownButton.isActivated(),
+					mWeaponSelect.isActivated(), mTerrain);
+			
+			for (Healthkit h : healthPacks) {
+				h.update(elapsedTime, mTerrain);
+	
+				// Ensure healthpacks cannot leave the confines of the world
+				// TODO this should be applied to sprite/item class
+				BoundingBox healthBound = h.getBound();
+				if (healthBound.getBottom() < 0) {
+					h.position.y -= healthBound.getBottom();
+				}
+	
+				// Checks for any collisions
+				if (mTeamManager.getActivePlayer().getBound().intersects(healthBound)) {
+					// Apply health to player
+					mTeamManager.getActivePlayer().setHealth(h.getHealthValue());
+					// Remove from list
+					h.setActive(false);
 				}
 			}
-		mTeamManager.getActivePlayer().update(elapsedTime, 
-				mMoveLeftButton.isActivated(),
-				mMoveRightButton.isActivated(),
-				mJumpLeftButton.isActivated(),
-				mJumpRightButton.isActivated(),
-				mAimUpButton.isActivated(),
-				mAimDownButton.isActivated(),
-				mWeaponSelect.isActivated(), mTerrain);
-		
-		for (Healthkit h : healthPacks) {
-			h.update(elapsedTime, mTerrain);
-
-			// Ensure healthpacks cannot leave the confines of the world
-			// TODO this should be applied to sprite/item class
-			BoundingBox healthBound = h.getBound();
-			if (healthBound.getBottom() < 0) {
-				h.position.y -= healthBound.getBottom();
+	
+			// TODO DM - More work needed to collect used up items
+			// Garbage Collection to remove objects from screen not being used
+			Iterator<Healthkit> healthpackList = healthPacks.listIterator();
+			while (healthpackList.hasNext()) {
+				// If the healthkit is NOT active
+				if (!healthpackList.next().isActive()) {
+					healthpackList.remove(); // Remove
+				}
 			}
-
-			// Checks for any collisions
-			if (mTeamManager.getActivePlayer().getBound().intersects(healthBound)) {
-				// Apply health to player
-				mTeamManager.getActivePlayer().setHealth(h.getHealthValue());
-				// Remove from list
-				h.setActive(false);
-			}
-		}
-
-		// TODO DM - More work needed to collect used up items
-		// Garbage Collection to remove objects from screen not being used
-		Iterator<Healthkit> healthpackList = healthPacks.listIterator();
-		while (healthpackList.hasNext()) {
-			// If the healthkit is NOT active
-			if (!healthpackList.next().isActive()) {
-				healthpackList.remove(); // Remove
-			}
-		}
-		try {
-			mDashboardTimer.updateText(Long.toString(mCountDownTimer.getCountDownInSeconds()));
-			mDashboardTimer.update(elapsedTime);
-			int c = 0;
-			if(mTeamHealthText != null && mTeamHealthText.size() > 0){
-				for(OnScreenText t : mTeamHealthText){
-					String str = mTeamManager.getTeam(c).getTeamName();
-					String buffer = "";
-					if(str.length() > 20){
-						str = str.substring(0, 19);
-					}
-					else if(str.length() < 20) {
-						int difference =  (20 - str.length());
-						for(int i = 0; i < (difference); i ++){
-							buffer += " ";
+			try {
+				mDashboardTimer.updateText(Long.toString(mCountDownTimer.getCountDownInSeconds()));
+				mDashboardTimer.update(elapsedTime);
+				int c = 0;
+				if(mTeamHealthText != null && mTeamHealthText.size() > 0){
+					for(OnScreenText t : mTeamHealthText){
+						String str = mTeamManager.getTeam(c).getTeamName();
+						String buffer = "";
+						if(str.length() > 20){
+							str = str.substring(0, 19);
 						}
+						else if(str.length() < 20) {
+							int difference =  (20 - str.length());
+							for(int i = 0; i < (difference); i ++){
+								buffer += " ";
+							}
+						}
+						StringBuilder sb = new StringBuilder();
+						sb.append(str);
+						sb.append(buffer);
+						if(mTeamManager.getTeam(c).getCollectiveHealth() > 0){
+							sb.append(" " + Integer.toString(mTeamManager.getTeam(c).getCollectiveHealth()));
+						}
+						else {
+							sb.append(" OUT");
+						}
+						t.updateText(sb.toString());
+						t.update(elapsedTime);
+						c++;
 					}
-					StringBuilder sb = new StringBuilder();
-					sb.append(str);
-					sb.append(buffer);
-					if(mTeamManager.getTeam(c).getCollectiveHealth() > 0){
-						sb.append(" " + Integer.toString(mTeamManager.getTeam(c).getCollectiveHealth()));
-					}
-					else {
-						sb.append(" OUT");
-					}
-					t.updateText(sb.toString());
-					t.update(elapsedTime);
-					c++;
 				}
 			}
+			catch (Exception e){
+				Log.e("Text Error", "Game screen timer error : " + e);
+			}
 		}
-		catch (Exception e){
-			Log.e("Text Error", "Game screen timer error : " + e);
-		}
-}
+	}
+	}
 
 	private void gameOver(boolean surrender) {
+		Log.v("PlayerDeath", "Game over!");
 		if(!surrender){
 			displayNotification(InGameText.generateWinText(mTeamManager.getWinningTeam().getTeamName()));
 		}
+		mGameOver = true;
 	}
 
 	/**
