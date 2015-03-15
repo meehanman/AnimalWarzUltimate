@@ -113,4 +113,9 @@ public class Projectile extends Sprite {
 
 	}
 
+	public int getDamage() {
+		
+		return 50;
+	}
+
 }

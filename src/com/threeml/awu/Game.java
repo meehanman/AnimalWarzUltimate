@@ -34,6 +34,7 @@ public abstract class Game extends Fragment {
 	
 	private GameCountDownTimer countDownTimer;
 	private GameCountDownTimer notificationTimer;
+	private GameCountDownTimer notification2Timer;
 	
 	/**
 	 * Variable used to record the target number of update/draw iterations in a
@@ -218,8 +219,9 @@ public abstract class Game extends Fragment {
 		// Create the screen manager
 		mScreenManager = new ScreenManager();		
 		
-		countDownTimer = new GameCountDownTimer(20000, 1000);
+		countDownTimer = new GameCountDownTimer(45000, 1000);
 		notificationTimer = new GameCountDownTimer(3000, 1000);
+		notification2Timer = new GameCountDownTimer(3000, 1000);
 		
 		// Request control of the volume
 		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -319,6 +321,10 @@ public abstract class Game extends Fragment {
 	
 	public GameCountDownTimer getNotificationTimer(){
 		return notificationTimer;
+	}
+	
+	public GameCountDownTimer getNotification2Timer(){
+		return notification2Timer;
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////

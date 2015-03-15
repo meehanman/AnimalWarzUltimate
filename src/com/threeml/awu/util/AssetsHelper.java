@@ -47,6 +47,7 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("AimUp","img/dashControls/AimUp.png");
 		assetManager.loadAndAddBitmap("AimDown","img/dashControls/AimDown.png");
 		assetManager.loadAndAddBitmap("WeaponArchive", "img/dashControls/WeaponArchive.png");
+		assetManager.loadAndAddBitmap("MainMenu", "img/dashControls/MainMenuButton.png");
 		
 		//Weapon Menu images
 		assetManager.loadAndAddBitmap("Gun", "img/weapons/gun.png");

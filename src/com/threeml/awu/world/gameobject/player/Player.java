@@ -233,11 +233,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 * Alive to false
 	 */
 	public void kill(){
-		//if player is not in water/bottom of the screen
-		if(position.y != 0){
-			//do death animation
-			//change bitmap to grave
-		}
 		velocity = new Vector2(0,0);
 		setAlive(false);
 		mFullImage = mGameScreen.getGame().getAssetManager().getBitmap("PlayerGrave");
@@ -251,17 +246,25 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 * Alive to false
 	 */
 	public void killByWater(){
-		//if player is not in water/bottom of the screen
-		if(position.y != 0){
-			//do death animation
-			//change bitmap to grave
-		}
+		Log.v("PlayerDeath", "Death by water triggered");
 		velocity = new Vector2(0,0);
 		setAlive(false);
 		mFullImage = Bitmap.createBitmap((int)this.getBound().getWidth(), (int)this.getBound().getHeight(), Config.ALPHA_8);
 		mSpritesheetHandler.setFullImage(mFullImage);
 		mSpritesheetHandler.setRows(1);
 		setPlayerDirection("0");
+	}
+	/**
+	 * Decreases the player's health by the amount of damage
+	 * @param damage
+	 */
+	public void doDamage(int damage) {
+		if((mHealth - damage) > 0){
+			mHealth-= damage;
+		}
+		else {
+			mHealth = 0;
+		}
 	}
 	
 	/**
