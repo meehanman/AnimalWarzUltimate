@@ -20,10 +20,10 @@ public class InGameText {
 	 */
 	private enum DeathText {
 		checkedOut(" has checked out..."),
-		dancedLastDance(" has danced their last dance..."),
+		dancedLastDance(" has danced its last dance..."),
 		deaderThanADoornail(" is deader than a doornail."),
 		givenUpTheGhost(" has given up the ghost."),
-		meetMaker(" has gone to meet their maker!"),
+		meetMaker(" has gone to meet its maker!"),
 		pushingDaisies(" is pushing up daisies now."),
 		betterPlace(" is in a better place now..."),
 		kickedTheBucket(" has kicked the bucket!"),
@@ -40,11 +40,11 @@ public class InGameText {
 		valhalla(" has gone to Valhalla"),
 		mortalCoil(" has shuffled off this mortal coil..."),
 		zombieApocalypse(" has gone to fight in the Zombie Apocalypse!"),
-		ancestors(" is feasting with their ancestors."),
+		ancestors(" is feasting with its ancestors."),
 		greatSlumber(" has become one with The Will."),
 		legend(" lives on only in legend."),
 		circleOfLife(" has entered the next stage in the Circle of Life."),
-		insurance(" has faked their death as part of an insurance scam."),
+		insurance(" has faked its death as part of an insurance scam."),
 		;
 		
 		private String text;
@@ -75,7 +75,7 @@ public class InGameText {
 		sleepingWithFish(" is sleeping with the fish..."),
 		davyJones(" has gone to Davy Jones's Locker."),
 		styx(" has taken a one way trip down the River Styx."),
-		captainWormerica(" has fallen in the sea, maybe we'll find him in 70 years?"),
+		captainWormerica(" has fallen in the sea, maybe we'll find it in 70 years?"),
 		bubbling("'s life is bubbling away!"),
 		venus(" will not be reborn from the sea foam, like Venus. Alas!"),
 		;

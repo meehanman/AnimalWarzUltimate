@@ -135,7 +135,7 @@ public class TeamSelectionScreen extends GameScreen {
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
 				//TODO MJ This really should be in the GameScreen
-				Map map = new Map("Castles", 1600f, 580f, mGame,
+				Map map = new Map("Random", 1600f, 580f, mGame,
 						this);
 				mTeamManager = new TeamManager();
 				mTeamManager.createNewTeam("Threeml", mNoOfPlayers, map, mGame, this);
