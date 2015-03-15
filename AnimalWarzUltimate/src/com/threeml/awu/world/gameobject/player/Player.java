@@ -222,7 +222,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
 		playerTarget.update(elapsedTime, aimUp, aimDown);
-		mProjectile.update(elapsedTime, this, this.position, playerTarget);
+		mProjectile.update(elapsedTime, this, this.position, playerTarget,  TerrainObj);
 		
 		//Keep previous Position
 		//Save this position to be used as the previous position

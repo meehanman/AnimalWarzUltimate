@@ -67,7 +67,7 @@ public class Terrain extends Sprite {
 	 * 
 	 * @author Dean
 	 */
-	public boolean isPixelSolid(double x,double y){
+	public boolean isPixelSolid(float x,float y){
 		
 		Vector2 scaledValues = fixVectorScaling(x,y);
 		x=scaledValues.x;
