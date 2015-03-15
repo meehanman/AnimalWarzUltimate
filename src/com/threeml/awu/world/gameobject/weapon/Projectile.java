@@ -30,8 +30,8 @@ public class Projectile extends Sprite {
 	 *            The gamescreen this projectile object will be drawn to.
 	 */
 	public Projectile(Player player, GameScreen gameScreen) {
-		super(player.position.x, player.position.y, 10, 5, gameScreen.getGame()
-				.getAssetManager().getBitmap("Bullet"), gameScreen);
+		super(player.position.x, player.position.y, 10, 10, gameScreen.getGame()
+				.getAssetManager().getBitmap("Projectile"), gameScreen);
 	}
 
 	/**

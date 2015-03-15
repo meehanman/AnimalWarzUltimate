@@ -60,6 +60,7 @@ public class AssetsHelper {
 		//assetManager.loadAndAddBitmap("Bat", "img/weapons/crshairr.png");
 		
 		//Weapon and Projectile images
+		assetManager.loadAndAddBitmap("Projectile", "img/weapons/Projectile.png");
 		assetManager.loadAndAddBitmap("Bullet", "img/weapons/Bullet.png");
 		assetManager.loadAndAddSound("Bullet_SFX", "sfx/ShotGunFire.wav");
 		//Main Menu Items

@@ -521,6 +521,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			if (mShootButton.isActivated()) {
 				mTeamManager.getActivePlayer().getProjectile().loadProjectile();
 				getGame().getAssetManager().getSound("Bullet_SFX").play();
+				
 				//DM TODO - Testing the deform circle method
 			//	mTerrain.deformCircle(mTeamManager.getActivePlayer().getPlayerTarget().getX(),
 			//  mTeamManager.getActivePlayer().getPlayerTarget().getY(), 20);
