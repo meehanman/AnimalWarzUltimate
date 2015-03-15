@@ -67,9 +67,9 @@ public class Target extends Sprite {
 		 */
 		// Angles are in format 1.8 = (180)^o
 		if (aimUp == true) {
-			aimAngle -= (0.25 * playerDirection);
+			aimAngle -= (0.10 * playerDirection);
 		} else if (aimDown == true) {
-			aimAngle += (0.25 * playerDirection);
+			aimAngle += (0.10 * playerDirection);
 
 		}
 
