@@ -4,6 +4,7 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
+import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 
 /**
@@ -14,7 +15,6 @@ import com.threeml.awu.world.gameobject.player.Player;
  *
  */
 public class Projectile extends Sprite {
-	
 	/** Speed the projectile will travel at */
 	private float projSpeed = 20.0f;
 	/** Boolean variable to store if the shot method has been called*/
@@ -42,7 +42,7 @@ public class Projectile extends Sprite {
 	 * @param player
 	 * 			Player that will have the projectile assigned to it.
 	 */
-	public void update(ElapsedTime elapsedTime, Player player, Vector2 playerPos, Target targetPos) {
+	public void update(ElapsedTime elapsedTime, Player player, Vector2 playerPos, Target targetPos, Terrain terrainObj) {
 		super.update(elapsedTime);
 		
 		/*
@@ -51,7 +51,7 @@ public class Projectile extends Sprite {
 		 * of the projectile.
 		 */
 		if (shot){
-				shootProjectile(player, playerPos, targetPos, projSpeed);
+				shootProjectile(player, playerPos, targetPos, projSpeed, terrainObj);
 		}
 		
 		/*
@@ -81,7 +81,7 @@ public class Projectile extends Sprite {
 	 * @param speed
 	 * 			speed with which the projectile will fire
 	 */
-	public void shootProjectile(Player player, Vector2 playerPos, Target targetPos, Float speed) {
+	public void shootProjectile(Player player, Vector2 playerPos, Target targetPos, Float speed, Terrain terrainObj) {
 		/* 
 		 * Iniatilizing mDiretion to the product of targetPos.position - playerPos.
 		 * (If targetPos was a vector as opposed to Target object the target would not display)
@@ -90,11 +90,21 @@ public class Projectile extends Sprite {
 		mDirection.normalise();
 		/*
 		 * Setting the position of the projectile(x,y) to the product of mDirection(x,y) x speed
+		 * and also checking for clear pixels to allow the projectile to either move or stop.
 		 */
-		this.position.x += mDirection.x * speed;
-		this.position.y += mDirection.y * speed;
+			mDirection = new Vector2(targetPos.position.x - playerPos.x,targetPos.position.y - playerPos.y);
+			mDirection.normalise();
+			if (terrainObj.isPixelSolid(this.position.x, this.position.y) == false) {
+				this.position.x += mDirection.x * projSpeed;
+				this.position.y += mDirection.y * projSpeed;
+			} else {
+				this.position.x = this.position.x;
+				this.position.y = this.position.y;
+			}
+		
 		/*this.position.add(mDirection);
 		this.position.multiply(2.0f); */
 
 	}
+
 }
