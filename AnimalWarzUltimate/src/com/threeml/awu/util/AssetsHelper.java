@@ -58,8 +58,11 @@ public class AssetsHelper {
 		//Weapon and Projectile images
 		assetManager.loadAndAddBitmap("Projectile", "img/weapons/Projectile.png");
 		assetManager.loadAndAddBitmap("BazookaSingle", "img/weapons/BazookaSingle.png");
+		assetManager.loadAndAddBitmap("MiniGunSingle", "img/weapons/MiniGunSingle.png");
+		assetManager.loadAndAddBitmap("Hand", "img/weapons/Hand.png");
 		assetManager.loadAndAddBitmap("Bazooka", "img/weapons/Bazooka.png");
 		assetManager.loadAndAddBitmap("Bullet", "img/weapons/Bullet.png");
+		
 		assetManager.loadAndAddSound("Bullet_SFX", "sfx/ShotGunFire.wav");
 		
 		//Crosshair

@@ -23,6 +23,7 @@ import com.threeml.awu.world.ScreenViewport;
  */
 public class Control extends GameObject {
 
+	private String name = "";
 	/** Boolean to release the weapons menu upon selection */
 	private boolean wasSelected = false;
 	// /////////////////////////////////////////////////////////////////////////
@@ -32,6 +33,8 @@ public class Control extends GameObject {
 	/**
 	 * Create a new control.
 	 * 
+	 * @param name
+	 *            Name of the control
 	 * @param x
 	 *            Centre x location of the control
 	 * @param y
@@ -45,10 +48,12 @@ public class Control extends GameObject {
 	 * @param gameScreen
 	 *            Gamescreen to which this control belongs
 	 */
-	public Control(float x, float y, float width, float height,
+	public Control(String name, float x, float y, float width, float height,
 			String bitmapName, GameScreen gameScreen) {
 		super(x, y, width, height, gameScreen.getGame().getAssetManager()
 				.getBitmap(bitmapName), gameScreen);
+		
+		this.name = name;
 	}
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -77,6 +82,31 @@ public class Control extends GameObject {
 			}
 		}
 		return false;
+	}
+	
+	
+	/**
+	 * 
+	 * Returns true if the string entered
+	 * matches the controls name
+	 * 
+	 * @return
+	 * @author Dean
+	 */
+	public boolean nameEquils(String n){
+		if(this.name == n){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	/**
+	 * Returns the name
+	 * @return
+	 */
+	public String getName(){
+		return this.name;
 	}
 	
 	public boolean isTouched() {

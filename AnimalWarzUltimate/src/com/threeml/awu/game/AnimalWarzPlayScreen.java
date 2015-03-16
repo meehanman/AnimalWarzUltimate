@@ -27,6 +27,7 @@ import com.threeml.awu.world.gameobject.map.Water;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
 import com.threeml.awu.world.gameobject.player.TeamManager;
+import com.threeml.awu.world.gameobject.weapon.MiniGun;
 import com.threeml.awu.world.gameobject.weapon.Projectile;
 
 /**
@@ -44,10 +45,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private float LEVEL_WIDTH = 1600f;
 	/** Height of the level (Changed later by width/height of backgroundimage) */
 	private float LEVEL_HEIGHT = 580f;
-	/** Width of the weapon icon */
-	private final float WEAPON_WIDTH = getGame().getScreenWidth() / 5f;
-	/** Length of the weapon icon */
-	private final float WEAPON_HEIGHT = getGame().getScreenHeight() / 5f;
 	/** Viewport for device screen */
 	private ScreenViewport mScreenViewport;
 	/** Viewport for terrain - all game objects on this viewport */
@@ -82,8 +79,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	/** Touch controls for player input */
 	private Control mMoveLeftButton, mMoveRightButton, mJumpLeftButton,
 			mJumpRightButton, mWeaponSelect, mShootButton, mAimUpButton,
-			mAimDownButton, mWeaponsList, mGun, mGrenade, mRocket, mBat,
-			mMainMenu;
+			mAimDownButton, mMainMenu;
 
 	/** List array to handle controls */
 	private List<Control> mControls = new ArrayList<Control>();
@@ -218,11 +214,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 		x = screenWidthCell * 10;
 		y = (screenHeight - (screenHeightCell * 21));
-		mMoveLeftButton = new Control(x, y, width, height, "MoveLeft", this);
+		mMoveLeftButton = new Control("Move Left",x, y, width, height, "MoveLeft", this);
 		mControls.add(mMoveLeftButton);
 
 		x = screenWidthCell * 22.05f;
-		mMoveRightButton = new Control(x, y, width, height, "MoveRight", this);
+		mMoveRightButton = new Control("Move Right",x, y, width, height, "MoveRight", this);
 		mControls.add(mMoveRightButton);
 
 		width = screenWidthCell * 8.5f;
@@ -230,11 +226,11 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 		x = screenWidthCell * 16.05f;
 		y = (screenHeight - (screenHeightCell * 38.2f));
-		mAimUpButton = new Control(x, y, width, height, "AimUp", this);
+		mAimUpButton = new Control("Aim Up",x, y, width, height, "AimUp", this);
 		mControls.add(mAimUpButton);
 
 		y = (screenHeight - (screenHeightCell * 8.6f));
-		mAimDownButton = new Control(x, y, width, height, "AimDown", this);
+		mAimDownButton = new Control("Aim Down",x, y, width, height, "AimDown", this);
 		mControls.add(mAimDownButton);
 		x = 0;
 		y = 0;
@@ -247,55 +243,57 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		x = screenWidthCell * 40;
 		y = (screenHeight - (screenHeightCell * 15f));
 
-		mWeaponSelect = new Control(x, y, width, height, "WeaponsCrate", this);
+		mWeaponSelect = new Control("Weapon Select",x, y, width, height, "WeaponsCrate", this);
 		mControls.add(mWeaponSelect);
 
 		x = screenWidthCell * 80;
-		mShootButton = new Control(x, y, width, height, "Fireeee", this);
+		mShootButton = new Control("Shoot ",x, y, width, height, "Fireeee", this);
 		mControls.add(mShootButton);
 
 		x = screenWidthCell * 95;
-		mJumpRightButton = new Control(x, y, width, height, "JumpRight", this);
+		mJumpRightButton = new Control("Jump Right",x, y, width, height, "JumpRight", this);
 		mControls.add(mJumpRightButton);
 
 		y = (screenHeight - (screenHeightCell * 38.2f));
-		mJumpLeftButton = new Control(x, y, width, height, "JumpLeft", this);
+		mJumpLeftButton = new Control("Jump Left",x, y, width, height, "JumpLeft", this);
 		mControls.add(mJumpLeftButton);
-
-		mGun = new Control(getGame().getScreenWidth() / 5.2f, getGame()
-				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Gun",
-				this);
-		mWeaponSelection.add(mGun);
-
-		mGrenade = new Control(getGame().getScreenWidth() / 2.5f, getGame()
-				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT,
-				"Grenade", this);
-		mWeaponSelection.add(mGrenade);
-
-		mRocket = new Control(getGame().getScreenWidth() / 1.65f, getGame()
-				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Rocket",
-				this);
-		mWeaponSelection.add(mRocket);
-
-		mBat = new Control(getGame().getScreenWidth() / 1.20f, getGame()
-				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Bat",
-				this);
-		mWeaponSelection.add(mBat);
-
-		mMainMenu = new Control(getGame().getScreenWidth() / 2f, getGame()
+		
+		/**
+		 * Weapon Selections screen 
+		 * */
+		/** Width of the weapon icon */
+		float WEAPON_WIDTH = getGame().getScreenWidth() / 5f;
+		/** Length of the weapon icon */
+		float WEAPON_HEIGHT = getGame().getScreenHeight() / 5f;
+		
+		mMainMenu = new Control("Weapon Selection Menu",getGame().getScreenWidth() / 2f, getGame()
 				.getScreenHeight() / 2f, WEAPON_WIDTH, WEAPON_HEIGHT,
 				"MainMenu", this);
-
-		// mProjectile = new Projectile(mTeamManager.getActivePlayer().getX(),
-		// mTeamManager.getActivePlayer().getY(),
-		// 20f, 5f, getGame().getAssetManager().getBitmap("Projectile"), this);
-		/*
-		 * mWeaponsList = new Control(getGame().getScreenWidth() / 2, getGame()
-		 * .getScreenHeight() / 2, getGame().getScreenWidth() / 2, getGame()
-		 * .getScreenHeight() / 2, "WeaponArchive", this);
+		
+		/**
+		 * Weapons added
 		 */
-		// mControls.add(mWeaponsList);
+		//Uzi
+		mWeaponSelection.add(new Control("Uzi",getGame().getScreenWidth() / 5.2f, getGame()
+				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Gun",
+				this));
+		//Gernade
+		mWeaponSelection.add(new Control("Grenade",getGame().getScreenWidth() / 2.5f, getGame()
+				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT,
+				"Grenade", this));
+		//Bazooka
+		mWeaponSelection.add(new Control("Bazooka",getGame().getScreenWidth() / 1.65f, getGame()
+				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Rocket",
+				this));
+		//Baseball Bat
+		mWeaponSelection.add(new Control("Baseball Bat",getGame().getScreenWidth() / 1.20f, getGame()
+				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Bat",
+				this));
 
+		/**
+		 * Notification Code to position notification icons
+		 * on the screen
+		 */
 		x = screenWidthCell * 10.0f;
 		y = (screenHeight - 300.0f);
 		mNotification = new BannerNotification(x, y, this);
@@ -460,18 +458,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				
 				
 				p.update(elapsedTime, false, false, false, false, false, false, false, false, mTerrain);
-
-				// Log.v("UpdateMethod", "Player ID : " + p.getId());
-
-				/*
-				 * if(mWeaponsCrateButton.isActivated()){ mGun.setPosition(500,
-				 * 120); }
-				 */
-				
-				//mProjectile.setPosition(mTeamManager.getActivePlayer().getX(),
-					//	mTeamManager.getActivePlayer().getY());
-								
-				
 				
 				// Update Items
 				for (Healthkit h : healthPacks) {
@@ -513,23 +499,18 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				
 			}
 			
-			// Checking the weapon menu bitmaps for a touch event and logging
-			// the type of bitmap (weapon) that was selected
-			for (int j = 0; j < mWeaponSelection.size(); j++) {
-				if (mWeaponSelection.get(j).isActivated()
-						&& mWeaponSelection.get(j) == mWeaponSelection.get(0)) {
-					Log.v("WEAPON CLICK", "GUN");
-				} else if (mWeaponSelection.get(j).isActivated()
-						&& mWeaponSelection.get(j) == mWeaponSelection.get(1)) {
-					Log.v("WEAPON CLICK", "GRENADE");
-				} else if (mWeaponSelection.get(j).isActivated()
-						&& mWeaponSelection.get(j) == mWeaponSelection.get(2)) {
-					Log.v("WEAPON CLICK", "ROCKET");
-				} else if (mWeaponSelection.get(j).isActivated()
-						&& mWeaponSelection.get(j) == mWeaponSelection.get(3)) {
-					Log.v("WEAPON CLICK", "BAT");
+			
+			/**
+			 * WEAPON SELECTION MENU TOUCH EVENTS
+			 */
+			for(Control weaponControl: mWeaponSelection){
+				//if(mMainMenu.isTouched() && weaponControl.isActivated()){
+				if(weaponControl.isActivated()){
+					//Set the activePlayers weapon
+					getActivePlayer().changeWeapon(weaponControl.getName());
 				}
 			}
+			
 		getActivePlayer().update(elapsedTime, 
 				mMoveLeftButton.isActivated(),
 				mMoveRightButton.isActivated(),
@@ -666,8 +647,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 			// }
 		}
-		// mGun.draw(elapsedTime, graphics2D, mBackgroundViewport,
-		// mScreenViewport);
 
 		// Draw the controls last so they appear at the top
 		for (Control c : mControls) {

@@ -18,7 +18,7 @@ import com.threeml.awu.world.gameobject.player.Player;
  */
 public class Projectile extends Sprite {
 	/** Speed the projectile will travel at */
-	private float projSpeed = 20.0f;
+	private float projSpeed = 15.0f;
 	/** Varaible to store the current state of the projectile 
 	 * 0 = still in barrel
 	 * 1 = In the air
@@ -29,18 +29,17 @@ public class Projectile extends Sprite {
 	private int ammoDamange;
 	private Vector2 mDirection;
 
-	// private TeamManager mTeamManager;
-
 	/**
-	 * @param player
-	 *            The player this projectile object will be assigned to.
+	 * 
+	 * @param ammoDamange Radius in px of damange when hits something
+	 * @param weapon Weapon the projectile arrives from
 	 * @param gameScreen
-	 *            The gamescreen this projectile object will be drawn to.
 	 */
-	public Projectile(Weapon weapon, GameScreen gameScreen) {
+	public Projectile(int ammoDamange, Weapon weapon, GameScreen gameScreen) {
 		super(weapon.position.x, weapon.position.y, 10, 5, gameScreen.getGame()
 				.getAssetManager().getBitmap("Bullet"), gameScreen);
 		
+		this.ammoDamange = ammoDamange;  
 		//Sound to play when projectile is shot
 		shotSound = gameScreen.getGame().getAssetManager().getSound("Bullet_SFX");
 
@@ -54,7 +53,7 @@ public class Projectile extends Sprite {
 	 * @param player
 	 *            Player that will have the projectile assigned to it.
 	 */
-	public void update(ElapsedTime elapsedTime,Terrain terrainObj) {
+	public void update(ElapsedTime elapsedTime,Terrain terrainObj, Weapon weaponObj) {
 		super.update(elapsedTime);
 
 		//Collision detection from 
@@ -64,17 +63,18 @@ public class Projectile extends Sprite {
 			this.position.x += mDirection.x * projSpeed;
 			this.position.y += mDirection.y * projSpeed;
 			
+			this.orientation = weaponObj.orientation;
+
 			//when it hits something
 			if(terrainObj.isPixelSolid(this.position.x, this.position.y)) {
+				//Set bullet propery
 				this.position.x = this.position.x;
 				this.position.y = this.position.y;
-				terrainObj.deformCircle(this.position.x, this.position.y, 20);
-				//Set bullet propery
-				hitSomething();
+				terrainObj.deformCircle(this.position.x, this.position.y, ammoDamange);
+				setHitSomething();
 			}
-
 		}
-
+		
 	}
 
 
@@ -99,11 +99,9 @@ public class Projectile extends Sprite {
 		 * playerPos. (If targetPos was a vector as opposed to Target object the
 		 * target would not display)
 		 */
-		mDirection = new Vector2(targetPos.position.x - initialPosition.position.x,
+		this.mDirection = new Vector2(targetPos.position.x - initialPosition.position.x,
 				targetPos.position.y - initialPosition.position.y);
 		mDirection.normalise();
-		
-		Log.v("slope",mDirection.x+" > Direction SHOT");
 		
 		//Projectil Status
 		setInTheAir();
@@ -158,5 +156,4 @@ public class Projectile extends Sprite {
 	public void setAmmoDamange(int ammoDamange) {
 		this.ammoDamange = ammoDamange;
 	}
-
 }

@@ -24,6 +24,7 @@ import com.threeml.awu.world.gameobject.player.Player;
  *@author Dean & Mark
  */
 public class Weapon extends Sprite {
+	//TODO - Weapon class is in less than early stages, needs work
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Attributes
@@ -44,9 +45,7 @@ public class Weapon extends Sprite {
 	
 	/** The projectile that comes out of the weapon **/
 	protected List<Projectile> mProjectiles = new ArrayList<Projectile>(); 
-	
-	/** If the weapon is currently active **/
-	protected Boolean mActive;
+	protected int mProjectileBulletDamange;
 	
 	/** The last time the gun was shot **/
 	protected double mLastTime;
@@ -58,28 +57,31 @@ public class Weapon extends Sprite {
 	// ///////////////////////////////////////////////////////////////////////// 
 	// Constructors 
 	// /////////////////////////////////////////////////////////////////////////
-	
+
 	/**
-	 * Create a new weapon
+	 * Creates a new weapon
 	 * 
 	 * @param name
 	 * @param ammo
+	 * @param reloadTime
+	 * @param ProjectileBulletDamange
 	 * @param RequiresAiming
-	 * @param isActive
 	 * @param player
 	 * @param gameScreen
 	 * @param mWeaponBitmap
 	 */
-	public Weapon(String name, int ammo, Boolean RequiresAiming, Boolean isActive, 
+	public Weapon(String name, int ammo, double reloadTime, int ProjectileBulletDamange, Boolean RequiresAiming,
 			Player player, GameScreen gameScreen, Bitmap mWeaponBitmap) {
-		super(player.position.x, player.position.y, 10, 10, gameScreen
-				.getGame().getAssetManager().getBitmap("Bazooka"), gameScreen);
+		super(0,0,10, 10, mWeaponBitmap, gameScreen);
+		
+		//NOTE: POSITION SET ON UPDATE METHOD
 		
 		this.mName = name;
 		this.mAmmo = ammo;
 		
-		this.reloadTime = .5; //Seconds
+		this.reloadTime = reloadTime; //Seconds
 		this.canShoot = true;
+		this.mProjectileBulletDamange = ProjectileBulletDamange;
 		
 		this.mOwner = player;
 		
@@ -92,30 +94,6 @@ public class Weapon extends Sprite {
 			mTarget = null;
 		}
 		
-	}
-	/**
-	 * Default Constructor to be used by extends
-	 * @param player
-	 * @param gameScreen
-	 */
-	public Weapon(Player player, GameScreen gameScreen) {
-		super(player.position.x, player.position.y, 10, 10, gameScreen
-				.getGame().getAssetManager().getBitmap("BazookaSingle"), gameScreen);
-
-		
-		this.mName = "Bazooka 2"; Log.v("slope","Weapon Selected: "+mName);
-		this.mAmmo = 40000;
-
-		this.reloadTime = .000; //Seconds
-		this.canShoot = true;
-		
-		this.mOwner = player;
-		
-		//Set up Target & Aiming
-		this.mRequiresAiming = true;
-		mTarget = new Target(player, gameScreen);
-
-				
 	}
 	
 	// ///////////////////////////////////////////////////////////////////////// 
@@ -132,10 +110,14 @@ public class Weapon extends Sprite {
 		super.update(elapsedTime, terrainObj);
 		/* Halley's comment */
 
-		this.mOwner = player;
 		
+		//Ensure it always is the same as the player
+		this.position.set((float) (player.getX()),(float) (player.getY()-(player.getBound().getHeight()/4)));
+		
+		if(mRequiresAiming){
 		//Update TargetLocation
-		mTarget.update(elapsedTime, aimUp, aimDown);
+			mTarget.update(elapsedTime, aimUp, aimDown);
+		}
 		
 		//Update whether or not the weapon currently can shoot
 		if(currentTime < (mLastTime + reloadTime)){
@@ -145,21 +127,17 @@ public class Weapon extends Sprite {
 		}
 		
 		for(Projectile proj: mProjectiles){
-			proj.update(elapsedTime, terrainObj);
+			proj.update(elapsedTime, terrainObj, this);
 		}
 		
 		//cleanup for projectiles
 		Iterator<Projectile> ProjectilesList = mProjectiles.listIterator();
 		while (ProjectilesList.hasNext()) {
 			// If the healthkit is NOT active
-			if (!ProjectilesList.next().hitSomething()) {
+			if (ProjectilesList.next().hitSomething()) {
 				ProjectilesList.remove(); // Remove
 			}
 		}
-
-		
-		//Ensure it always is the same as the player
-		this.position.set((float) (player.getX()),(float) (player.getY()));
 		
 		//Update to the current time
 		currentTime = elapsedTime.totalTime;
@@ -172,15 +150,18 @@ public class Weapon extends Sprite {
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
-		
 			super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 			
-			mTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
-		
+			//If the weapon requires aiming, show the aim
+			if(mRequiresAiming){
+				mTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+				orientation = mTarget.orientation;
+			}
+			
+			//Draw all projectiles from the weapon
 			for(Projectile proj: mProjectiles){
 				proj.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 			}
-
 			
 		}
 
@@ -195,12 +176,14 @@ public class Weapon extends Sprite {
 		if(canShoot && this.mAmmo>0){
 				
 			//Add a new bullet to the mag
-			mProjectiles.add(new Projectile(this,mOwner.getGameScreen()));
+			mProjectiles.add(new Projectile(mProjectileBulletDamange,this,mOwner.getGameScreen()));
 			
 			//Shoot a bullet from the mag!
 			for(Projectile proj: mProjectiles){
 				if(proj.inBarrel()){
 					proj.shootProjectile(mOwner, mTarget);
+				}else if(proj.hitSomething()){
+					mProjectiles.remove(proj);
 				}
 			}
 			
@@ -253,20 +236,6 @@ public class Weapon extends Sprite {
 	 */
 	public Boolean getRequiresAiming() {
 		return mRequiresAiming;
-	}
-
-	/**
-	 * @return Returns if the current weapon is active
-	 */
-	public Boolean getIsActive() {
-		return mActive;
-	}
-
-	/**
-	 * @param Sets the current weapon to active
-	 */
-	public void setActive(Boolean mActive) {
-		this.mActive = mActive;
 	}
 
 	

@@ -34,6 +34,11 @@ public class OptionsScreen extends GameScreen {
 	///Setting variables
 	private boolean PlaySounds;
 	private boolean PlayMusic;
+	
+	//TimerOptions for buttons
+	private double mLastTime;
+	private double currentTime;
+	private boolean canClick = true;
 	/**
 	 * Define Assets to be used in Main Menu
 	 */
@@ -47,10 +52,7 @@ public class OptionsScreen extends GameScreen {
 	 */
 	public OptionsScreen(Game game) {
 		super("OptionsScreen", game);
-		
-		int screenWidth = game.getScreenWidth();
-		int screenHeight = game.getScreenHeight();
-		
+
 		//Get Number of players stored in device
 		mPreferenceStore = new PreferenceStore(game.getActivity().getApplicationContext());
 		PlaySounds = mPreferenceStore.RetrieveBoolean("PlaySounds");
@@ -67,6 +69,16 @@ public class OptionsScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
+		
+		//Update whether or not the buttons can currently be clicked
+		//Stops them being clicked at every update (50times/second)
+		if(currentTime > (mLastTime + .5)){
+			canClick = true;
+		}else{
+			canClick = false;
+		}
+		
+		
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
 		List<TouchEvent> touchEvents = input.getTouchEvents();
@@ -87,9 +99,10 @@ public class OptionsScreen extends GameScreen {
 				MenuScreen menuScreen = new MenuScreen(mGame);
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(menuScreen);
+
 			}
 			
-			if (mPlaySoundBound.contains((int) touchEvent.x,(int) touchEvent.y)) {
+			if (canClick && mPlaySoundBound.contains((int) touchEvent.x,(int) touchEvent.y)) {
 				
 				assetManager.getSound("ButtonClick").play();
 
@@ -97,11 +110,12 @@ public class OptionsScreen extends GameScreen {
 				PlaySounds = !PlaySounds;
 				Log.v("slope","PlaySounds "+PlaySounds);
 				mPreferenceStore.Save("PlaySounds",PlaySounds);
-
 				
+				//Log time of last click 
+				mLastTime = currentTime;
 			}
 			
-			if (mPlayMusicBound.contains((int) touchEvent.x,(int) touchEvent.y)) {
+			if (canClick && mPlayMusicBound.contains((int) touchEvent.x,(int) touchEvent.y)) {
 				
 				assetManager.getMusic("Dungeon_Boss").pause();
 				assetManager.getSound("ButtonClick").play();
@@ -109,11 +123,17 @@ public class OptionsScreen extends GameScreen {
 				PlayMusic = !PlayMusic;
 				
 				mPreferenceStore.Save("PlayMusic",PlayMusic);
-
+				
+				//Log time of last click 
+				mLastTime = currentTime;
 			}
 		}
-		//
+		
+		//Set the music preferences
 		musicPreferences();
+				
+		//Update to the current time
+		currentTime = elapsedTime.totalTime;
 	}
 
 	/*

@@ -22,9 +22,13 @@ import com.threeml.awu.world.Sprite;
  *
  */
 public class Water extends Sprite {
+	
+	//Control that handles the subframes
 	private SpritesheetHandler mSpritesheetHandler;
+	//The full sprite image
 	private Bitmap mFullImage;
 	
+	//Frame Count
 	double mLastTime = 0;
 	/**
 	 * Create a new Water object
@@ -45,22 +49,21 @@ public class Water extends Sprite {
 	public Water(float x, float y, float width, float height,
 			Bitmap bitmap, GameScreen gameScreen) {
 		super(x,y,width,height,bitmap,gameScreen);
+		
+		//Initilise the fullImage
 		mFullImage = bitmap;
-		mSpritesheetHandler = new SpritesheetHandler(mFullImage, 12, 0);
-		//Initially create AABB bounding boxes for the terrain
-		//CreateTerrainPhysics();
+		//Create the sprite sheet handler
+		mSpritesheetHandler = new SpritesheetHandler(mFullImage, 12, 1);
+		//Go to next frame
+
 	}
 	
-	@Override
 	public void update(ElapsedTime elapsedTime) {
-		Log.v("TeamError", "Water updated");
-		super.update(elapsedTime);
 		if((mLastTime + 0.1) < elapsedTime.totalTime){
-			Log.v("TeamError", "Water frame updated");
 			mSpritesheetHandler.nextFrameVertical();
 			mLastTime = elapsedTime.totalTime;
 		}
-		
+		super.update(elapsedTime);
 	}
 	
 	/**
@@ -76,14 +79,15 @@ public class Water extends Sprite {
 	 * @param screenViewport
 	 *            Screen viewport
 	 */
-	
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
-			LayerViewport layerViewport, ScreenViewport screenViewport) {
+			LayerViewport layerViewport, ScreenViewport screenViewport, boolean active) {
 		try {
 			if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 					screenViewport, drawSourceRect, drawScreenRect)) {
+	
 				// Draw the image
-				graphics2D.drawBitmap(mSpritesheetHandler.getFrameImage(), drawSourceRect, drawScreenRect, null);
+				this.mBitmap = mSpritesheetHandler.getFrameImage();
+				graphics2D.drawBitmap(mBitmap, drawSourceRect, drawScreenRect, null);
 			}
 		}
 		catch (Exception e){
