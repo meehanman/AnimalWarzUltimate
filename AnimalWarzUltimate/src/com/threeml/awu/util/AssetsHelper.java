@@ -84,6 +84,14 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("TSBackground", "img/TeamSelectionImages/MenuBackground.jpg");
 		assetManager.loadAndAddBitmap("TSTitle", "img/TeamSelectionImages/TeamSelectionTitle.png");
 		assetManager.loadAndAddBitmap("ContinueButton", "img/TeamSelectionImages/continue.png");
+		assetManager.loadAndAddBitmap("NumberPlayers", "img/TeamSelectionImages/NoOfPlayers.png");
+		assetManager.loadAndAddBitmap("ChooseMap", "img/TeamSelectionImages/ChooseAMap.png");
+		assetManager.loadAndAddBitmap("Numbers", "img/TeamSelectionImages/Numbers.png");
+		//http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/magic-marker-icons-arrows/114831-magic-marker-icon-arrows-arrow1-left-right1.png
+		assetManager.loadAndAddBitmap("LeftArrow", "img/TeamSelectionImages/LeftArrow.png");
+		assetManager.loadAndAddBitmap("RightArrow", "img/TeamSelectionImages/RightArrow.png");
+		//https://cdn0.iconfinder.com/data/icons/weboo-2/512/tick.png
+		assetManager.loadAndAddBitmap("Tick", "img/TeamSelectionImages/tick.png");
 		
 		//Options Menu
 		assetManager.loadAndAddBitmap("OptionsBackground", "img/OptionsMenuControls/OptionsMenuBackground.jpg");
@@ -93,6 +101,13 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("SoundNButton", "img/OptionsMenuControls/SoundN.png");
 		assetManager.loadAndAddBitmap("AudioYButton", "img/OptionsMenuControls/AudioY.png");
 		assetManager.loadAndAddBitmap("AudioNButton", "img/OptionsMenuControls/AudioN.png");
+		
+		//small maps
+		assetManager.loadAndAddBitmap("smallCastlesMap", "img/TerrainImages/small/CastlesMap.png");
+		assetManager.loadAndAddBitmap("smallFairyLandMap", "img/TerrainImages/small/FairyLandMap.png");
+		assetManager.loadAndAddBitmap("smallPiratesMap", "img/TerrainImages/small/PiratesMap.png");
+		assetManager.loadAndAddBitmap("smallShipMap", "img/TerrainImages/small/ShipMap.png");
+		assetManager.loadAndAddBitmap("smallTitanicMap", "img/TerrainImages/small/TitanicMap.png");
 		
 
 	}

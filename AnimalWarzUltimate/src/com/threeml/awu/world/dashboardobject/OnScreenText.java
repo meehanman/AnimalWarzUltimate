@@ -1,5 +1,7 @@
 package com.threeml.awu.world.dashboardobject;
 
+import android.graphics.Bitmap;
+
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BitmapFont;
@@ -116,5 +118,13 @@ public class OnScreenText extends BitmapFont{
 				
 			}
 		}
+	}
+	
+	/**
+	 * Get the bitmap text image
+	 * @return text image
+	 */
+	public Bitmap getTextImage(){
+		return mTextImage;
 	}
 }

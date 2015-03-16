@@ -69,7 +69,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 */
 	private BannerNotification mNotification;
 
-	private Vector2 mBottomOfScreen;
+	private float mBottomOfScreen;
 
 	private OnScreenText mNonBannerText;
 
@@ -176,10 +176,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					240);
 		}
 
-		mBottomOfScreen = new Vector2(mTerrainViewport.getLeft(),
-				(mTerrainViewport.getBottom() + getActivePlayer().getBound()
-						.getHeight()));
+		
 		CreateGameObjects(screenHeight, screenWidth);
+		mBottomOfScreen = (mTerrain.getBitmap().getHeight() - getActivePlayer().getBound().getHeight());
 		mCountDownTimer = game.getPlayerCountDown();
 		mNotificationTimer = game.getNotificationTimer();
 		mNotification2Timer = game.getNotification2Timer();
@@ -507,7 +506,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 						h.setActive(false);
 					}
 				}
-				if(p.position == mBottomOfScreen){
+				if(p.position.y >= mBottomOfScreen){
 					Log.v("PlayerDeath", p.getName() + " died in water. Much tragedy. Wow.");
 					p.setHealth(0);
 					p.killByWater();
