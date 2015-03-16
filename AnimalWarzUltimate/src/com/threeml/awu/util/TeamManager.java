@@ -2,6 +2,7 @@ package com.threeml.awu.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.util.Vector2;
@@ -37,13 +38,10 @@ public class TeamManager {
 	private Team mWinningTeam;
 
 	// TESTING PURPOSES ONLY
-	private String[] villains = new String[] { "Cyberman", "Dalek",
-			"The Master", "Weeping Angel", "The Silence", "Cyberman", "Dalek",
-			"The Master", "Weeping Angel", "The Silence" };
-	private String[] heroes = new String[] { "The Doctor", "Amy", "Jack",
-			"Rose", "Clara", "The Doctor", "Amy", "Jack", "Rose", "Clara" };
-	private String[] threeml = new String[] { "MayJay!", "Mark :D", "Dean :)",
-			"Lisa *.*", "Jade", "MayJay", "Mark", "Dean", "Lisa", "Jade" };
+	private String[] names = {"MayJay", "Mark", "Dean", "Lisa", "Phil", "The Doctor", "Clara Oswald", "Dalek", 
+			"Leslie Knope", "Ron Swanson", "Agent Carter", "Missy", "Heisenberg", "Chapman", "Robb Stark", "Nymeria",
+			"Hannibal Lecter", "Dean Winchester", "Elsa", "Lyra Silvertongue", "Marceline", "Starlord", "Groot", "Ned the Piemaker",
+			"Andy", "April Ludgate", "Captain America", "Iron Man", "Black Widow", "The Hulk", "Gamora", "Princess Bubblegum"};
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -172,7 +170,7 @@ public class TeamManager {
 				Vector2 spawnLocation = map.getUniqueSpawnLocation();
 				Player p = new Player(spawnLocation.x, spawnLocation.y, 1, 15,
 						game.getAssetManager().getBitmap("PlayerWalk"),
-						gameScreen, threeml[i],t.getTeamColour());
+						gameScreen, getRandomName(),t.getTeamColour());
 				players.add(p);
 						
 			}
@@ -207,6 +205,22 @@ public class TeamManager {
 		mTeams.get(teamIndex).addNewPlayer(
 				new Player(startX, startY, columns, rows, bitmap, gameScreen,
 						"Default",mTeams.get(teamIndex).getTeamColour()));
+	}
+	
+	/**
+	 * Selects a random name for a player
+	 * 
+	 * @return name
+	 */
+	private String getRandomName(){
+		try {
+			Random rn = new Random();
+			int position = rn.nextInt((names.length-1) - 0 + 1) + 0;
+			
+			return names[position];
+		} catch (Exception e){
+			return "Bob!!!!";
+		}
 	}
 
 	/**
