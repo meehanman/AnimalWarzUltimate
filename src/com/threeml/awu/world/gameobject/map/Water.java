@@ -66,12 +66,14 @@ public class Water extends Sprite {
 	 * com.threeml.awu.world.GameObject#update(com.threeml.awu.engine.ElapsedTime
 	 * )
 	 */
+	@Override
 	public void update(ElapsedTime elapsedTime) {
-		if ((mLastTime + 0.1) < elapsedTime.totalTime) {
+		super.update(elapsedTime);
+		if ((mLastTime + 0.07) < elapsedTime.totalTime) {
 			mSpritesheetHandler.nextFrameVertical();
 			mLastTime = elapsedTime.totalTime;
 		}
-		super.update(elapsedTime);
+		
 	}
 
 	/**
@@ -87,17 +89,16 @@ public class Water extends Sprite {
 	 * @param screenViewport
 	 *            Screen viewport
 	 */
+	
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
-			LayerViewport layerViewport, ScreenViewport screenViewport,
-			boolean active) {
+			LayerViewport layerViewport, ScreenViewport screenViewport) {
+
 		try {
 			if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 					screenViewport, drawSourceRect, drawScreenRect)) {
 
-				// Draw the image
-				this.mBitmap = mSpritesheetHandler.getFrameImage();
-				graphics2D.drawBitmap(mBitmap, drawSourceRect, drawScreenRect,
-						null);
+				graphics2D.drawBitmap(mSpritesheetHandler.getFrameImage(), drawSourceRect, drawScreenRect, null);
+
 			}
 		} catch (Exception e) {
 			// move along, nothing to see here.

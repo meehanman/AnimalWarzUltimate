@@ -31,7 +31,11 @@ import com.threeml.awu.world.gameobject.player.TeamManager;
  * Team Selection Menu allowing user to choose settings before 
  * playing the game
  * 
+ * If there was time, we would have liked to have included a way of letting the user enter
+ * team names
+ * 
  * @author Dean
+ * @author Mary-Jane
  */
 public class TeamSelectionScreen extends GameScreen {
 	

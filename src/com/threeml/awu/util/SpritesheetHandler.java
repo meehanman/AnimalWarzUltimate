@@ -229,6 +229,12 @@ public class SpritesheetHandler {
 				mSpritesheetHandler.nextFrameVertical();
 			}
 		}else if(playerDirection == 0){
+			mSpritesheetHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerDie"));
+			mSpritesheetHandler.setRows(17);
+			if(mSpritesheetHandler != null && mSpritesheetHandler.getRows() > 1){
+				mSpritesheetHandler.nextFrameVertical();
+			}
+		} else if (playerDirection == 2){
 			mSpritesheetHandler.setFullImage(mGameScreen.getGame().getAssetManager().getBitmap("PlayerGrave"));
 			mSpritesheetHandler.setRows(17);
 			if(mSpritesheetHandler != null && mSpritesheetHandler.getRows() > 1){
