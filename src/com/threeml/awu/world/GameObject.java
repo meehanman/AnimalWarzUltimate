@@ -32,9 +32,10 @@ public class GameObject {
 	/** Bounding box for this game object */
 	protected BoundingBox mBound = new BoundingBox();
 
-	/** Reusable Rect used to draw this game object */	//TODO - needs more specific commenting
+	/** Reusable Rect used to draw this game object */
+	// TODO - needs more specific commenting
 	protected Rect drawSourceRect = new Rect();
-	
+
 	/** Reusable Rect used to draw this game object */
 	protected Rect drawScreenRect = new Rect();
 
@@ -106,6 +107,7 @@ public class GameObject {
 		mBound.halfWidth = width / 2.0f;
 		mBound.halfHeight = height / 2.0f;
 	}
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
