@@ -19,53 +19,61 @@ import com.threeml.awu.world.Sprite;
  * Initilised from Map
  * 
  * @author Dean
- *
+ * 
  */
 public class Water extends Sprite {
-	
-	//Control that handles the subframes
+
+	// Control that handles the subframes
 	private SpritesheetHandler mSpritesheetHandler;
-	//The full sprite image
+	// The full sprite image
 	private Bitmap mFullImage;
-	
-	//Frame Count
+
+	// Frame Count
 	double mLastTime = 0;
+
 	/**
 	 * Create a new Water object
 	 * 
 	 * @param x
-	 *            	x location of the object
+	 *            x location of the object
 	 * @param y
-	 *            	y location of the object
+	 *            y location of the object
 	 * @param width
-	 *            	width of the object
+	 *            width of the object
 	 * @param height
-	 *            	height of the object
+	 *            height of the object
 	 * @param bitmap
-	 *            	Bitmap used to represent this object
+	 *            Bitmap used to represent this object
 	 * @param gameScreen
-	 *            	Gamescreen to which this object belongs
+	 *            Gamescreen to which this object belongs
 	 */
-	public Water(float x, float y, float width, float height,
-			Bitmap bitmap, GameScreen gameScreen) {
-		super(x,y,width,height,bitmap,gameScreen);
-		
-		//Initilise the fullImage
+	public Water(float x, float y, float width, float height, Bitmap bitmap,
+			GameScreen gameScreen) {
+		super(x, y, width, height, bitmap, gameScreen);
+
+		// Initilise the fullImage
 		mFullImage = bitmap;
-		//Create the sprite sheet handler
+		// Create the sprite sheet handler
 		mSpritesheetHandler = new SpritesheetHandler(mFullImage, 12, 1);
-		//Go to next frame
+		// Go to next frame
 
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.threeml.awu.world.GameObject#update(com.threeml.awu.engine.ElapsedTime
+	 * )
+	 */
 	public void update(ElapsedTime elapsedTime) {
-		if((mLastTime + 0.1) < elapsedTime.totalTime){
+		if ((mLastTime + 0.1) < elapsedTime.totalTime) {
 			mSpritesheetHandler.nextFrameVertical();
 			mLastTime = elapsedTime.totalTime;
 		}
 		super.update(elapsedTime);
 	}
-	
+
 	/**
 	 * Draw Method Override to encapsulate draw methods connected to player i.e
 	 * Player Health
@@ -80,20 +88,20 @@ public class Water extends Sprite {
 	 *            Screen viewport
 	 */
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
-			LayerViewport layerViewport, ScreenViewport screenViewport, boolean active) {
+			LayerViewport layerViewport, ScreenViewport screenViewport,
+			boolean active) {
 		try {
 			if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 					screenViewport, drawSourceRect, drawScreenRect)) {
-	
+
 				// Draw the image
 				this.mBitmap = mSpritesheetHandler.getFrameImage();
-				graphics2D.drawBitmap(mBitmap, drawSourceRect, drawScreenRect, null);
+				graphics2D.drawBitmap(mBitmap, drawSourceRect, drawScreenRect,
+						null);
 			}
-		}
-		catch (Exception e){
-			 // move along, nothing to see here. 
+		} catch (Exception e) {
+			// move along, nothing to see here.
 		}
 	}
-	
-	
+
 }
