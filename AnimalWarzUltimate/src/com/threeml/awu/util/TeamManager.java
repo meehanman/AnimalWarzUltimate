@@ -1,4 +1,4 @@
-package com.threeml.awu.world.gameobject.player;
+package com.threeml.awu.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,8 @@ import com.threeml.awu.Game;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.gameobject.map.Map;
+import com.threeml.awu.world.gameobject.player.Player;
+import com.threeml.awu.world.gameobject.player.Team;
 
 import android.graphics.Bitmap;
 import android.util.Log;

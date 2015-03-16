@@ -26,7 +26,7 @@ import com.threeml.awu.world.gameobject.map.Map;
 import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
-import com.threeml.awu.world.gameobject.player.TeamManager;
+import com.threeml.awu.util.TeamManager;
 import com.threeml.awu.world.gameobject.weapon.Projectile;
 
 /**
@@ -58,42 +58,36 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private Background mBackground;
 	/** Terrain image, all game objects interact with this object */
 	private Terrain mTerrain;
-	/**
-	 * Banner Notification will appear when there is a notification for the user
-	 */
+	/** Banner Notification will appear when there is a notification for the user */
 	private BannerNotification mNotification;
-
-	private float mBottomOfScreen;
-
+	/** Notification without a background will appear when there is a notification for the user */
 	private OnScreenText mNonBannerText;
-
 	// TODO - should be a better way to add healthpacks to game
 	// - I don't think there should be just one global healthpack
 	// -Updated to array, we could have an array of healthpacks
 	// -after certain goes, we then can "para" in some more
 	private List<Healthkit> healthPacks = new ArrayList<Healthkit>();
-	// - need more work on weapon management
+	/** Manages players and teams for this game */
 	private TeamManager mTeamManager;
-
 	/** Touch controls for player input */
 	private Control mMoveLeftButton, mMoveRightButton, mJumpLeftButton,
 			mJumpRightButton, mWeaponSelect, mShootButton, mAimUpButton,
 			mAimDownButton, mMainMenu;
-
 	/** List array to handle controls */
 	private List<Control> mControls = new ArrayList<Control>();
-
 	/** List array to handle weapon selection */
 	private List<Control> mWeaponSelection = new ArrayList<Control>();
-
 	/** count down timer to change active user after 30 seconds */
 	private GameCountDownTimer mCountDownTimer;
-
+	/** Notification timer to display banner notifications for 3 seconds */
 	private GameCountDownTimer mNotificationTimer;
+	/** Notification timer to display non banner notifications for 3 seconds */
 	private GameCountDownTimer mNotification2Timer;
-
+	/** Displays the timer for active player change */
 	private OnScreenText mDashboardTimer;
+	/** Displays the total health for each team */
 	private List<OnScreenText> mTeamHealthText;
+	/** Boolean to control updates */
 	private boolean mGameOver = false;
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -105,21 +99,24 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 * 
 	 * @param game
 	 *            Game to which this screen belongs
+	 * @param MapName
+	 *            Name of the map to play with
+	 * @param noOfPlayers
+	 * 			  Number of players per team to play with
 	 */
 	public AnimalWarzPlayScreen(Game game, String MapName,
 			int noOfPlayers) {
 		super("AnimalWarzPlayScreen", game);
 		
+		//Initialises the current map, using the parameter MapName 
 		mCurrentMap = new Map(MapName, LEVEL_WIDTH, LEVEL_HEIGHT, mGame, this);
 		
+		//Initialises the Team Manager object, creating 2 teams using the NoOfPlayers parameter
+		//to determine number of players per team
 		mTeamManager = new TeamManager();
 		mTeamManager.createNewTeam("Threeml", noOfPlayers, mCurrentMap, mGame, this);
 		mTeamManager.createNewTeam("This shit is BANANAS", noOfPlayers, mCurrentMap, mGame, this);
 		
-		
-		// Get the current Map Ready
-		
-
 		// Get Camera/Screen Width and Height
 		int screenWidth = game.getScreenWidth();
 		int screenHeight = game.getScreenHeight();
@@ -127,13 +124,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		// Change the scaling of the map on screen
 		// TODO DM - We need to have a level width larger than images so stuff
 		// can fly
-		// around the game, not limited to just the map itself, unless we add
-		// larger images
-		// with large transparent borders
-		// LEVEL_WIDTH =
-		// getGame().getAssetManager().getBitmap("TerrainImage").getWidth();
-		// LEVEL_HEIGHT =
-		// getGame().getAssetManager().getBitmap("TerrainImage").getHeight();
 
 		// Create the screen viewport
 		mScreenViewport = new ScreenViewport(0, 0, screenWidth, screenHeight);
@@ -161,7 +151,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 		
 		CreateGameObjects(screenHeight, screenWidth);
-		mBottomOfScreen = (mTerrain.getBitmap().getHeight() - getActivePlayer().getBound().getHeight());
 		mCountDownTimer = game.getPlayerCountDown();
 		mNotificationTimer = game.getNotificationTimer();
 		mNotification2Timer = game.getNotification2Timer();
