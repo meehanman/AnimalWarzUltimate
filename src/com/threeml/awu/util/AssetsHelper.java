@@ -100,7 +100,7 @@ public class AssetsHelper {
 				"music/Video_Dungeon_Boss.mp3");
 		assetManager.loadAndAddSound("ButtonClick", "sfx/CursorSelect.wav");
 		// DM - Lower this annoying Music
-		assetManager.getMusic("Dungeon_Boss").setVolume(.02f);
+		assetManager.getMusic("Dungeon_Boss").setVolume(0.5f);
 
 		// Team Selection
 		// Load in BG Image and assets

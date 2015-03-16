@@ -13,6 +13,7 @@ import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.CollisionDetector;
 import com.threeml.awu.util.InGameText;
+import com.threeml.awu.util.PreferenceStore;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
@@ -99,6 +100,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	/** Hold's the time the weapon was last shot */
 	private double mShootTime = 0;
 	private boolean mShotsFired = false;
+	/** Holds the saved preferences */
+	private PreferenceStore mPreferenceStore;
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -123,8 +126,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		// NoOfPlayers parameter
 		// to determine number of players per team
 		mTeamManager = new TeamManager();
-		mTeamManager.createNewTeam("Threeml", noOfPlayers, mCurrentMap, mGame, this);
-		mTeamManager.createNewTeam("This shit is BANANAS", noOfPlayers, mCurrentMap, mGame, this);
+		mTeamManager.createNewTeam("Muffins", noOfPlayers, mCurrentMap, mGame, this);
+		mTeamManager.createNewTeam("Cupcakes", noOfPlayers, mCurrentMap, mGame, this);
 		//Reset static colours for teams
 		Team.resetColours();
 		// Get Camera/Screen Width and Height
@@ -394,7 +397,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mCurrentMap.getWater().update(elapsedTime);
 		// hides notifications if the timers are up
 		hideNotifications();
-		
+		// Process user preferences for sound and music playing
 		// Updates to make if the game is not over
 		if (!mGameOver) {
 			if (getActivePlayer().isAlive()) {
@@ -742,5 +745,44 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					mScreenViewport);
 		}
 
+	}
+	
+	/**
+	 * Overrides the method to ensure music plays when game resumed
+	 * 
+	 * @author Dean
+	 * @author Mary-Jane
+	 */
+	@Override
+	public void resume() {
+		super.resume();
+
+		// Process user preferences for sound and music playing
+		if (mPreferenceStore.RetrieveBoolean("PlayMusic")) {
+			getGame().getAssetManager().getSound("Dungeon_Boss").play();
+		}
+		/*
+		 * if(mMediaAvailable){ this.FadeIn(3); mMediaPlayer.start(); }
+		 */
+	}
+
+	/**
+	 * Overrides the method to ensure music is not playing when game not running
+	 * 
+	 * @author Dean
+	 * @author Mary-Jane
+	 */
+	@Override
+	public void pause() {
+		super.pause();
+
+		getGame().getAssetManager().getMusic("Dungeon_Boss").pause();
+		/*
+		 * if(mMediaAvailable) { mMediaPlayer.pause();
+		 * 
+		 * if(mGame.getActivity().isFinishing()){ //mMediaPlayer.stop();
+		 * //mMediaPlayer.release(); this.FadeOut(1.0f); mSoundPool.release(); }
+		 * }
+		 */
 	}
 }
