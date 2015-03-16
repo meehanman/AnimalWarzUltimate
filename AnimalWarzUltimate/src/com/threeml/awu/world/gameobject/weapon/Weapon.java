@@ -19,7 +19,7 @@ import com.threeml.awu.world.gameobject.player.Player;
 //TODO - add JavaDoc Description
 /**
  * 
- * Weapon class
+ * Weapon BASE class 
  *
  *@author Dean & Mark
  */
@@ -61,21 +61,6 @@ public class Weapon extends Sprite {
 	// /////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * 
-	 * @param x
-	 * 				Centre x location of the control
-	 * @param y
-	 * 				Centre y location of the control
-	 * @param bitmap
-	 * 				Bitmap used to represent this control
-	 * @param gameScreen
-	 * 				Gamescreen to which this control belongs
-	 */
-	public Weapon(float x, float y, Bitmap bitmap, GameScreen gameScreen) {
-		super(x, y, bitmap, gameScreen);
-	}
-	
-	/**
 	 * Create a new weapon
 	 * 
 	 * @param name
@@ -89,12 +74,12 @@ public class Weapon extends Sprite {
 	public Weapon(String name, int ammo, Boolean RequiresAiming, Boolean isActive, 
 			Player player, GameScreen gameScreen, Bitmap mWeaponBitmap) {
 		super(player.position.x, player.position.y, 10, 10, gameScreen
-				.getGame().getAssetManager().getBitmap("Bullet"), gameScreen);
+				.getGame().getAssetManager().getBitmap("Bazooka"), gameScreen);
 		
 		this.mName = name;
 		this.mAmmo = ammo;
 		
-		this.reloadTime = 2000; //1Second
+		this.reloadTime = .5; //Seconds
 		this.canShoot = true;
 		
 		this.mOwner = player;
@@ -116,12 +101,13 @@ public class Weapon extends Sprite {
 	 */
 	public Weapon(Player player, GameScreen gameScreen) {
 		super(player.position.x, player.position.y, 10, 10, gameScreen
-				.getGame().getAssetManager().getBitmap("Bazooka"), gameScreen);
-		
-		this.mName = "Bazooka 2";
-		this.mAmmo = 40;
+				.getGame().getAssetManager().getBitmap("BazookaSingle"), gameScreen);
 
-		this.reloadTime = .5; //Seconds
+		
+		this.mName = "Bazooka 2"; Log.v("slope","Weapon Selected: "+mName);
+		this.mAmmo = 40000;
+
+		this.reloadTime = .000; //Seconds
 		this.canShoot = true;
 		
 		this.mOwner = player;
@@ -141,10 +127,13 @@ public class Weapon extends Sprite {
 	 * @param elapsedTime
 	 * 			Elapsed time information
 	 */
-	public void update(ElapsedTime elapsedTime, Terrain terrainObj, Boolean aimUp, Boolean aimDown)
+	public void update(ElapsedTime elapsedTime, Terrain terrainObj, Player player, Boolean aimUp, Boolean aimDown)
 	{
+		//Update this
+		super.update(elapsedTime, terrainObj);
 		/* Halley's comment */
 
+		this.mOwner = player;
 		
 		//Update TargetLocation
 		mTarget.update(elapsedTime, aimUp, aimDown);
@@ -157,7 +146,7 @@ public class Weapon extends Sprite {
 		}
 		
 		for(Projectile proj: mProjectiles){
-			proj.update(elapsedTime, mOwner, mOwner.position, mTarget, terrainObj);
+			proj.update(elapsedTime, terrainObj);
 		}
 		
 		//cleanup for projectiles
@@ -169,9 +158,12 @@ public class Weapon extends Sprite {
 			}
 		}
 
+		
+		//Ensure it always is the same as the player
+		this.position.set((float) (player.getX()),(float) (player.getY()));
+		
+		//Update to the current time
 		currentTime = elapsedTime.totalTime;
-		//Update this
-		super.update(elapsedTime, terrainObj);
 	}
 	
 	/**
@@ -181,7 +173,8 @@ public class Weapon extends Sprite {
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
-
+		
+			super.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 			
 			mTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		
@@ -208,7 +201,7 @@ public class Weapon extends Sprite {
 			//Shoot a bullet from the mag!
 			for(Projectile proj: mProjectiles){
 				if(proj.inBarrel()){
-					proj.shootProjectile(mOwner.position, mTarget.position);
+					proj.shootProjectile(mOwner, mTarget);
 				}
 			}
 			
@@ -220,6 +213,10 @@ public class Weapon extends Sprite {
 		}
 	}
 	
+	public List<Projectile> getProjectiles(){
+		
+		return mProjectiles;
+	}
 	/////////////////////////////////////////////////////
 	//  Getter and Setter Methods
 	/////////////////////////////////////////////////////

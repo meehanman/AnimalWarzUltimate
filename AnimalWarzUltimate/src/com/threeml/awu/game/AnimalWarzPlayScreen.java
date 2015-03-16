@@ -23,6 +23,7 @@ import com.threeml.awu.world.gameobject.droppable.Healthkit;
 import com.threeml.awu.world.gameobject.map.Background;
 import com.threeml.awu.world.gameobject.map.Map;
 import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.map.Water;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
 import com.threeml.awu.world.gameobject.player.TeamManager;
@@ -57,8 +58,10 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private LayerViewport mDashboardViewport;
 	/** Define game objects used within game */
 	private Map mCurrentMap;
-	/** Background image - not interactable */
+	/** Background image */
 	private Background mBackground;
+	/** Water Image **/
+	private Water mWater;
 	/** Terrain image, all game objects interact with this object */
 	private Terrain mTerrain;
 	/**
@@ -197,6 +200,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		// Set Terrain and Background Objects
 		mTerrain = mCurrentMap.getTerrain();
 		mBackground = mCurrentMap.getBackground();
+		mWater = mCurrentMap.getWater();
 
 		// Create the objects
 
@@ -464,6 +468,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		// background together
 		mTerrainViewport.x = mBackgroundViewport.x;
 		mTerrainViewport.y = mBackgroundViewport.y;
+		
 
 			for (Player p : mTeamManager.getAllNotActivePlayers()) {
 				
@@ -507,28 +512,18 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					p.setHealth(0);
 					p.killByWater();
 				}
-				
-				/* /* TODO DM 23:06
-				if(p.getBound().intersects(getActivePlayer().getProjectile().getBound())){
-					p.doDamage(getActivePlayer().getProjectile().getDamage());
-					
+
+				//For each projectile the current player is shooting
+				//Check they dont hit any other players
+				for(Projectile proj: getActivePlayer().getCurrentWeapon().getProjectiles()){
+					//If so kill or damange the player
+					if(p.getBound().intersects(proj.getBound())){
+						p.doDamage(proj.getAmmoDamange());
+					}else if(p.getHealth() <= 0){
+						p.kill();
+					}
 				}
-				*/
 				
-				else if(p.getHealth() <= 0){
-					p.kill();
-				}
-			}
-			
-			if (mShootButton.isActivated()) {
-				/* TODO DM 23:06
-				mTeamManager.getActivePlayer().getProjectile().loadProjectile();
-				getGame().getAssetManager().getSound("Bullet_SFX").play();
-				*/
-				
-				//DM TODO - Testing the deform circle method
-			//	mTerrain.deformCircle(mTeamManager.getActivePlayer().getPlayerTarget().getX(),
-			//  mTeamManager.getActivePlayer().getPlayerTarget().getY(), 20);
 				
 			}
 			
@@ -664,6 +659,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				mScreenViewport);
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,
 				mScreenViewport);
+		mWater.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 
 		for (Player p : mTeamManager.getAllNotActivePlayers()) {
 			// for(Player p : mPlayers){

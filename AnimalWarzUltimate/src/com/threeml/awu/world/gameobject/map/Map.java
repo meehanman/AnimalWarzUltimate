@@ -9,6 +9,7 @@ package com.threeml.awu.world.gameobject.map;
  */
 import java.util.Random;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.threeml.awu.Game;
@@ -22,6 +23,7 @@ public class Map {
 	private Vector2[] SpawnLocations;
 	private Terrain MapTerrainObj;
 	private Background MapBackgroundObj;
+	private Water MapWaterObject;
 
 	/**
 	 * Constructor
@@ -47,7 +49,14 @@ public class Map {
 		//Create Background Object
 		this.MapBackgroundObj = new Background(LEVEL_WIDTH / 2.0f,
 						LEVEL_HEIGHT / 2.0f, LEVEL_WIDTH, LEVEL_HEIGHT, mGame
-								.getAssetManager().getBitmap("TerrainBackground"), mGameScreen);		
+								.getAssetManager().getBitmap("TerrainBackground"), mGameScreen);
+		
+		//Adding water
+		Bitmap waterBitmap = mGame.getAssetManager().getBitmap("TerrainWater");
+		
+		this.MapWaterObject = new Water(LEVEL_WIDTH / 2.0f,0,LEVEL_WIDTH*4,
+				(waterBitmap.getHeight()*(LEVEL_HEIGHT/LEVEL_WIDTH))/5,
+				waterBitmap, mGameScreen);	
 		}
 
 	/**
@@ -98,6 +107,13 @@ public class Map {
 		return MapBackgroundObj;
 	}
 	
+	/**
+	 * @return the mapWaterObject
+	 */
+	public Water getWater() {
+		return MapWaterObject;
+	}
+
 	/**
 	 * Shuffle the spawn locations 
 	 * so each games locations are different

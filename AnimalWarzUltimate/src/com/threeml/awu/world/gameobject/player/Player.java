@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
-import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.util.SpritesheetHandler;
 import com.threeml.awu.util.Vector2;
@@ -16,9 +15,6 @@ import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.GameObjectText;
 import com.threeml.awu.world.gameobject.map.Terrain;
-import com.threeml.awu.world.gameobject.weapon.Bazooka;
-import com.threeml.awu.world.gameobject.weapon.Projectile;
-import com.threeml.awu.world.gameobject.weapon.Target;
 import com.threeml.awu.world.gameobject.weapon.Weapon;
 
 
@@ -197,8 +193,6 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			if(mShootButton){
 				shootWeapon();
 			}
-			
-		
 	
 		// Call the sprite's update method to apply the defined 
 		// accelerations and velocities to provide a new position
@@ -213,7 +207,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		}
 		
 		//Update the weapon
-		mCurrentWeapon.update(elapsedTime, TerrainObj, aimUp, aimDown);
+		mCurrentWeapon.update(elapsedTime, TerrainObj, this, aimUp, aimDown);
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
 		
