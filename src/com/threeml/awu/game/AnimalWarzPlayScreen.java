@@ -96,7 +96,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private List<OnScreenText> mTeamHealthText;
 	/** Boolean to control updates */
 	private boolean mGameOver = false;
-
+	/** Hold's the time the weapon was last shot */
+	private double mShootTime = 0;
+	private boolean mShotsFired = false;
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -334,6 +336,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				.generateChangePlayerText(getActivePlayer().getName()));
 		mCountDownTimer.cancel();
 		mCountDownTimer.start();
+		mShotsFired = false;
 	}
 
 	/**
@@ -540,7 +543,21 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					mJumpLeftButton.isActivated(),
 					mJumpRightButton.isActivated(), mAimUpButton.isActivated(),
 					mAimDownButton.isActivated(), mWeaponSelect.isActivated(),
-					mShootButton.isActivated(), mTerrain);
+					(mShootButton.isActivated() && !mShotsFired), mTerrain);
+			
+			if(mShootButton.isActivated()){
+				if(mCountDownTimer.getCountDownInSeconds() > 3){
+					mShootTime = (elapsedTime.totalTime + 3);
+					
+				} else {
+					mShootTime = elapsedTime.totalTime + mCountDownTimer.getCountDownInSeconds();
+				}
+				mShotsFired = true;
+			}
+			
+			if(elapsedTime.totalTime > (mShootTime) && mShotsFired){
+				changeActivePlayer();
+			}
 
 			for (Healthkit h : healthPacks) {
 				h.update(elapsedTime, mTerrain);

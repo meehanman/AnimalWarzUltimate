@@ -27,45 +27,39 @@ import com.threeml.awu.util.TeamManager;
  * Team Selection Menu allowing user to choose settings before playing the game
  * 
  * If there was time, we would have liked to have included a way of letting the
- * user enter team names
+ * user enter team/player names
  * 
  * @author Dean
  * @author Mary-Jane
  */
 public class TeamSelectionScreen extends GameScreen {
 
-	/**
-	 * Define the trigger touch region for playing the 'games'
-	 */
+	/** Define the trigger touch region for playing the 'games' */
 	private Rect mPlayGameBound;
 	private Rect mBackgroundBound, mBackgroundLogoBound, mChooseMapBound,
 			mNumberPlayersBound, mNumberBound;
+	/** List of Small Maps, holds small map image, map name and map bound */
 	private List<SmallMap> mSmallMaps;
-
+	/** Screen Viewport */
 	private ScreenViewport mScreenViewport;
+	/** Viewport for buttons */
 	private LayerViewport mDashboardViewport;
-
-	private OnScreenText mChooseNoOfPlayers;
-
-	private TeamManager mTeamManager;
-
-	private int mNoOfPlayers = 5;
+	/** Holds the number of players, chosen by the user */
+	private int mNoOfPlayers = 4;
+	/** Buttons used to increment and decrement the number of players */
 	private Control mIncreaseButton, mDecreaseButton;
-
+	/** Holds the saved preferences */
 	private PreferenceStore mPreferenceStore;
-
+	/** Holds the time of the last button update */
 	private double mLastTime = 0;
-
+	/** Holds if map has been selected or not */
 	private boolean mMapSelected = false;
-
+	/** Holds the selected map name */
 	private String mSelectedMap;
 
-	// private EditText mTextName;
-	/**
-	 * Define Assets to be used in Main Menu
-	 */
+	/** Define Assets to be used in Main Menu */
 	AssetStore assetManager = mGame.getAssetManager();
-
+	/** Changeable text image for number of players */
 	OnScreenText numbers;
 
 	/**
@@ -76,10 +70,10 @@ public class TeamSelectionScreen extends GameScreen {
 	 */
 	public TeamSelectionScreen(Game game) {
 		super("TeamSelectionScreen", game);
-
+		
 		int screenWidth = game.getScreenWidth();
 		int screenHeight = game.getScreenHeight();
-
+		//Initialise viewports to be size of the screen
 		mScreenViewport = new ScreenViewport(0, 0, screenWidth, screenHeight);
 		mDashboardViewport = new LayerViewport(0, 0, screenWidth, screenHeight);
 
@@ -91,7 +85,7 @@ public class TeamSelectionScreen extends GameScreen {
 		if (storePlayers != -1) {
 			mNoOfPlayers = storePlayers;
 		} else {
-			mNoOfPlayers = 5;
+			mNoOfPlayers = 4;
 		}
 
 		// loadAssets();
@@ -121,7 +115,7 @@ public class TeamSelectionScreen extends GameScreen {
 		// Initialise initial variables
 		int left, top, right, bottom, scaling;
 		int pageColumns = getGame().getScreenWidth() / 12;
-
+		//Initialise small maps and position on screen
 		mSmallMaps = new ArrayList<SmallMap>();
 		int count = -1;
 		for (String map : MapHelper.getMapNames()) {
@@ -170,7 +164,7 @@ public class TeamSelectionScreen extends GameScreen {
 			// It means pressing the screen with several fingers may not
 			// trigger a 'button', but, hey, it's an exceedingly basic menu.
 			TouchEvent touchEvent = touchEvents.get(0);
-
+			//if play game button is touched
 			if (mPlayGameBound.contains((int) touchEvent.x, (int) touchEvent.y)) {
 
 				assetManager.getMusic("Dungeon_Boss").pause();
@@ -191,6 +185,7 @@ public class TeamSelectionScreen extends GameScreen {
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
 			}
+			//Only update number of players if button hasn't been pressed in last 0.1 seconds
 			if (elapsedTime.totalTime > (mLastTime + 0.1)) {
 				if (mDecreaseButton.isActivated()) {
 					if (mNoOfPlayers < 8) {
@@ -216,10 +211,11 @@ public class TeamSelectionScreen extends GameScreen {
 				mLastTime = elapsedTime.totalTime;
 			}
 			numbers.updateText("" + mNoOfPlayers);
-
+			//If player touches map image
 			for (SmallMap map : mSmallMaps) {
 				if (map.mapBound.contains((int) touchEvent.x,
 						(int) touchEvent.y)) {
+					//select this map
 					mMapSelected = true;
 					mSelectedMap = map.mapName;
 				}
@@ -236,6 +232,7 @@ public class TeamSelectionScreen extends GameScreen {
 	 */
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
+		//Load bitmaps
 		Bitmap Background = mGame.getAssetManager().getBitmap("TSBackground");
 		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap("TSTitle");
 		Bitmap playGame = mGame.getAssetManager().getBitmap("ContinueButton");
@@ -269,14 +266,16 @@ public class TeamSelectionScreen extends GameScreen {
 			right = left + pageColumns * 6;
 			bottom = top + ((pageColumns * 6) / scaling);
 			mBackgroundLogoBound = new Rect(left, top, right, bottom);
-
+			
+			//Choose map text
 			scaling = chooseMap.getWidth() / chooseMap.getHeight();
 			left = pageColumns * 2;
 			top = ((graphics2D.getSurfaceHeight() - chooseMap.getHeight()) / 20) * 5;
 			right = left + pageColumns * 3;
 			bottom = top + ((pageColumns * 3) / scaling);
 			mChooseMapBound = new Rect(left, top, right, bottom);
-
+			
+			//Choose number of players text
 			scaling = numberPlayers.getWidth() / numberPlayers.getHeight();
 			left = pageColumns * 7;
 			top = ((graphics2D.getSurfaceHeight() - numberPlayers.getHeight()) / 20) * 5;
@@ -284,6 +283,7 @@ public class TeamSelectionScreen extends GameScreen {
 			bottom = top + ((pageColumns * 3) / scaling);
 			mNumberPlayersBound = new Rect(left, top, right, bottom);
 
+			//Number of players text
 			scaling = number.getWidth() / number.getHeight();
 			left = (pageColumns * 8) + 40;
 			top = (((graphics2D.getSurfaceHeight() - number.getHeight()) / 20) * 8) + 40;
@@ -299,7 +299,7 @@ public class TeamSelectionScreen extends GameScreen {
 			mBackgroundBound = new Rect(0, 0, graphics2D.getSurfaceWidth(),
 					graphics2D.getSurfaceHeight());
 		}
-
+		//Draw bitmaps on screen using their respective bounds
 		graphics2D.clear(Color.WHITE);
 		graphics2D.drawBitmap(Background, null, mBackgroundBound, null);
 		graphics2D.drawBitmap(BackgroundLogo, null, mBackgroundLogoBound, null);
@@ -307,16 +307,18 @@ public class TeamSelectionScreen extends GameScreen {
 		graphics2D.drawBitmap(chooseMap, null, mChooseMapBound, null);
 		graphics2D.drawBitmap(numberPlayers, null, mNumberPlayersBound, null);
 		graphics2D.drawBitmap(number, null, mNumberBound, null);
-
+		
+		//Draw small maps on screen
 		for (SmallMap map : mSmallMaps) {
 			graphics2D.drawBitmap(map.mapImage, null, map.mapBound, null);
 			if (mMapSelected) {
+				//if map is selected, draw tick over it
 				if (map.mapName == mSelectedMap) {
 					graphics2D.drawBitmap(tick, null, map.mapBound, null);
 				}
 			}
 		}
-
+		//draw buttons for incrementing and decrementing number of players
 		mIncreaseButton.draw(elapsedTime, graphics2D, mDashboardViewport,
 				mScreenViewport);
 		mDecreaseButton.draw(elapsedTime, graphics2D, mDashboardViewport,
