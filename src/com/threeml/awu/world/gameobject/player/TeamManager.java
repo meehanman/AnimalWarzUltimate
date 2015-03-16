@@ -58,8 +58,6 @@ public class TeamManager {
 		mTeams = new ArrayList<Team>();
 		mTeams.add(teamOne);
 		mTeams.add(teamTwo);
-		
-		//TODO MJ FIX THIS
 		mActiveTeam = mTeams.get(0);
 		mActivePlayer = mTeams.get(0).getPlayers().get(0);
 		mWinningTeam = null;
@@ -185,47 +183,7 @@ public class TeamManager {
 			Log.e("TeamError", "Error in TeamManager createNewTeam : " + e);
 		}
 	}
-	//TODO MJ - added name arrays for testing purposes, need to remove later
-	public void createTestNewTeam(String n, int numPlayers, Map map, Game game, GameScreen gameScreen){
-		try {
-			List<Player> players = new ArrayList<Player>();
-			for(int i = 0; i < numPlayers; i++){
-				Vector2 spawnLocation = map.getUniqueSpawnLocation();
-				players.add(new Player(spawnLocation.x, spawnLocation.y, 1,
-						15,
-						game.getAssetManager().getBitmap("PlayerWalk"),
-						gameScreen, villains[i]));
-			}
-			mTeams.add(new Team(players, n));
-			if(mActivePlayer == null){
-				mActiveTeam = mTeams.get(0);
-				mActivePlayer = mTeams.get(0).getPlayers().get(0);
-			}
-		}
-		catch(Exception e){
-			Log.e("TeamError", "Error in TeamManager createNewTeam : " + e);
-		}
-	}
-	public void createTestNewTeam2(String n, int numPlayers, Map map, Game game, GameScreen gameScreen){
-		try {
-			List<Player> players = new ArrayList<Player>();
-			for(int i = 0; i < numPlayers; i++){
-				Vector2 spawnLocation = map.getUniqueSpawnLocation();
-				players.add(new Player(spawnLocation.x, spawnLocation.y, 1,
-						15,
-						game.getAssetManager().getBitmap("PlayerWalk"),
-						gameScreen, threeml[i]));
-			}
-			mTeams.add(new Team(players, n));
-			if(mActivePlayer == null){
-				mActiveTeam = mTeams.get(0);
-				mActivePlayer = mTeams.get(0).getPlayers().get(0);
-			}
-		}
-		catch(Exception e){
-			Log.e("TeamError", "Error in TeamManager createNewTeam : " + e);
-		}
-	}
+	
 	
 	/**
 	 * Creates a new player using given arguments

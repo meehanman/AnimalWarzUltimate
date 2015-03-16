@@ -24,7 +24,6 @@ import com.threeml.awu.world.gameobject.player.Player;
  *@author Dean & Mark
  */
 public class Weapon extends Sprite {
-	//TODO - Weapon class is in less than early stages, needs work
 	
 	// /////////////////////////////////////////////////////////////////////////
 	// Attributes

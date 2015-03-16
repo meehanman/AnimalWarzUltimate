@@ -62,7 +62,6 @@ public class Vector2 {
 	 * @author Dean
 	 */
 	public Vector2(double x, double y) {
-		// TODO Auto-generated method stub
 		this.x = (float)x;
 		this.y = (float)y;
 	}

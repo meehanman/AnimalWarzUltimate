@@ -47,7 +47,6 @@ public class Water extends Sprite {
 		super(x,y,width,height,bitmap,gameScreen);
 		mFullImage = bitmap;
 		mSpritesheetHandler = new SpritesheetHandler(mFullImage, 12, 0);
-		mSpritesheetHandler.nextFrameVertical();
 		//Initially create AABB bounding boxes for the terrain
 		//CreateTerrainPhysics();
 	}

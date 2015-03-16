@@ -71,25 +71,12 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 	private OnScreenText mNonBannerText;
 
-	// TODO MJ - Player management isn't complete
-	/** players */
-	// TODO MJ - remove this when completed team management
-	/*
-	 * private Player mPlayer; private Player mPlayer2;
-	 */
-
 	// TODO - should be a better way to add healthpacks to game
 	// - I don't think there should be just one global healthpack
 	// -Updated to array, we could have an array of healthpacks
 	// -after certain goes, we then can "para" in some more
 	private List<Healthkit> healthPacks = new ArrayList<Healthkit>();
-	// TODO MP - there shouldn't be one global gun object, probably.
 	// - need more work on weapon management
-	// TODO MJ - Player management
-	/*
-	 * private List<Player> mPlayers = new ArrayList<Player>(); private Player
-	 * mPlayer1; private Player mPlayer2;
-	 */
 	private TeamManager mTeamManager;
 
 	/** Touch controls for player input */
@@ -125,11 +112,18 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 *            Game to which this screen belongs
 	 */
 	public AnimalWarzPlayScreen(Game game, String MapName,
-			TeamManager teamManager) {
+			int noOfPlayers) {
 		super("AnimalWarzPlayScreen", game);
-		mTeamManager = teamManager;
-		// Get the current Map Ready
+		
 		mCurrentMap = new Map(MapName, LEVEL_WIDTH, LEVEL_HEIGHT, mGame, this);
+		
+		mTeamManager = new TeamManager();
+		mTeamManager.createNewTeam("Threeml", noOfPlayers, mCurrentMap, mGame, this);
+		mTeamManager.createNewTeam("This shit is BANANAS", noOfPlayers, mCurrentMap, mGame, this);
+		
+		
+		// Get the current Map Ready
+		
 
 		// Get Camera/Screen Width and Height
 		int screenWidth = game.getScreenWidth();
@@ -145,10 +139,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		// getGame().getAssetManager().getBitmap("TerrainImage").getWidth();
 		// LEVEL_HEIGHT =
 		// getGame().getAssetManager().getBitmap("TerrainImage").getHeight();
-
-		// TODO DM - apply scaling depending on screensize
-		// LEVEL_WIDTH /= 1.2f;
-		// LEVEL_HEIGHT /= 1.2f;
 
 		// Create the screen viewport
 		mScreenViewport = new ScreenViewport(0, 0, screenWidth, screenHeight);
