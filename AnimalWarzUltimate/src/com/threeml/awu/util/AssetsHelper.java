@@ -36,6 +36,10 @@ public class AssetsHelper {
 		//Game Objects
 		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
 		assetManager.loadAndAddBitmap("Font", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
+		assetManager.loadAndAddBitmap("FontBlue", "img/fonts/fontBlue.png");
+		assetManager.loadAndAddBitmap("FontPink", "img/fonts/fontPink.png");
+		assetManager.loadAndAddBitmap("FontPurple", "img/fonts/fontPurple.png");
+		assetManager.loadAndAddBitmap("FontRed", "img/fonts/fontRed.png");
 
 		//DashboardControls
 		assetManager.loadAndAddBitmap("MoveLeft","img/dashControls/MoveLeft.png");
@@ -62,12 +66,13 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("Hand", "img/weapons/Hand.png");
 		assetManager.loadAndAddBitmap("Bazooka", "img/weapons/Bazooka.png");
 		assetManager.loadAndAddBitmap("Bullet", "img/weapons/Bullet.png");
+		assetManager.loadAndAddBitmap("BaseballBatSingle", "img/weapons/BaseBallSingle.png");
+
 		
 		assetManager.loadAndAddSound("Bullet_SFX", "sfx/ShotGunFire.wav");
 		
 		//Crosshair
 		assetManager.loadAndAddBitmap("Crosshair", "img/weapons/crshairrSingle.png");
-		//assetManager.loadAndAddBitmap("Bat", "img/weapons/crshairr.png");
 		
 
 		//Main Menu Items

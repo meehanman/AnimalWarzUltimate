@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
@@ -172,7 +171,7 @@ public class Weapon extends Sprite {
 	public void shoot() {
 
 		// if the player can shoot and has ammo
-		if (canShoot && this.mAmmo > 0) {
+		if (mRequiresAiming && canShoot && this.mAmmo > 0) {
 
 			// Add a new bullet to the mag
 			mProjectiles.add(new Projectile(mProjectileBulletDamange, this,

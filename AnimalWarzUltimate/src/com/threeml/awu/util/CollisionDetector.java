@@ -248,5 +248,24 @@ public class CollisionDetector {
 		return collisionType;
 	}
 	
+	/**
+	 * 
+	 * If a POINT of RADIUS (Circle) intersects a boundingBox 
+	 * 
+	 * @param circle Circle center Vector2
+	 * @param raduis Circle radius
+	 * @param box Bounding box to check
+	 * @return If a POINT of RADIUS (Circle) intersects a boundingBox 
+	 * 
+	 * @author Dean
+	 */
+	public static boolean intersect(Vector2 circle, int radius, BoundingBox box){
+		    if (box.x > circle.x+radius) return false;
+		    if (box.y > circle.y+radius) return false;
+		    if (box.x+(box.halfWidth*2) < circle.x-radius) return false;
+		    if (box.y+(box.halfHeight*2) < circle.y-radius) return false;
+		    return true;
+	}
+	
 	
 }
