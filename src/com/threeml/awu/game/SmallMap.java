@@ -7,8 +7,8 @@ public class SmallMap {
 	public Bitmap mapImage;
 	public String mapName;
 	public Rect mapBound;
-	
-	public SmallMap(){
-		
+
+	public SmallMap() {
+
 	}
 }

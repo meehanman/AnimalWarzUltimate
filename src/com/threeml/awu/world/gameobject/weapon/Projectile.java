@@ -1,9 +1,5 @@
 package com.threeml.awu.world.gameobject.weapon;
 
-import java.util.Random;
-
-import android.util.Log;
-
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.audio.Sound;
 import com.threeml.awu.util.Vector2;
@@ -33,7 +29,7 @@ public class Projectile extends Sprite {
 	/** The direction the player is moving **/
 	private Vector2 mDirection;
 	/** The jitter a bullet has when its shot to add some randomness */
-	private int jitter;
+	//private int jitter;
 
 	/**
 	 * 

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.threeml.awu.world.GameScreen;
 
-
 /**
  * The screen manager stores the available screens defined within the game.
  * Screens can be added or remove to reflect the evolution of the game. Within
@@ -126,7 +125,7 @@ public class ScreenManager {
 		GameScreen gameScreen = mGameScreens.remove(name);
 		return (gameScreen != null);
 	}
-	
+
 	/**
 	 * Dispose of the manager and all game screens stored within the manager.
 	 */

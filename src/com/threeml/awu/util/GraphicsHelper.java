@@ -9,12 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 
 public final class GraphicsHelper {
-	
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Source and Desintation Rects
 	// /////////////////////////////////////////////////////////////////////////
-		
-	/** 
+
+	/**
 	 * Determine the full source bitmap Rect and destination screen Rect if the
 	 * specified game object bound falls within the layer's viewport.
 	 * 
@@ -41,40 +41,50 @@ public final class GraphicsHelper {
 		BoundingBox spriteBound = gameObject.getBound();
 
 		// Determine if the sprite falls within the layer viewport
-		if (spriteBound.x - spriteBound.halfWidth < layerViewport.x + layerViewport.halfWidth && 
-			spriteBound.x + spriteBound.halfWidth > layerViewport.x - layerViewport.halfWidth && 
-			spriteBound.y - spriteBound.halfHeight < layerViewport.y + layerViewport.halfHeight && 
-			spriteBound.y + spriteBound.halfHeight > layerViewport.y - layerViewport.halfHeight) {
+		if (spriteBound.x - spriteBound.halfWidth < layerViewport.x
+				+ layerViewport.halfWidth
+				&& spriteBound.x + spriteBound.halfWidth > layerViewport.x
+						- layerViewport.halfWidth
+				&& spriteBound.y - spriteBound.halfHeight < layerViewport.y
+						+ layerViewport.halfHeight
+				&& spriteBound.y + spriteBound.halfHeight > layerViewport.y
+						- layerViewport.halfHeight) {
 
 			// Define the source rectangle
 			Bitmap spriteBitmap = gameObject.getBitmap();
-			sourceRect.set(0, 0, spriteBitmap.getWidth(), spriteBitmap.getHeight());
+			sourceRect.set(0, 0, spriteBitmap.getWidth(),
+					spriteBitmap.getHeight());
 
-			// Determine the x- and y-aspect rations between the layer and screen viewports
-			float screenXScale = (float) screenViewport.width / (2 * layerViewport.halfWidth);
-			float screenYScale = (float) screenViewport.height / (2 * layerViewport.halfHeight);
+			// Determine the x- and y-aspect rations between the layer and
+			// screen viewports
+			float screenXScale = (float) screenViewport.width
+					/ (2 * layerViewport.halfWidth);
+			float screenYScale = (float) screenViewport.height
+					/ (2 * layerViewport.halfHeight);
 
 			// Determine the screen rectangle
-			float screenX = screenViewport.left + screenXScale * 					
-							((spriteBound.x - spriteBound.halfWidth) 
-									- (layerViewport.x - layerViewport.halfWidth));
-			float screenY = screenViewport.top + screenYScale * 
-							((layerViewport.y + layerViewport.halfHeight) 
-									- (spriteBound.y + spriteBound.halfHeight));
+			float screenX = screenViewport.left
+					+ screenXScale
+					* ((spriteBound.x - spriteBound.halfWidth) - (layerViewport.x - layerViewport.halfWidth));
+			float screenY = screenViewport.top
+					+ screenYScale
+					* ((layerViewport.y + layerViewport.halfHeight) - (spriteBound.y + spriteBound.halfHeight));
 
-			screenRect.set((int) screenX, (int) screenY,
-					(int) (screenX + (spriteBound.halfWidth * 2) * screenXScale),
-					(int) (screenY + (spriteBound.halfHeight * 2) * screenYScale));
+			screenRect
+					.set((int) screenX, (int) screenY,
+							(int) (screenX + (spriteBound.halfWidth * 2)
+									* screenXScale),
+							(int) (screenY + (spriteBound.halfHeight * 2)
+									* screenYScale));
 
 			return true;
 		}
 
 		// Not visible
 		return false;
-	}	
-	
-	
-	/** 
+	}
+
+	/**
 	 * Determine a source bitmap Rect and destination screen Rect if the
 	 * specified game object bound falls within the layer's viewport.
 	 * 
@@ -93,20 +103,25 @@ public final class GraphicsHelper {
 	 * @return boolean true if the entity is visible, false otherwise
 	 * @return
 	 */
-	public static final boolean getClippedSourceAndScreenRect(GameObject gameObject,
-			LayerViewport layerViewport, ScreenViewport screenViewport,
-			Rect sourceRect, Rect screenRect) {
+	public static final boolean getClippedSourceAndScreenRect(
+			GameObject gameObject, LayerViewport layerViewport,
+			ScreenViewport screenViewport, Rect sourceRect, Rect screenRect) {
 
 		// Get the bounding box for the specified sprite
 		BoundingBox spriteBound = gameObject.getBound();
 
 		// Determine if the sprite falls within the layer viewport
-		if (spriteBound.x - spriteBound.halfWidth < layerViewport.x + layerViewport.halfWidth && 
-			spriteBound.x + spriteBound.halfWidth > layerViewport.x - layerViewport.halfWidth && 
-			spriteBound.y - spriteBound.halfHeight < layerViewport.y + layerViewport.halfHeight && 
-			spriteBound.y + spriteBound.halfHeight > layerViewport.y - layerViewport.halfHeight) {
+		if (spriteBound.x - spriteBound.halfWidth < layerViewport.x
+				+ layerViewport.halfWidth
+				&& spriteBound.x + spriteBound.halfWidth > layerViewport.x
+						- layerViewport.halfWidth
+				&& spriteBound.y - spriteBound.halfHeight < layerViewport.y
+						+ layerViewport.halfHeight
+				&& spriteBound.y + spriteBound.halfHeight > layerViewport.y
+						- layerViewport.halfHeight) {
 
-			// Work out what region of the sprite is visible within the layer viewport,
+			// Work out what region of the sprite is visible within the layer
+			// viewport,
 
 			float sourceX = Math.max(0.0f,
 					(layerViewport.x - layerViewport.halfWidth)
@@ -126,7 +141,7 @@ public final class GraphicsHelper {
 			// Rect and set the sourceRect value.
 
 			Bitmap spriteBitmap = gameObject.getBitmap();
-			
+
 			float sourceScaleWidth = (float) spriteBitmap.getWidth()
 					/ (2 * spriteBound.halfWidth);
 			float sourceScaleHeight = (float) spriteBitmap.getHeight()
@@ -140,18 +155,23 @@ public final class GraphicsHelper {
 			// Determine =which region of the screen viewport (relative to the
 			// canvas) we will be drawing to.
 
-			// Determine the x- and y-aspect rations between the layer and screen viewports
-			float screenXScale = (float) screenViewport.width / (2 * layerViewport.halfWidth);
-			float screenYScale = (float) screenViewport.height / (2 * layerViewport.halfHeight);
+			// Determine the x- and y-aspect rations between the layer and
+			// screen viewports
+			float screenXScale = (float) screenViewport.width
+					/ (2 * layerViewport.halfWidth);
+			float screenYScale = (float) screenViewport.height
+					/ (2 * layerViewport.halfHeight);
 
-			float screenX = screenViewport.left + screenXScale * Math.max(
+			float screenX = screenViewport.left
+					+ screenXScale
+					* Math.max(
 							0.0f,
-							((spriteBound.x - spriteBound.halfWidth) 
-									- (layerViewport.x - layerViewport.halfWidth)));
-			float screenY = screenViewport.top + screenYScale * Math.max(
+							((spriteBound.x - spriteBound.halfWidth) - (layerViewport.x - layerViewport.halfWidth)));
+			float screenY = screenViewport.top
+					+ screenYScale
+					* Math.max(
 							0.0f,
-							((layerViewport.y + layerViewport.halfHeight) 
-									- (spriteBound.y + spriteBound.halfHeight)));
+							((layerViewport.y + layerViewport.halfHeight) - (spriteBound.y + spriteBound.halfHeight)));
 
 			// Set the region to the canvas to which we will draw
 			screenRect.set((int) screenX, (int) screenY,
@@ -164,31 +184,36 @@ public final class GraphicsHelper {
 		// Not visible
 		return false;
 	}
-	
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Aspect Ratios
 	// /////////////////////////////////////////////////////////////////////////
-			
+
 	/**
 	 * Create a 3:2 aspect ratio screen viewport
 	 * 
-	 * @param game Game view for which the screenport will be defined
-	 * @param screenPort Screen viewport to be defined
+	 * @param game
+	 *            Game view for which the screenport will be defined
+	 * @param screenPort
+	 *            Screen viewport to be defined
 	 */
-	public static void create3To2AspectRatioScreenViewport(
-			Game game, ScreenViewport screenViewport) {
-		
+	public static void create3To2AspectRatioScreenViewport(Game game,
+			ScreenViewport screenViewport) {
+
 		// Create the screen viewport, size it to provide a 3:2 aspect
-		float aspectRatio = (float) game.getScreenWidth() / (float) game.getScreenHeight();
-		
+		float aspectRatio = (float) game.getScreenWidth()
+				/ (float) game.getScreenHeight();
+
 		if (aspectRatio > 1.5f) { // 16:10/16:9
 			int viewWidth = (int) (game.getScreenHeight() * 1.5f);
 			int viewOffset = (game.getScreenWidth() - viewWidth) / 2;
-			screenViewport.set(viewOffset, 0, viewOffset + viewWidth, game.getScreenHeight());
+			screenViewport.set(viewOffset, 0, viewOffset + viewWidth,
+					game.getScreenHeight());
 		} else { // 4:3
 			int viewHeight = (int) (game.getScreenWidth() / 1.5f);
 			int viewOffset = (game.getScreenHeight() - viewHeight) / 2;
-			screenViewport.set(0, viewOffset, game.getScreenWidth(), viewOffset + viewHeight);
+			screenViewport.set(0, viewOffset, game.getScreenWidth(), viewOffset
+					+ viewHeight);
 		}
 	}
 }

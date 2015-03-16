@@ -34,6 +34,7 @@ public class CollisionDetector {
 				&& one.y - one.halfHeight < two.y + two.halfHeight && one.y
 				+ one.halfHeight > two.y - two.halfHeight);
 	}
+
 	/**
 	 * Determine the type of collision between the two bounding boxes.
 	 * CollisionType.None is returned if there are no collisions.
@@ -44,15 +45,16 @@ public class CollisionDetector {
 	 *            Second bounding box
 	 * @return Collision type
 	 */
-	public static CollisionType determineCollisionType(BoundingBox one, BoundingBox two) {
+	public static CollisionType determineCollisionType(BoundingBox one,
+			BoundingBox two) {
 		if (!isCollision(one, two)) {
 			return CollisionType.None;
 		} else {
-			
-			
-			Log.v("dct","CollisionDetected: " + one.toString() +" "+ two.toString());
-			
-			
+
+			Log.v("dct",
+					"CollisionDetected: " + one.toString() + " "
+							+ two.toString());
+
 			CollisionType collisionType = CollisionType.None;
 
 			// Determine the side of *least intersection*
@@ -147,7 +149,6 @@ public class CollisionDetector {
 				collisionDepth = lOverlap;
 			}
 
-			
 			// Separate if needed
 			switch (collisionType) {
 			case Top:
@@ -166,23 +167,24 @@ public class CollisionDetector {
 				break;
 			}
 		}
-		
-		Log.v("CollisionDetected","Type: " + collisionType.name());
-		
+
+		Log.v("CollisionDetected", "Type: " + collisionType.name());
+
 		return collisionType;
-	}	
-	
-	public static CollisionType determineAndResolveCollision(GameObject gameObjectOne, GameObject gameObjectTwo) {
-			
+	}
+
+	public static CollisionType determineAndResolveCollision(
+			GameObject gameObjectOne, GameObject gameObjectTwo) {
+
 		BoundingBox one = gameObjectOne.getBound();
 		BoundingBox two = gameObjectTwo.getBound();
-		
-		return determineAndResolveCollision(one,two);
-		
+
+		return determineAndResolveCollision(one, two);
+
 	}
-	
-	
-	public static CollisionType determineAndResolveCollisionPlayerVsTerrain(Player P, BoundingBox T) {
+
+	public static CollisionType determineAndResolveCollisionPlayerVsTerrain(
+			Player P, BoundingBox T) {
 		CollisionType collisionType = CollisionType.None;
 
 		BoundingBox one = P.getBound();
@@ -222,7 +224,6 @@ public class CollisionDetector {
 				collisionDepth = lOverlap;
 			}
 
-			
 			// Separate if needed
 			switch (collisionType) {
 			case Top:
@@ -243,29 +244,34 @@ public class CollisionDetector {
 				break;
 			}
 		}
-		
-		
+
 		return collisionType;
 	}
-	
+
 	/**
 	 * 
-	 * If a POINT of RADIUS (Circle) intersects a boundingBox 
+	 * If a POINT of RADIUS (Circle) intersects a boundingBox
 	 * 
-	 * @param circle Circle center Vector2
-	 * @param raduis Circle radius
-	 * @param box Bounding box to check
-	 * @return If a POINT of RADIUS (Circle) intersects a boundingBox 
+	 * @param circle
+	 *            Circle center Vector2
+	 * @param raduis
+	 *            Circle radius
+	 * @param box
+	 *            Bounding box to check
+	 * @return If a POINT of RADIUS (Circle) intersects a boundingBox
 	 * 
 	 * @author Dean
 	 */
-	public static boolean intersect(Vector2 circle, int radius, BoundingBox box){
-		    if (box.x > circle.x+radius) return false;
-		    if (box.y > circle.y+radius) return false;
-		    if (box.x+(box.halfWidth*2) < circle.x-radius) return false;
-		    if (box.y+(box.halfHeight*2) < circle.y-radius) return false;
-		    return true;
+	public static boolean intersect(Vector2 circle, int radius, BoundingBox box) {
+		if (box.x > circle.x + radius)
+			return false;
+		if (box.y > circle.y + radius)
+			return false;
+		if (box.x + (box.halfWidth * 2) < circle.x - radius)
+			return false;
+		if (box.y + (box.halfHeight * 2) < circle.y - radius)
+			return false;
+		return true;
 	}
-	
-	
+
 }

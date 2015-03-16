@@ -58,9 +58,14 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private Background mBackground;
 	/** Terrain image, all game objects interact with this object */
 	private Terrain mTerrain;
-	/** Banner Notification will appear when there is a notification for the user */
+	/**
+	 * Banner Notification will appear when there is a notification for the user
+	 */
 	private BannerNotification mNotification;
-	/** Notification without a background will appear when there is a notification for the user */
+	/**
+	 * Notification without a background will appear when there is a
+	 * notification for the user
+	 */
 	private OnScreenText mNonBannerText;
 	// TODO - should be a better way to add healthpacks to game
 	// - I don't think there should be just one global healthpack
@@ -102,21 +107,23 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 * @param MapName
 	 *            Name of the map to play with
 	 * @param noOfPlayers
-	 * 			  Number of players per team to play with
+	 *            Number of players per team to play with
 	 */
-	public AnimalWarzPlayScreen(Game game, String MapName,
-			int noOfPlayers) {
+	public AnimalWarzPlayScreen(Game game, String MapName, int noOfPlayers) {
 		super("AnimalWarzPlayScreen", game);
-		
-		//Initialises the current map, using the parameter MapName 
+
+		// Initialises the current map, using the parameter MapName
 		mCurrentMap = new Map(MapName, LEVEL_WIDTH, LEVEL_HEIGHT, mGame, this);
-		
-		//Initialises the Team Manager object, creating 2 teams using the NoOfPlayers parameter
-		//to determine number of players per team
+
+		// Initialises the Team Manager object, creating 2 teams using the
+		// NoOfPlayers parameter
+		// to determine number of players per team
 		mTeamManager = new TeamManager();
-		mTeamManager.createNewTeam("Threeml", noOfPlayers, mCurrentMap, mGame, this);
-		mTeamManager.createNewTeam("This shit is BANANAS", noOfPlayers, mCurrentMap, mGame, this);
-		
+		mTeamManager.createNewTeam("Threeml", noOfPlayers, mCurrentMap, mGame,
+				this);
+		mTeamManager.createNewTeam("This shit is BANANAS", noOfPlayers,
+				mCurrentMap, mGame, this);
+
 		// Get Camera/Screen Width and Height
 		int screenWidth = game.getScreenWidth();
 		int screenHeight = game.getScreenHeight();
@@ -149,7 +156,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					240);
 		}
 
-		
 		CreateGameObjects(screenHeight, screenWidth);
 		mCountDownTimer = game.getPlayerCountDown();
 		mNotificationTimer = game.getNotificationTimer();
@@ -202,11 +208,13 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 		x = screenWidthCell * 10;
 		y = (screenHeight - (screenHeightCell * 21));
-		mMoveLeftButton = new Control("Move Left",x, y, width, height, "MoveLeft", this);
+		mMoveLeftButton = new Control("Move Left", x, y, width, height,
+				"MoveLeft", this);
 		mControls.add(mMoveLeftButton);
 
 		x = screenWidthCell * 22.05f;
-		mMoveRightButton = new Control("Move Right",x, y, width, height, "MoveRight", this);
+		mMoveRightButton = new Control("Move Right", x, y, width, height,
+				"MoveRight", this);
 		mControls.add(mMoveRightButton);
 
 		width = screenWidthCell * 8.5f;
@@ -214,11 +222,12 @@ public class AnimalWarzPlayScreen extends GameScreen {
 
 		x = screenWidthCell * 16.05f;
 		y = (screenHeight - (screenHeightCell * 38.2f));
-		mAimUpButton = new Control("Aim Up",x, y, width, height, "AimUp", this);
+		mAimUpButton = new Control("Aim Up", x, y, width, height, "AimUp", this);
 		mControls.add(mAimUpButton);
 
 		y = (screenHeight - (screenHeightCell * 8.6f));
-		mAimDownButton = new Control("Aim Down",x, y, width, height, "AimDown", this);
+		mAimDownButton = new Control("Aim Down", x, y, width, height,
+				"AimDown", this);
 		mControls.add(mAimDownButton);
 		x = 0;
 		y = 0;
@@ -231,56 +240,62 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		x = screenWidthCell * 40;
 		y = (screenHeight - (screenHeightCell * 15f));
 
-		mWeaponSelect = new Control("Weapon Select",x, y, width, height, "WeaponsCrate", this);
+		mWeaponSelect = new Control("Weapon Select", x, y, width, height,
+				"WeaponsCrate", this);
 		mControls.add(mWeaponSelect);
 
 		x = screenWidthCell * 80;
-		mShootButton = new Control("Shoot ",x, y, width, height, "Fireeee", this);
+		mShootButton = new Control("Shoot ", x, y, width, height, "Fireeee",
+				this);
 		mControls.add(mShootButton);
 
 		x = screenWidthCell * 95;
-		mJumpRightButton = new Control("Jump Right",x, y, width, height, "JumpRight", this);
+		mJumpRightButton = new Control("Jump Right", x, y, width, height,
+				"JumpRight", this);
 		mControls.add(mJumpRightButton);
 
 		y = (screenHeight - (screenHeightCell * 38.2f));
-		mJumpLeftButton = new Control("Jump Left",x, y, width, height, "JumpLeft", this);
+		mJumpLeftButton = new Control("Jump Left", x, y, width, height,
+				"JumpLeft", this);
 		mControls.add(mJumpLeftButton);
-		
+
 		/**
-		 * Weapon Selections screen 
+		 * Weapon Selections screen
 		 * */
 		/** Width of the weapon icon */
 		float WEAPON_WIDTH = getGame().getScreenWidth() / 5f;
 		/** Length of the weapon icon */
 		float WEAPON_HEIGHT = getGame().getScreenHeight() / 5f;
-		
-		mMainMenu = new Control("Weapon Selection Menu",getGame().getScreenWidth() / 2f, getGame()
-				.getScreenHeight() / 2f, WEAPON_WIDTH, WEAPON_HEIGHT,
-				"MainMenu", this);
-		
+
+		mMainMenu = new Control("Weapon Selection Menu", getGame()
+				.getScreenWidth() / 2f, getGame().getScreenHeight() / 2f,
+				WEAPON_WIDTH, WEAPON_HEIGHT, "MainMenu", this);
+
 		/**
 		 * Weapons added
 		 */
-		//Uzi
-		mWeaponSelection.add(new Control("Uzi",getGame().getScreenWidth() / 5.2f, getGame()
-				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Gun",
-				this));
-		//Gernade
-		mWeaponSelection.add(new Control("Grenade",getGame().getScreenWidth() / 2.5f, getGame()
-				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT,
+		// Uzi
+		mWeaponSelection.add(new Control("Uzi",
+				getGame().getScreenWidth() / 5.2f,
+				getGame().getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT,
+				"Gun", this));
+		// Gernade
+		mWeaponSelection.add(new Control("Grenade",
+				getGame().getScreenWidth() / 2.5f,
+				getGame().getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT,
 				"Grenade", this));
-		//Bazooka
-		mWeaponSelection.add(new Control("Bazooka",getGame().getScreenWidth() / 1.65f, getGame()
-				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Rocket",
-				this));
-		//Baseball Bat
-		mWeaponSelection.add(new Control("Baseball Bat",getGame().getScreenWidth() / 1.20f, getGame()
-				.getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT, "Bat",
-				this));
+		// Bazooka
+		mWeaponSelection.add(new Control("Bazooka",
+				getGame().getScreenWidth() / 1.65f,
+				getGame().getScreenHeight() / 3f, WEAPON_WIDTH, WEAPON_HEIGHT,
+				"Rocket", this));
+		// Baseball Bat
+		mWeaponSelection.add(new Control("Baseball Bat", getGame()
+				.getScreenWidth() / 1.20f, getGame().getScreenHeight() / 3f,
+				WEAPON_WIDTH, WEAPON_HEIGHT, "Bat", this));
 
 		/**
-		 * Notification Code to position notification icons
-		 * on the screen
+		 * Notification Code to position notification icons on the screen
 		 */
 		x = screenWidthCell * 10.0f;
 		y = (screenHeight - 300.0f);
@@ -375,85 +390,87 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	public void update(ElapsedTime elapsedTime) {
 		mCurrentMap.getWater().update(elapsedTime);
 		hideNotifications();
-		if(!mGameOver){
-		if(getActivePlayer().isAlive()){
-			//Rotate players after timers finished
-			if (getActivePlayer() != null) {
-				if (mCountDownTimer.hasFinished()) {
-					changeActivePlayer();
+		if (!mGameOver) {
+			if (getActivePlayer().isAlive()) {
+				// Rotate players after timers finished
+				if (getActivePlayer() != null) {
+					if (mCountDownTimer.hasFinished()) {
+						changeActivePlayer();
+					}
+					// Ensure the player cannot leave the confines of the world
+					BoundingBox playerBound = getActivePlayer().getBound();
+					if (playerBound.getLeft() < 0)
+						getActivePlayer().position.x -= playerBound.getLeft();
+					else if (playerBound.getRight() > LEVEL_WIDTH)
+						getActivePlayer().position.x -= (playerBound.getRight() - LEVEL_WIDTH);
+
+					if (playerBound.getBottom() < 0)
+						getActivePlayer().position.y -= playerBound.getBottom();
+					else if (playerBound.getTop() > LEVEL_HEIGHT)
+						getActivePlayer().position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
+
+					// Focus the layer viewport on the player
+					mBackgroundViewport.x = getActivePlayer().position.x;
+					mBackgroundViewport.y = getActivePlayer().position.y;
+
+					// Ensure the viewport cannot leave the confines of the
+					// world
+					if (mBackgroundViewport.getLeft() < 0)
+						mBackgroundViewport.x -= mBackgroundViewport.getLeft();
+					else if (mBackgroundViewport.getRight() > LEVEL_WIDTH)
+						mBackgroundViewport.x -= (mBackgroundViewport
+								.getRight() - LEVEL_WIDTH);
+
+					if (mBackgroundViewport.getBottom() < 0)
+						mBackgroundViewport.y -= mBackgroundViewport
+								.getBottom();
+					else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
+						mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
+
+					// if player lands in water, kill them!!!!
+					if (getActivePlayer().getBound().intersects(
+							mCurrentMap.getWater().getBound())) {
+						getActivePlayer().killByWater();
+					}
+
+				} else {
+					Log.v("Error",
+							"Error occurred in AnimalWarzPlayScreen: update method. No active player");
 				}
-				// Ensure the player cannot leave the confines of the world
-				BoundingBox playerBound = getActivePlayer().getBound();
-				if (playerBound.getLeft() < 0)
-					getActivePlayer().position.x -= playerBound.getLeft();
-				else if (playerBound.getRight() > LEVEL_WIDTH)
-					getActivePlayer().position.x -= (playerBound.getRight() - LEVEL_WIDTH);
-	
-				if (playerBound.getBottom() < 0)
-					getActivePlayer().position.y -= playerBound.getBottom();
-				else if (playerBound.getTop() > LEVEL_HEIGHT)
-					getActivePlayer().position.y -= (playerBound.getTop() - LEVEL_HEIGHT);
-	
-				// Focus the layer viewport on the player
-				mBackgroundViewport.x = getActivePlayer().position.x;
-				mBackgroundViewport.y = getActivePlayer().position.y;
-				
-				// Ensure the viewport cannot leave the confines of the world
-				if (mBackgroundViewport.getLeft() < 0)
-					mBackgroundViewport.x -= mBackgroundViewport.getLeft();
-				else if (mBackgroundViewport.getRight() > LEVEL_WIDTH)
-					mBackgroundViewport.x -= (mBackgroundViewport.getRight() - LEVEL_WIDTH);
-	
-				if (mBackgroundViewport.getBottom() < 0)
-					mBackgroundViewport.y -= mBackgroundViewport.getBottom();
-				else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
-					mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
-				
-				//if player lands in water, kill them!!!!
-				if (getActivePlayer().getBound().intersects(
-						mCurrentMap.getWater().getBound())) {
-					getActivePlayer().killByWater();
-				}
-				
 			} else {
-				Log.v("Error",
-						"Error occurred in AnimalWarzPlayScreen: update method. No active player");
-			}
-		}
-		else {
-			mCountDownTimer.cancel();
-			Log.v("PlayerDeath", "Has alive players" + "");
-			//if the current active team has no more alive players
-			if(!mTeamManager.getActiveTeam().hasAlivePlayers()){
-				Log.v("PlayerDeath", "Has no alive players" + "");
-				//if team manager has playable teams, i.e. if any more
-				if(mTeamManager.hasPlayableTeams()){
-					Log.v("PlayerDeath", "Has playable teams" + "");
+				mCountDownTimer.cancel();
+				Log.v("PlayerDeath", "Has alive players" + "");
+				// if the current active team has no more alive players
+				if (!mTeamManager.getActiveTeam().hasAlivePlayers()) {
+					Log.v("PlayerDeath", "Has no alive players" + "");
+					// if team manager has playable teams, i.e. if any more
+					if (mTeamManager.hasPlayableTeams()) {
+						Log.v("PlayerDeath", "Has playable teams" + "");
+						changeActivePlayer();
+					}
+					// if no more playable teams
+					else {
+						Log.v("PlayerDeath", "game over" + "");
+						gameOver(false);
+					}
+				}
+				displayNotificationWithoutBanner(InGameText
+						.generateDeathText(getActivePlayer().getName()));
+				if (!mGameOver) {
 					changeActivePlayer();
 				}
-				//if no more playable teams
-				else {
-					Log.v("PlayerDeath", "game over" + "");
-					gameOver(false);
-				}
 			}
-			displayNotificationWithoutBanner(InGameText.generateDeathText(getActivePlayer().getName()));
-			if(!mGameOver){
-				changeActivePlayer();
-			}
-		}
- 
-		// Until we have a paralex effect, lets position forground and
-		// background together
-		mTerrainViewport.x = mBackgroundViewport.x;
-		mTerrainViewport.y = mBackgroundViewport.y;
-		
+
+			// Until we have a paralex effect, lets position forground and
+			// background together
+			mTerrainViewport.x = mBackgroundViewport.x;
+			mTerrainViewport.y = mBackgroundViewport.y;
 
 			for (Player p : mTeamManager.getAllNotActivePlayers()) {
-				
-				
-				p.update(elapsedTime, false, false, false, false, false, false, false, false, mTerrain);
-				
+
+				p.update(elapsedTime, false, false, false, false, false, false,
+						false, false, mTerrain);
+
 				// Update Items
 				for (Healthkit h : healthPacks) {
 					h.update(elapsedTime, mTerrain);
@@ -469,7 +486,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					if (p.getBound().intersects(healthBound)) {
 						// Apply health to player
 						p.setHealth(h.getHealthValue());
-						displayNotificationWithoutBanner(InGameText.generateCollectedHealthText(getActivePlayer().getName(), h.getHealthValue()));
+						displayNotificationWithoutBanner(InGameText
+								.generateCollectedHealthText(getActivePlayer()
+										.getName(), h.getHealthValue()));
 						// Remove from list
 						h.setActive(false);
 					}
@@ -478,123 +497,124 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					p.killByWater();
 				}
 
-				//For each projectile the current player is shooting
-				//Check they dont hit any other players
-				for(Projectile proj: getActivePlayer().getCurrentWeapon().getProjectiles()){
-					//If so kill or damange the player
-					//If the player is directly hit by the projectile
-					if(p.getBound().intersects(proj.getBound())){
+				// For each projectile the current player is shooting
+				// Check they dont hit any other players
+				for (Projectile proj : getActivePlayer().getCurrentWeapon()
+						.getProjectiles()) {
+					// If so kill or damange the player
+					// If the player is directly hit by the projectile
+					if (p.getBound().intersects(proj.getBound())) {
 						p.doDamage(proj.getAmmoDamange());
-					//If the player is close to the projectiles explosion
-					}else if(CollisionDetector.intersect(proj.position,proj.getAmmoDamangeRaduis(),p.getBound())){
-						p.moveFromPoint(proj.position,proj.getAmmoDamange());
-						
+						// If the player is close to the projectiles explosion
+					} else if (CollisionDetector.intersect(proj.position,
+							proj.getAmmoDamangeRaduis(), p.getBound())) {
+						p.moveFromPoint(proj.position, proj.getAmmoDamange());
 
-					}else if(p.getHealth() <= 0){
+					} else if (p.getHealth() <= 0) {
 						p.kill();
 					}
 				}
-				
-				
+
 			}
-			
-			
+
 			/**
 			 * WEAPON SELECTION MENU TOUCH EVENTS
 			 */
-			for(Control weaponControl: mWeaponSelection){
-				if(weaponControl.isActivated()){
-					//Set the activePlayers weapon
+			for (Control weaponControl : mWeaponSelection) {
+				if (weaponControl.isActivated()) {
+					// Set the activePlayers weapon
 					getActivePlayer().changeWeapon(weaponControl.getName());
 				}
 			}
-			
+
 			/**
 			 * PLAYER UPDATE CLASS
 			 * */
-		getActivePlayer().update(elapsedTime, 
-				mMoveLeftButton.isActivated(),
-				mMoveRightButton.isActivated(),
-				mJumpLeftButton.isActivated(),
-				mJumpRightButton.isActivated(),
-				mAimUpButton.isActivated(),
-				mAimDownButton.isActivated(),
-				mWeaponSelect.isActivated(),
-				mShootButton.isActivated(),
-				mTerrain);
-		
-		for (Healthkit h : healthPacks) {
-			h.update(elapsedTime, mTerrain);
+			getActivePlayer().update(elapsedTime,
+					mMoveLeftButton.isActivated(),
+					mMoveRightButton.isActivated(),
+					mJumpLeftButton.isActivated(),
+					mJumpRightButton.isActivated(), mAimUpButton.isActivated(),
+					mAimDownButton.isActivated(), mWeaponSelect.isActivated(),
+					mShootButton.isActivated(), mTerrain);
 
-			// Ensure healthpacks cannot leave the confines of the world
-			// TODO this should be applied to sprite/item class
-			BoundingBox healthBound = h.getBound();
-			if (healthBound.getBottom() < 0) {
-				h.position.y -= healthBound.getBottom();
-			}
+			for (Healthkit h : healthPacks) {
+				h.update(elapsedTime, mTerrain);
 
-			// Checks for any collisions
-			if (mTeamManager.getActivePlayer().getBound().intersects(healthBound)) {
-				// Apply health to player
-				mTeamManager.getActivePlayer().setHealth(h.getHealthValue());
-				// Remove from list
-				h.setActive(false);
-			}
-		}
+				// Ensure healthpacks cannot leave the confines of the world
+				// TODO this should be applied to sprite/item class
+				BoundingBox healthBound = h.getBound();
+				if (healthBound.getBottom() < 0) {
+					h.position.y -= healthBound.getBottom();
+				}
 
-		Iterator<Healthkit> healthpackList = healthPacks.listIterator();
-		while (healthpackList.hasNext()) {
-			// If the healthkit is NOT active
-			if (!healthpackList.next().isActive()) {
-				healthpackList.remove(); // Remove
-			}
-		}
-		try {
-			mDashboardTimer.updateText(Long.toString(mCountDownTimer.getCountDownInSeconds()));
-			mDashboardTimer.update(elapsedTime);
-			int c = 0;
-			if(mTeamHealthText != null && mTeamHealthText.size() > 0){
-				for(OnScreenText t : mTeamHealthText){
-					String str = mTeamManager.getTeam(c).getTeamName();
-					String buffer = "";
-					if(str.length() > 20){
-						str = str.substring(0, 19);
-					}
-					else if(str.length() < 20) {
-						int difference =  (20 - str.length());
-						for(int i = 0; i < (difference); i ++){
-							buffer += " ";
-						}
-					}
-					StringBuilder sb = new StringBuilder();
-					sb.append(str);
-					sb.append(buffer);
-					if(mTeamManager.getTeam(c).getCollectiveHealth() > 0){
-						sb.append(" " + Integer.toString(mTeamManager.getTeam(c).getCollectiveHealth()));
-					}
-					else {
-						sb.append(" OUT");
-					}
-					t.updateText(sb.toString());
-					t.update(elapsedTime);
-					c++;
+				// Checks for any collisions
+				if (mTeamManager.getActivePlayer().getBound()
+						.intersects(healthBound)) {
+					// Apply health to player
+					mTeamManager.getActivePlayer()
+							.setHealth(h.getHealthValue());
+					// Remove from list
+					h.setActive(false);
 				}
 			}
+
+			Iterator<Healthkit> healthpackList = healthPacks.listIterator();
+			while (healthpackList.hasNext()) {
+				// If the healthkit is NOT active
+				if (!healthpackList.next().isActive()) {
+					healthpackList.remove(); // Remove
+				}
+			}
+			try {
+				mDashboardTimer.updateText(Long.toString(mCountDownTimer
+						.getCountDownInSeconds()));
+				mDashboardTimer.update(elapsedTime);
+				int c = 0;
+				if (mTeamHealthText != null && mTeamHealthText.size() > 0) {
+					for (OnScreenText t : mTeamHealthText) {
+						String str = mTeamManager.getTeam(c).getTeamName();
+						String buffer = "";
+						if (str.length() > 20) {
+							str = str.substring(0, 19);
+						} else if (str.length() < 20) {
+							int difference = (20 - str.length());
+							for (int i = 0; i < (difference); i++) {
+								buffer += " ";
+							}
+						}
+						StringBuilder sb = new StringBuilder();
+						sb.append(str);
+						sb.append(buffer);
+						if (mTeamManager.getTeam(c).getCollectiveHealth() > 0) {
+							sb.append(" "
+									+ Integer.toString(mTeamManager.getTeam(c)
+											.getCollectiveHealth()));
+						} else {
+							sb.append(" OUT");
+						}
+						t.updateText(sb.toString());
+						t.update(elapsedTime);
+						c++;
+					}
+				}
+			} catch (Exception e) {
+				Log.e("Text Error", "Game screen timer error : " + e);
+			}
+		} else {
+			displayNotificationWithBanner(InGameText
+					.generateWinText(mTeamManager.getWinningTeam()
+							.getTeamName()));
+			if (mMainMenu.isActivated()) {
+				getGame().getAssetManager().getSound("ButtonClick").play();
+				mGame.getScreenManager().removeScreen(this.getName());
+				// AnimalWarzPlayScreen AnimalWarzPlayScreen = new
+				// AnimalWarzPlayScreen(mGame);
+				MenuScreen menuScreen = new MenuScreen(mGame);
+				// As it's the only added screen it will become active.
+				mGame.getScreenManager().addScreen(menuScreen);
+			}
 		}
-		catch (Exception e){
-			Log.e("Text Error", "Game screen timer error : " + e);
-		}
-	} else {
-		displayNotificationWithBanner(InGameText.generateWinText(mTeamManager.getWinningTeam().getTeamName()));
-		if(mMainMenu.isActivated()){
-			getGame().getAssetManager().getSound("ButtonClick").play();
-			mGame.getScreenManager().removeScreen(this.getName());
-			//AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
-			MenuScreen menuScreen = new MenuScreen(mGame);
-			// As it's the only added screen it will become active.
-			mGame.getScreenManager().addScreen(menuScreen);
-		}
-	}
 
 	}
 
@@ -625,7 +645,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				mScreenViewport);
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,
 				mScreenViewport);
-		mCurrentMap.getWater().draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+		mCurrentMap.getWater().draw(elapsedTime, graphics2D,
+				mBackgroundViewport, mScreenViewport);
 
 		for (Player p : mTeamManager.getAllNotActivePlayers()) {
 			// for(Player p : mPlayers){
@@ -672,12 +693,14 @@ public class AnimalWarzPlayScreen extends GameScreen {
 						mScreenViewport);
 			}
 		}
-		mNotification.position = new Vector2((getGame().getScreenWidth() /2) - (mNotification.getBitmap().getWidth()),
+		mNotification.position = new Vector2((getGame().getScreenWidth() / 2)
+				- (mNotification.getBitmap().getWidth()),
 				mNotification.position.y);
 		mNotification.draw(elapsedTime, graphics2D, mDashboardViewport,
 				mScreenViewport);
-		
-		mNonBannerText.position = new Vector2((getGame().getScreenWidth() /2) - (mNonBannerText.getBitmap().getWidth()),
+
+		mNonBannerText.position = new Vector2((getGame().getScreenWidth() / 2)
+				- (mNonBannerText.getBitmap().getWidth()),
 				mNonBannerText.position.y);
 		mNonBannerText.draw(elapsedTime, graphics2D, mDashboardViewport,
 				mScreenViewport);

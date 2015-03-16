@@ -22,7 +22,7 @@ import com.threeml.awu.world.GameScreen;
  * 
  */
 public class MenuScreen extends GameScreen {
-	
+
 	/**
 	 * Define the trigger touch region for playing the 'games'
 	 */
@@ -43,12 +43,13 @@ public class MenuScreen extends GameScreen {
 	 */
 	public MenuScreen(Game game) {
 		super("MenuScreen", game);
-		
-		//Loads all the assets for the game
+
+		// Loads all the assets for the game
 		AssetsHelper.loadAllAssets(game);
-		
-		//Get Number of players stored in device
-		mPreferenceStore = new PreferenceStore(game.getActivity().getApplicationContext());
+
+		// Get Number of players stored in device
+		mPreferenceStore = new PreferenceStore(game.getActivity()
+				.getApplicationContext());
 	}
 
 	/*
@@ -60,7 +61,6 @@ public class MenuScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-		
 
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
@@ -72,49 +72,54 @@ public class MenuScreen extends GameScreen {
 			// trigger a 'button', but, hey, it's an exceedingly basic menu.
 			TouchEvent touchEvent = touchEvents.get(0);
 
-			if (mPlayGameBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
-				
+			if (mPlayGameBound.contains((int) touchEvent.x, (int) touchEvent.y)) {
+
 				assetManager.getSound("ButtonClick").play();
-				
-				
+
 				/*
+				 * // If the play game area has been touched then swap screens
+				 * mGame.getScreenManager().removeScreen(this.getName());
+				 * AnimalWarzPlayScreen AnimalWarzPlayScreen = new
+				 * AnimalWarzPlayScreen(mGame); // As it's the only added screen
+				 * it will become active.
+				 * mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
+				 */
+				// DM - Testing intermediate screen
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
-				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
-				// As it's the only added screen it will become active.
-				mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
-				*/
-				//DM - Testing intermediate screen
-				// If the play game area has been touched then swap screens
-				mGame.getScreenManager().removeScreen(this.getName());
-				//AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
-				TeamSelectionScreen TeamSelectionScreen = new TeamSelectionScreen(mGame);
+				// AnimalWarzPlayScreen AnimalWarzPlayScreen = new
+				// AnimalWarzPlayScreen(mGame);
+				TeamSelectionScreen TeamSelectionScreen = new TeamSelectionScreen(
+						mGame);
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(TeamSelectionScreen);
 			}
-			
-			if (mOptionsButtonBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
-				
+
+			if (mOptionsButtonBound.contains((int) touchEvent.x,
+					(int) touchEvent.y)) {
+
 				assetManager.getSound("ButtonClick").play();
-				
+
 				/*
+				 * // If the play game area has been touched then swap screens
+				 * mGame.getScreenManager().removeScreen(this.getName());
+				 * AnimalWarzPlayScreen AnimalWarzPlayScreen = new
+				 * AnimalWarzPlayScreen(mGame); // As it's the only added screen
+				 * it will become active.
+				 * mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
+				 */
+				// DM - Testing intermediate screen
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
-				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
-				// As it's the only added screen it will become active.
-				mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
-				*/
-				//DM - Testing intermediate screen
-				// If the play game area has been touched then swap screens
-				mGame.getScreenManager().removeScreen(this.getName());
-				//AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
+				// AnimalWarzPlayScreen AnimalWarzPlayScreen = new
+				// AnimalWarzPlayScreen(mGame);
 				OptionsScreen optionsScreen = new OptionsScreen(mGame);
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(optionsScreen);
 			}
 		}
-		
-		//Process user preferences for sound and music playing
+
+		// Process user preferences for sound and music playing
 		musicPreferences();
 	}
 
@@ -128,47 +133,51 @@ public class MenuScreen extends GameScreen {
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
 
-		Bitmap Background = mGame.getAssetManager().getBitmap("MainMenuBackground");
-		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap("MainMenuLogo"); 
+		Bitmap Background = mGame.getAssetManager().getBitmap(
+				"MainMenuBackground");
+		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap(
+				"MainMenuLogo");
 		Bitmap playGame = mGame.getAssetManager().getBitmap("NewGameButton");
-		Bitmap OptionsButton = mGame.getAssetManager().getBitmap("OptionsButton");
-		
+		Bitmap OptionsButton = mGame.getAssetManager().getBitmap(
+				"OptionsButton");
+
 		// Determine a center location of the play region
 		if (mPlayGameBound == null) {
-			
-			//Initialise initial variables
+
+			// Initialise initial variables
 			int left, top, right, bottom, scaling;
 
-			//DM - Break page into columns
+			// DM - Break page into columns
 			int pageColumns = graphics2D.getSurfaceWidth() / 12;
-			
-			//Play Button
+
+			// Play Button
 			scaling = playGame.getWidth() / playGame.getHeight();
-			left = pageColumns*8; 
+			left = pageColumns * 8;
 			top = (graphics2D.getSurfaceHeight() - playGame.getHeight()) / 2;
-			right = left + pageColumns*3;
-			bottom = top + ((pageColumns*3)/scaling);
+			right = left + pageColumns * 3;
+			bottom = top + ((pageColumns * 3) / scaling);
 			mPlayGameBound = new Rect(left, top, right, bottom);
-			
-			//Options Button
+
+			// Options Button
 			scaling = playGame.getWidth() / OptionsButton.getHeight();
 			top += (OptionsButton.getHeight() * 2.5);
-			bottom = top + ((pageColumns*3)/scaling);
+			bottom = top + ((pageColumns * 3) / scaling);
 			mOptionsButtonBound = new Rect(left, top, right, bottom);
-			
-			//Background Game Logo
+
+			// Background Game Logo
 			scaling = BackgroundLogo.getWidth() / BackgroundLogo.getHeight();
-			left = pageColumns*3; 
+			left = pageColumns * 3;
 			top = (graphics2D.getSurfaceHeight() - BackgroundLogo.getHeight()) / 30;
-			right = left + pageColumns*6;
-			bottom = top + ((pageColumns*6)/scaling);
+			right = left + pageColumns * 6;
+			bottom = top + ((pageColumns * 6) / scaling);
 			mBackgroundLogoBound = new Rect(left, top, right, bottom);
 		}
-		
-		// Create a background bound for the image and sets the size to fullscreen.
+
+		// Create a background bound for the image and sets the size to
+		// fullscreen.
 		if (mBackgroundBound == null) {
 			mBackgroundBound = new Rect(0, 0, graphics2D.getSurfaceWidth(),
-					graphics2D.getSurfaceHeight() );
+					graphics2D.getSurfaceHeight());
 		}
 
 		graphics2D.clear(Color.WHITE);
@@ -177,10 +186,9 @@ public class MenuScreen extends GameScreen {
 		graphics2D.drawBitmap(playGame, null, mPlayGameBound, null);
 		graphics2D.drawBitmap(OptionsButton, null, mOptionsButtonBound, null);
 	}
-	
+
 	/**
-	 * Overrides the method to ensure music plays 
-	 * when game resumed
+	 * Overrides the method to ensure music plays when game resumed
 	 * 
 	 * @author Dean
 	 * @author Mary-Jane
@@ -188,18 +196,14 @@ public class MenuScreen extends GameScreen {
 	@Override
 	public void resume() {
 		super.resume();
-		
-		assetManager.getMusic("Dungeon_Boss").play();	
+
+		assetManager.getMusic("Dungeon_Boss").play();
 
 		/*
-		if(mMediaAvailable){
-			this.FadeIn(3);
-			mMediaPlayer.start();
-		}
-		*/
+		 * if(mMediaAvailable){ this.FadeIn(3); mMediaPlayer.start(); }
+		 */
 	}
-	
-	
+
 	/**
 	 * Overrides the method to ensure music is not playing when game not running
 	 * 
@@ -209,40 +213,35 @@ public class MenuScreen extends GameScreen {
 	@Override
 	public void pause() {
 		super.pause();
-		
-		assetManager.getMusic("Dungeon_Boss").pause();	
+
+		assetManager.getMusic("Dungeon_Boss").pause();
 		/*
-		if(mMediaAvailable) {
-			mMediaPlayer.pause();
-			
-			if(mGame.getActivity().isFinishing()){
-				//mMediaPlayer.stop();
-				//mMediaPlayer.release();
-				this.FadeOut(1.0f);
-				mSoundPool.release();
-			}
-		}
-		*/
+		 * if(mMediaAvailable) { mMediaPlayer.pause();
+		 * 
+		 * if(mGame.getActivity().isFinishing()){ //mMediaPlayer.stop();
+		 * //mMediaPlayer.release(); this.FadeOut(1.0f); mSoundPool.release(); }
+		 * }
+		 */
 	}
-	
+
 	/**
-	 * Sets the volume for sounds and music on this screen
-	 * as stated by the user preferences
+	 * Sets the volume for sounds and music on this screen as stated by the user
+	 * preferences
 	 * 
 	 * @author Dean
 	 */
-	private void musicPreferences(){
-		if(mPreferenceStore.RetrieveBoolean("PlaySound")){
+	private void musicPreferences() {
+		if (mPreferenceStore.RetrieveBoolean("PlaySound")) {
 			assetManager.getSound("ButtonClick").unmute();
-		}else{
+		} else {
 			assetManager.getSound("ButtonClick").mute();
 		}
-		
-		if(mPreferenceStore.RetrieveBoolean("PlayMusic")){
+
+		if (mPreferenceStore.RetrieveBoolean("PlayMusic")) {
 			assetManager.getMusic("Dungeon_Boss").unmute();
-		}else{
+		} else {
 			assetManager.getMusic("Dungeon_Boss").mute();
 		}
 	}
-	
+
 }

@@ -17,25 +17,24 @@ import com.threeml.awu.util.PreferenceStore;
 import com.threeml.awu.world.GameScreen;
 
 /**
- * Options Menu allowing user to choose settings before 
- * playing the game
+ * Options Menu allowing user to choose settings before playing the game
  * 
  * @author Dean
  */
 public class OptionsScreen extends GameScreen {
-	
+
 	/**
 	 * Define the trigger touch region for playing the 'games'
 	 */
 	private Rect mBackButtonBound, mPlaySoundBound, mPlayMusicBound;
 	private Rect mBackgroundBound, mBackgroundLogoBound;
 	private PreferenceStore mPreferenceStore;
-	
-	///Setting variables
+
+	// /Setting variables
 	private boolean PlaySounds;
 	private boolean PlayMusic;
-	
-	//TimerOptions for buttons
+
+	// TimerOptions for buttons
 	private double mLastTime;
 	private double currentTime;
 	private boolean canClick = true;
@@ -53,11 +52,12 @@ public class OptionsScreen extends GameScreen {
 	public OptionsScreen(Game game) {
 		super("OptionsScreen", game);
 
-		//Get Number of players stored in device
-		mPreferenceStore = new PreferenceStore(game.getActivity().getApplicationContext());
+		// Get Number of players stored in device
+		mPreferenceStore = new PreferenceStore(game.getActivity()
+				.getApplicationContext());
 		PlaySounds = mPreferenceStore.RetrieveBoolean("PlaySounds");
 		PlayMusic = mPreferenceStore.RetrieveBoolean("PlayMusic");
-				
+
 	}
 
 	/*
@@ -69,16 +69,15 @@ public class OptionsScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-		
-		//Update whether or not the buttons can currently be clicked
-		//Stops them being clicked at every update (50times/second)
-		if(currentTime > (mLastTime + .5)){
+
+		// Update whether or not the buttons can currently be clicked
+		// Stops them being clicked at every update (50times/second)
+		if (currentTime > (mLastTime + .5)) {
 			canClick = true;
-		}else{
+		} else {
 			canClick = false;
 		}
-		
-		
+
 		// Process any touch events occurring since the update
 		Input input = mGame.getInput();
 		List<TouchEvent> touchEvents = input.getTouchEvents();
@@ -89,50 +88,56 @@ public class OptionsScreen extends GameScreen {
 			// trigger a 'button', but, hey, it's an exceedingly basic menu.
 			TouchEvent touchEvent = touchEvents.get(0);
 
-			if (mBackButtonBound.contains((int) touchEvent.x,	(int) touchEvent.y)) {
-				
+			if (mBackButtonBound.contains((int) touchEvent.x,
+					(int) touchEvent.y)) {
+
 				assetManager.getSound("ButtonClick").play();
 
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
-				//AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame);
+				// AnimalWarzPlayScreen AnimalWarzPlayScreen = new
+				// AnimalWarzPlayScreen(mGame);
 				MenuScreen menuScreen = new MenuScreen(mGame);
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(menuScreen);
 
 			}
-			
-			if (canClick && mPlaySoundBound.contains((int) touchEvent.x,(int) touchEvent.y)) {
-				
+
+			if (canClick
+					&& mPlaySoundBound.contains((int) touchEvent.x,
+							(int) touchEvent.y)) {
+
 				assetManager.getSound("ButtonClick").play();
 
-				Log.v("slope","PlaySounds "+PlaySounds);
+				Log.v("slope", "PlaySounds " + PlaySounds);
 				PlaySounds = !PlaySounds;
-				Log.v("slope","PlaySounds "+PlaySounds);
-				mPreferenceStore.Save("PlaySounds",PlaySounds);
-				
-				//Log time of last click 
+				Log.v("slope", "PlaySounds " + PlaySounds);
+				mPreferenceStore.Save("PlaySounds", PlaySounds);
+
+				// Log time of last click
 				mLastTime = currentTime;
 			}
-			
-			if (canClick && mPlayMusicBound.contains((int) touchEvent.x,(int) touchEvent.y)) {
-				
+
+			if (canClick
+					&& mPlayMusicBound.contains((int) touchEvent.x,
+							(int) touchEvent.y)) {
+
 				assetManager.getMusic("Dungeon_Boss").pause();
 				assetManager.getSound("ButtonClick").play();
-				
+
 				PlayMusic = !PlayMusic;
-				
-				mPreferenceStore.Save("PlayMusic",PlayMusic);
-				
-				//Log time of last click 
+
+				mPreferenceStore.Save("PlayMusic", PlayMusic);
+
+				// Log time of last click
 				mLastTime = currentTime;
 			}
 		}
-		
-		//Set the music preferences
+
+		// Set the music preferences
 		musicPreferences();
-				
-		//Update to the current time
+
+		// Update to the current time
 		currentTime = elapsedTime.totalTime;
 	}
 
@@ -146,80 +151,83 @@ public class OptionsScreen extends GameScreen {
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D) {
 
-		Bitmap Background = mGame.getAssetManager().getBitmap("OptionsBackground");
-		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap("OptionsTitle"); 
+		Bitmap Background = mGame.getAssetManager().getBitmap(
+				"OptionsBackground");
+		Bitmap BackgroundLogo = mGame.getAssetManager().getBitmap(
+				"OptionsTitle");
 		Bitmap BackButton = mGame.getAssetManager().getBitmap("BackButton");
 		Bitmap AudioButtonY = mGame.getAssetManager().getBitmap("AudioYButton");
 		Bitmap AudioButtonN = mGame.getAssetManager().getBitmap("AudioNButton");
-		Bitmap SoundsButtonY = mGame.getAssetManager().getBitmap("SoundYButton");
-		Bitmap SoundsButtonN = mGame.getAssetManager().getBitmap("SoundNButton");
-		
+		Bitmap SoundsButtonY = mGame.getAssetManager()
+				.getBitmap("SoundYButton");
+		Bitmap SoundsButtonN = mGame.getAssetManager()
+				.getBitmap("SoundNButton");
+
 		// Determine a center location of the play region
 		if (mBackButtonBound == null) {
-			
-			//Initialise initial variables
+
+			// Initialise initial variables
 			int left, top, right, bottom, scaling;
 
-			//DM - Break page into columns
+			// DM - Break page into columns
 			int pageColumns = graphics2D.getSurfaceWidth() / 12;
-			
-			//Play Music Button
+
+			// Play Music Button
 			scaling = AudioButtonY.getWidth() / AudioButtonY.getHeight();
-			top = ((graphics2D.getSurfaceHeight() - AudioButtonY.getHeight()) / 10)*3;
-			bottom = top + ((pageColumns*3)/scaling);
-			left = pageColumns*8; 
-			right = left + pageColumns*3;
+			top = ((graphics2D.getSurfaceHeight() - AudioButtonY.getHeight()) / 10) * 3;
+			bottom = top + ((pageColumns * 3) / scaling);
+			left = pageColumns * 8;
+			right = left + pageColumns * 3;
 			mPlayMusicBound = new Rect(left, top, right, bottom);
-			
-			//Play Sound Button
-			top += AudioButtonY.getHeight()*1;
-			bottom = top + ((pageColumns*3)/scaling);
+
+			// Play Sound Button
+			top += AudioButtonY.getHeight() * 1;
+			bottom = top + ((pageColumns * 3) / scaling);
 			mPlaySoundBound = new Rect(left, top, right, bottom);
-			
-			//Back Button
+
+			// Back Button
 			scaling = BackButton.getWidth() / BackButton.getHeight();
-			left = pageColumns; 
-			top = ((graphics2D.getSurfaceHeight() - BackButton.getHeight()) / 10)*9;
-			right = left + pageColumns*3;
-			bottom = top + ((pageColumns*3)/scaling);
+			left = pageColumns;
+			top = ((graphics2D.getSurfaceHeight() - BackButton.getHeight()) / 10) * 9;
+			right = left + pageColumns * 3;
+			bottom = top + ((pageColumns * 3) / scaling);
 			mBackButtonBound = new Rect(left, top, right, bottom);
-			
-			
-			//Background Game Logo
+
+			// Background Game Logo
 			scaling = BackgroundLogo.getWidth() / BackgroundLogo.getHeight();
-			left = pageColumns*3; 
+			left = pageColumns * 3;
 			top = (graphics2D.getSurfaceHeight() - BackgroundLogo.getHeight()) / 30;
-			right = left + pageColumns*6;
-			bottom = top + ((pageColumns*6)/scaling);
+			right = left + pageColumns * 6;
+			bottom = top + ((pageColumns * 6) / scaling);
 			mBackgroundLogoBound = new Rect(left, top, right, bottom);
 		}
-		
-		// Create a background bound for the image and sets the size to fullscreen.
+
+		// Create a background bound for the image and sets the size to
+		// fullscreen.
 		if (mBackgroundBound == null) {
 			mBackgroundBound = new Rect(0, 0, graphics2D.getSurfaceWidth(),
-					graphics2D.getSurfaceHeight() );
+					graphics2D.getSurfaceHeight());
 		}
 
 		graphics2D.clear(Color.WHITE);
 		graphics2D.drawBitmap(Background, null, mBackgroundBound, null);
 		graphics2D.drawBitmap(BackgroundLogo, null, mBackgroundLogoBound, null);
 		graphics2D.drawBitmap(BackButton, null, mBackButtonBound, null);
-		
-		if(PlaySounds){ 
+
+		if (PlaySounds) {
 			graphics2D.drawBitmap(SoundsButtonY, null, mPlaySoundBound, null);
-		}else{
+		} else {
 			graphics2D.drawBitmap(SoundsButtonN, null, mPlaySoundBound, null);
 		}
-		if(PlayMusic){ 
+		if (PlayMusic) {
 			graphics2D.drawBitmap(AudioButtonY, null, mPlayMusicBound, null);
-		}else{
+		} else {
 			graphics2D.drawBitmap(AudioButtonN, null, mPlayMusicBound, null);
 		}
 	}
-	
+
 	/**
-	 * Overrides the method to ensure music plays 
-	 * when game resumed
+	 * Overrides the method to ensure music plays when game resumed
 	 * 
 	 * @author Dean
 	 * @author Mary-Jane
@@ -227,17 +235,13 @@ public class OptionsScreen extends GameScreen {
 	@Override
 	public void resume() {
 		super.resume();
-		
+
 		assetManager.getSound("Dungeon_Boss").play();
 		/*
-		if(mMediaAvailable){
-			this.FadeIn(3);
-			mMediaPlayer.start();
-		}
-		*/
+		 * if(mMediaAvailable){ this.FadeIn(3); mMediaPlayer.start(); }
+		 */
 	}
-	
-	
+
 	/**
 	 * Overrides the method to ensure music is not playing when game not running
 	 * 
@@ -247,38 +251,33 @@ public class OptionsScreen extends GameScreen {
 	@Override
 	public void pause() {
 		super.pause();
-		
-		assetManager.getMusic("Dungeon_Boss").pause();	
+
+		assetManager.getMusic("Dungeon_Boss").pause();
 		/*
-		if(mMediaAvailable) {
-			mMediaPlayer.pause();
-			
-			if(mGame.getActivity().isFinishing()){
-				//mMediaPlayer.stop();
-				//mMediaPlayer.release();
-				this.FadeOut(1.0f);
-				mSoundPool.release();
-			}
-		}
-		*/
+		 * if(mMediaAvailable) { mMediaPlayer.pause();
+		 * 
+		 * if(mGame.getActivity().isFinishing()){ //mMediaPlayer.stop();
+		 * //mMediaPlayer.release(); this.FadeOut(1.0f); mSoundPool.release(); }
+		 * }
+		 */
 	}
-	
+
 	/**
-	 * Sets the volume for sounds and music on this screen
-	 * as stated by the user preferences
+	 * Sets the volume for sounds and music on this screen as stated by the user
+	 * preferences
 	 * 
 	 * @author Dean
 	 */
-	private void musicPreferences(){
-		if(mPreferenceStore.RetrieveBoolean("PlaySound")){
+	private void musicPreferences() {
+		if (mPreferenceStore.RetrieveBoolean("PlaySound")) {
 			assetManager.getSound("ButtonClick").unmute();
-		}else{
+		} else {
 			assetManager.getSound("ButtonClick").mute();
 		}
-		
-		if(mPreferenceStore.RetrieveBoolean("PlayMusic")){
+
+		if (mPreferenceStore.RetrieveBoolean("PlayMusic")) {
 			assetManager.getMusic("Dungeon_Boss").unmute();
-		}else{
+		} else {
 			assetManager.getMusic("Dungeon_Boss").mute();
 		}
 	}

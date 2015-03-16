@@ -60,9 +60,6 @@ public class Player extends Sprite {
 	/** Acceleration with which the player can move along the x-axis */
 	private float RUN_ACCELERATION = 200.0f;
 
-	/** Maximum velocity of the player along the x-axis */
-	private float MAX_X_VELOCITY = 200.0f;
-
 	/**
 	 * Scale factor that is applied to the x-velocity when the player is not
 	 * moving left or right
@@ -211,7 +208,7 @@ public class Player extends Sprite {
 
 		// Update the weapon
 		mCurrentWeapon.update(elapsedTime, TerrainObj, this, aimUp, aimDown);
-		this.mHealthText.updateText(mHealth+"");
+		this.mHealthText.updateText(mHealth + "");
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
 
@@ -477,27 +474,27 @@ public class Player extends Sprite {
 		} else if (weaponName == "Bazooka") {
 			mCurrentWeapon = new Bazooka(this, mGameScreen);
 		} else if (weaponName == "Baseball Bat") {
-			mCurrentWeapon = new BaseballBat(this,mGameScreen);
+			mCurrentWeapon = new BaseballBat(this, mGameScreen);
 		} else {
 		}
 	}
 
 	/**
-	 * If the player is caught up in an explosion
-	 * move them a bit to simulate an explosion
+	 * If the player is caught up in an explosion move them a bit to simulate an
+	 * explosion
 	 */
-	public void moveFromPoint(Vector2 source,int radius){
+	public void moveFromPoint(Vector2 source, int radius) {
 		Vector2 direction = new Vector2(this.position.x - source.x,
 				this.position.y - source.y);
 		direction.normalise();
-		
-		//Do some damanage to the player
-		doDamage(radius/2);
-		
-		//Change position
-		this.velocity.x += direction.x * (radius*1.5);
-		double yDirection = (direction.y * (radius*2));
-		this.velocity.y += yDirection<0?-yDirection:yDirection;
+
+		// Do some damanage to the player
+		doDamage(radius / 2);
+
+		// Change position
+		this.velocity.x += direction.x * (radius * 1.5);
+		double yDirection = (direction.y * (radius * 2));
+		this.velocity.y += yDirection < 0 ? -yDirection : yDirection;
 	}
-	
+
 }

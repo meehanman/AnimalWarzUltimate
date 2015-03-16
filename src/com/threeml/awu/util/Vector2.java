@@ -10,7 +10,7 @@ public class Vector2 {
 	// /////////////////////////////////////////////////////////////////////////
 	// Defined Vectors
 	// /////////////////////////////////////////////////////////////////////////
-		
+
 	/**
 	 * Zero [0,0] vector
 	 */
@@ -19,26 +19,27 @@ public class Vector2 {
 	// /////////////////////////////////////////////////////////////////////////
 	// Properties
 	// /////////////////////////////////////////////////////////////////////////
-	
+
 	public Vector2 temp;
 	/**
 	 * x component of this vector
 	 */
 	public float x;
-	
+
 	/**
 	 * y component of this vector
-	 */	
+	 */
 	public float y;
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
-	// /////////////////////////////////////////////////////////////////////////	
-	
+	// /////////////////////////////////////////////////////////////////////////
+
 	/**
 	 * Constructs a new vector with a value of [0,0]
 	 */
-	public Vector2() { }
+	public Vector2() {
+	}
 
 	/**
 	 * Constructs a vector with the given component values
@@ -52,7 +53,7 @@ public class Vector2 {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * Double Vectors Created for Map Spawn Locations
 	 * 
@@ -62,8 +63,8 @@ public class Vector2 {
 	 * @author Dean
 	 */
 	public Vector2(double x, double y) {
-		this.x = (float)x;
-		this.y = (float)y;
+		this.x = (float) x;
+		this.y = (float) y;
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class Vector2 {
 		this.x = other.x;
 		this.y = other.y;
 	}
-		
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
@@ -124,7 +125,8 @@ public class Vector2 {
 	/**
 	 * Set the component value of the vector
 	 * 
-	 * @param other Vector from which to copy the values
+	 * @param other
+	 *            Vector from which to copy the values
 	 */
 	public void set(Vector2 other) {
 		this.x = other.x;
@@ -147,8 +149,9 @@ public class Vector2 {
 	/**
 	 * Add the component value to the vector
 	 * 
-	 * @param other Vector from which to add the values
-	 */	
+	 * @param other
+	 *            Vector from which to add the values
+	 */
 	public void add(Vector2 other) {
 		this.x += other.x;
 		this.y += other.y;
@@ -157,22 +160,25 @@ public class Vector2 {
 	/**
 	 * Subtract the component value from the vector
 	 * 
-	 * @param other Vector whose values are to be subtracted
-	 */	
+	 * @param other
+	 *            Vector whose values are to be subtracted
+	 */
 	public void subtract(Vector2 other) {
 		this.x -= other.x;
 		this.y -= other.y;
 	}
-	
+
 	public Vector2 sub(Vector2 other) {
 		float x = this.x -= other.x;
 		float y = this.y -= other.y;
-		return temp = new Vector2(x,y);
+		return temp = new Vector2(x, y);
 	}
+
 	/**
 	 * Multiple the vector components by the specified scalar
 	 * 
-	 * @param scalar Value with which to multiple the component values
+	 * @param scalar
+	 *            Value with which to multiple the component values
 	 */
 	public void multiply(float scalar) {
 		x *= scalar;
@@ -182,8 +188,9 @@ public class Vector2 {
 	/**
 	 * Divide the vector components by the specified scalar
 	 * 
-	 * @param scalar Value with which to divide the component values
-	 */	
+	 * @param scalar
+	 *            Value with which to divide the component values
+	 */
 	public void divide(float scalar) {
 		x /= scalar;
 		y /= scalar;
