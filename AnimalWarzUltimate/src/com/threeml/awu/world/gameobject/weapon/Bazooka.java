@@ -1,8 +1,7 @@
 package com.threeml.awu.world.gameobject.weapon;
 
-import android.graphics.Bitmap;
-
 import com.threeml.awu.world.GameScreen;
+import com.threeml.awu.world.gameobject.player.Player;
 
 //TODO - add JavaDoc Description
 /**
@@ -10,14 +9,13 @@ import com.threeml.awu.world.GameScreen;
  * Gun class
  *
  */
-public class Missile extends Weapon {
+public class Bazooka extends Weapon {
 	
 	
 	
 	// ///////////////////////////////////////////////////////////////////////// 
 	// Constructors 
 	// /////////////////////////////////////////////////////////////////////////
-	
 	/**
 	 * 
 	 * @param x
@@ -29,12 +27,10 @@ public class Missile extends Weapon {
 	 * @param gameScreen
 	 * 				Gamescreen to which this control belongs
 	 */
-	public Missile(float x, float y, Bitmap bitmap, GameScreen gameScreen) {
-		super(x, y, bitmap, gameScreen);
+	public Bazooka(Player player, GameScreen gameScreen){
+		super("Bazooka", 12, true,false, player, gameScreen, gameScreen
+				.getGame().getAssetManager().getBitmap("Bazooka"));
+		
 	}
-	
-	// ///////////////////////////////////////////////////////////////////////// 
-	// Methods
-	// /////////////////////////////////////////////////////////////////////////
-	
+		
 }

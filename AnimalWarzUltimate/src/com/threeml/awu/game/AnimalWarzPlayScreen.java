@@ -468,7 +468,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			for (Player p : mTeamManager.getAllNotActivePlayers()) {
 				
 				
-				p.update(elapsedTime, false, false, false, false, false, false, false, mTerrain);
+				p.update(elapsedTime, false, false, false, false, false, false, false, false, mTerrain);
 
 				// Log.v("UpdateMethod", "Player ID : " + p.getId());
 
@@ -508,10 +508,12 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					p.killByWater();
 				}
 				
+				/* /* TODO DM 23:06
 				if(p.getBound().intersects(getActivePlayer().getProjectile().getBound())){
 					p.doDamage(getActivePlayer().getProjectile().getDamage());
 					
 				}
+				*/
 				
 				else if(p.getHealth() <= 0){
 					p.kill();
@@ -519,8 +521,10 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			}
 			
 			if (mShootButton.isActivated()) {
+				/* TODO DM 23:06
 				mTeamManager.getActivePlayer().getProjectile().loadProjectile();
 				getGame().getAssetManager().getSound("Bullet_SFX").play();
+				*/
 				
 				//DM TODO - Testing the deform circle method
 			//	mTerrain.deformCircle(mTeamManager.getActivePlayer().getPlayerTarget().getX(),
@@ -552,7 +556,9 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				mJumpRightButton.isActivated(),
 				mAimUpButton.isActivated(),
 				mAimDownButton.isActivated(),
-				mWeaponSelect.isActivated(), mTerrain);
+				mWeaponSelect.isActivated(),
+				mShootButton.isActivated(),
+				mTerrain);
 		
 		for (Healthkit h : healthPacks) {
 			h.update(elapsedTime, mTerrain);

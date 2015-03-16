@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 		//Set window properties
 		Window window = getWindow();
 		window.requestFeature(Window.FEATURE_NO_TITLE);
-		//window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 

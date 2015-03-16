@@ -54,15 +54,16 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("Grenade", "img/weapons/grenade.png");
 		assetManager.loadAndAddBitmap("Rocket", "img/weapons/rocket.png");
 		assetManager.loadAndAddBitmap("Bat", "img/weapons/bat.png");
+		assetManager.loadAndAddBitmap("Projectile", "img/weapons/Projectile.png");
+		assetManager.loadAndAddBitmap("Bullet", "img/weapons/Bullet.png");
+		assetManager.loadAndAddSound("Bullet_SFX", "sfx/ShotGunFire.wav");
 		
 		//Crosshair
 		assetManager.loadAndAddBitmap("Crosshair", "img/weapons/crshairrSingle.png");
 		//assetManager.loadAndAddBitmap("Bat", "img/weapons/crshairr.png");
 		
 		//Weapon and Projectile images
-		assetManager.loadAndAddBitmap("Projectile", "img/weapons/Projectile.png");
-		assetManager.loadAndAddBitmap("Bullet", "img/weapons/Bullet.png");
-		assetManager.loadAndAddSound("Bullet_SFX", "sfx/ShotGunFire.wav");
+
 		//Main Menu Items
 		//Load in BG Image and assets
 		assetManager.loadAndAddBitmap("MainMenuBackground", "img/MainMenu/MenuBackground.jpg");

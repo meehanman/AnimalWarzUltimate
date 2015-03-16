@@ -1,6 +1,9 @@
 package com.threeml.awu.world.gameobject.weapon;
 
+import android.util.Log;
+
 import com.threeml.awu.engine.ElapsedTime;
+import com.threeml.awu.engine.audio.Sound;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
@@ -16,8 +19,13 @@ import com.threeml.awu.world.gameobject.player.Player;
 public class Projectile extends Sprite {
 	/** Speed the projectile will travel at */
 	private float projSpeed = 20.0f;
-	/** Boolean variable to store if the shot method has been called */
-	private boolean shot = false;
+	/** Varaible to store the current state of the projectile 
+	 * 0 = still in barrel
+	 * 1 = In the air
+	 * 2 = Hit something
+	 * **/
+	private int mStatus = 0;
+	private Sound shotSound;
 
 	private Vector2 mDirection;
 
@@ -29,9 +37,13 @@ public class Projectile extends Sprite {
 	 * @param gameScreen
 	 *            The gamescreen this projectile object will be drawn to.
 	 */
-	public Projectile(Player player, GameScreen gameScreen) {
-		super(player.position.x, player.position.y, 10, 10, gameScreen.getGame()
-				.getAssetManager().getBitmap("Projectile"), gameScreen);
+	public Projectile(Weapon weapon, GameScreen gameScreen) {
+		super(weapon.position.x, weapon.position.y, 10, 5, gameScreen.getGame()
+				.getAssetManager().getBitmap("Bullet"), gameScreen);
+		
+		//Sound to play when projectile is shot
+		shotSound = gameScreen.getGame().getAssetManager().getSound("Bullet_SFX");
+
 	}
 
 	/**
@@ -46,76 +58,92 @@ public class Projectile extends Sprite {
 			Vector2 playerPos, Target targetPos, Terrain terrainObj) {
 		super.update(elapsedTime);
 
-		/*
-		 * If statement to check if shot is true. The shootProjectile method is
-		 * then called to calculate the aiming and motion of the projectile.
-		 */
-		if (shot) {
-			shootProjectile(player, playerPos, targetPos, projSpeed, terrainObj);
+		//Collision detection from 
+		if(inTheAir()){
+			
+			//Added seperate method for collisions in update
+			this.position.x += mDirection.x * projSpeed;
+			this.position.y += mDirection.y * projSpeed;
+			
+			//when it hits something
+			if(terrainObj.isPixelSolid(this.position.x, this.position.y)) {
+				this.position.x = this.position.x;
+				this.position.y = this.position.y;
+				terrainObj.deformCircle(this.position.x, this.position.y, 20);
+				//Set bullet propery
+				hitSomething();
+			}
+
 		}
 
-		/*
-		 * If no projectile has been fired, position the projectile beside the
-		 * player.
-		 */
-		if (!shot) {
-			this.setPosition(player.position.x, player.position.y);
-		}
 	}
 
-	/**
-	 * loadProjectile() method which initialises the boolean variable 'shot' to
-	 * true when called.
-	 */
-	public void loadProjectile() {
-		shot = true;
-	}
 
 	/**
 	 * shootProjectile method
 	 * 
-	 * @param player
-	 *            player which the projectile is associated with.
 	 * @param playerPos
-	 *            position vector of the player.
+	 *            inital position of the projectile
 	 * @param targetPos
 	 *            position of the target at present.
 	 * @param speed
 	 *            speed with which the projectile will fire
 	 */
-	public void shootProjectile(Player player, Vector2 playerPos,
-			Target targetPos, Float speed, Terrain terrainObj) {
+	public void shootProjectile(Vector2 initialPosition,
+			Vector2 targetPos) {
+		
+		//Play sound
+		shotSound.play();
+		
 		/*
 		 * Iniatilizing mDiretion to the product of targetPos.position -
 		 * playerPos. (If targetPos was a vector as opposed to Target object the
 		 * target would not display)
 		 */
-		mDirection = new Vector2(targetPos.position.x - playerPos.x,
-				targetPos.position.y - playerPos.y);
+		mDirection = new Vector2(targetPos.x - initialPosition.x,
+				targetPos.y - initialPosition.y);
 		mDirection.normalise();
-		/*
-		 * Setting the position of the projectile(x,y) to the product of
-		 * mDirection(x,y) x speed and also checking for clear pixels to allow
-		 * the projectile to either move or stop.
-		 */
-		mDirection = new Vector2(targetPos.position.x - playerPos.x,
-				targetPos.position.y - playerPos.y);
-		mDirection.normalise();
-		if (terrainObj.isPixelSolid(this.position.x, this.position.y) == false) {
-			this.position.x += mDirection.x * projSpeed;
-			this.position.y += mDirection.y * projSpeed;
-		} else {
-			this.position.x = this.position.x;
-			this.position.y = this.position.y;
-			terrainObj.deformCircle(this.position.x, this.position.y, 20);
-			shot = false;
-		}
+		
+		Log.v("slope",mDirection+" > Direction SHOT");
+		
+		//Projectil Status
+		setInTheAir();
 
 	}
-
-	public int getDamage() {
-		
-		return 50;
+	
+	/**
+	 * Returns if the projectile is still in the barrel
+	 * @return
+	 */
+	public boolean inBarrel(){
+		return mStatus==0;
+	}
+	/**
+	 * Returns if the projectile is flying in the air
+	 * @return
+	 */
+	public boolean inTheAir(){
+		return mStatus==1;
+	}
+	/**
+	 * Returns if the projectile was used and hit something
+	 * @return
+	 */
+	public boolean hitSomething(){
+		return mStatus==2;
+	}
+	
+	/**
+	 * Setters for Projectile options
+	 */
+	public void setInBarrel(){
+		mStatus = 0;
+	}
+	public void setInTheAir(){
+		mStatus = 1;
+	}
+	public void setHitSomething(){
+		mStatus = 2;
 	}
 
 }

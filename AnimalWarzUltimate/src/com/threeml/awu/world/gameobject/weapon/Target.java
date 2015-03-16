@@ -52,7 +52,6 @@ public class Target extends Sprite {
 	 */
 	public void update(ElapsedTime elapsedTime, boolean aimUp, boolean aimDown) {
 		super.update(elapsedTime);
-
 		/**
 		 * If the player direction is -1 the target will display to the left of
 		 * the player, if the player direction is 1 the target will be displayed
