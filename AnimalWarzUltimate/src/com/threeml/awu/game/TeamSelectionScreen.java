@@ -183,23 +183,12 @@ public class TeamSelectionScreen extends GameScreen {
 				
 				// If the play game area has been touched then swap screens
 				mGame.getScreenManager().removeScreen(this.getName());
-				//TODO MJ This really should be in the GameScreen
-				Map map;
-				if(mSelectedMap != null){
-					map = new Map(mSelectedMap, 1600f, 580f, mGame,
-							this);
-				} else {
-					map = new Map("Random", 1600f, 580f, mGame,
-							this);
-				}
-				mTeamManager = new TeamManager();
-				mTeamManager.createNewTeam("Threeml", mNoOfPlayers, map, mGame, this);
-				mTeamManager.createNewTeam("This shit is BANANAS", mNoOfPlayers, map, mGame, this);
+				
 				//Store the mNoOfPlayers to file
 				//Save the Number of Players for next time
 				mPreferenceStore.Save("NoOfPlayers",mNoOfPlayers);
 				//Where the Map and Team Selection is passed
-				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame, map.getName(), mTeamManager);
+				AnimalWarzPlayScreen AnimalWarzPlayScreen = new AnimalWarzPlayScreen(mGame, mSelectedMap, mNoOfPlayers);
 				// As it's the only added screen it will become active.
 				mGame.getScreenManager().addScreen(AnimalWarzPlayScreen);
 			}

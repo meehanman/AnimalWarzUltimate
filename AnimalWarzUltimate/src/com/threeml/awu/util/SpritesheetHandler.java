@@ -44,9 +44,10 @@ public class SpritesheetHandler {
 	 * 				Number of columns in the spritesheet
 	 */
 	public SpritesheetHandler(Bitmap fullImage, int rows, int columns){
+		
+		this.mRows = rows==0?1:rows;
+		this.mColumns = columns==0?1:columns;
 		this.mFullImage = fullImage;
-		this.mRows = rows;
-		this.mColumns = columns;
 		mCurrentColumn = 0;
 		mCurrentRow = 0;
 	}

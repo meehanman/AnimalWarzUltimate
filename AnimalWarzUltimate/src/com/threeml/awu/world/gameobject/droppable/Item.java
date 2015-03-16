@@ -16,8 +16,6 @@ import com.threeml.awu.world.gameobject.map.Terrain;
  *
  */
 public class Item extends Sprite {
-	//TODO    - add some attributes that are relevant to all droppable classes
-	//			or ditch this class because it's unnecessary
 	
 	/**If the item should still be active on screen
 	 *  i.e. an item is used up and is no longer needed
@@ -49,21 +47,6 @@ public class Item extends Sprite {
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
-	
-	//TODO - Is this method needed? If no, get rid of it
-	/**
-	 * @param elapsedTime
-	 * 			Elapsed time information
-	 * @param TerrainObj
-	 * 			
-	 */
-	public void update(ElapsedTime elapsedTime,  Terrain TerrainObj) {
-		// Call the sprite's update method to apply the defined 
-		// accelerations and velocities to provide a new position
-		// and orientation.
-		super.update(elapsedTime,TerrainObj);
-		
-	}
 
 	/**
 	 * @return if the current item is still active
