@@ -2,7 +2,6 @@ package com.threeml.awu.world.gameobject.map;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.threeml.awu.util.BoundingBox;
 import com.threeml.awu.util.Vector2;
@@ -93,27 +92,22 @@ public class Terrain extends Sprite {
 	 * @param radius
 	 *            Size of the deformCircle radius
 	 */
-	public void deformCircle(double x0, double y0, int radius) {
-
-		Vector2 scaledValues = fixVectorScaling(x0, y0);
-		x0 = scaledValues.x;
-		y0 = scaledValues.y;
-
-		for (int y = -radius; y <= radius; y++) {
-			for (int x = -radius; x <= radius; x++) {
-				if (x * x + y * y <= radius * radius) {
-
-					if (!outOfBoundsValadation(x0 + x, y0 + y)) {
-						continue;
-					}
-					;
-
-					mBitmap.setPixel((int) x0 + x, (int) y0 + y,
-							Color.argb(0, 0, 0, 0));
-				}
-			}
+	public void deformCircle(double x0, double y0, int radius){
+	
+		Vector2 scaledValues = fixVectorScaling(x0,y0);
+		x0=scaledValues.x;
+		y0=scaledValues.y;
+		
+		for(int y=-radius; y<=radius; y++){
+		    for(int x=-radius; x<=radius; x++){
+		        if(x*x+y*y <= radius*radius){
+		        	
+		        	if(!outOfBoundsValadation(x0+x,y0+y)){continue;};
+		        	
+		        	mBitmap.setPixel((int)x0+x, (int)y0+y, Color.argb(000, 255, 255, 000));
+		        }
+		    }
 		}
-
 	}
 
 	/**

@@ -26,9 +26,14 @@ public class Projectile extends Sprite {
 	 * 1 = In the air 2 = Hit something
 	 * **/
 	private int mStatus = 0;
+	/** The sound of a bullet being shot **/
 	private Sound shotSound;
+	/** the damanage the ammo does to its suroundings**/
 	private int ammoDamange;
+	/** The direction the player is moving **/
 	private Vector2 mDirection;
+	/** The jitter a bullet has when its shot to add some randomness */
+	private int jitter;
 
 	/**
 	 * 
@@ -67,19 +72,17 @@ public class Projectile extends Sprite {
 			// Added seperate method for collisions in update
 			this.position.x += mDirection.x * projSpeed;
 			this.position.y += mDirection.y * projSpeed;
-
-			/*
-			 * //Add a but of random gun jitter Random rand = new Random(); int
-			 * min = -5, max = 5; // nextInt is normally exclusive of the top
-			 * value, // so add 1 to make it inclusive int randomJitterX =
-			 * rand.nextInt((max - min) + 1) + min; int randomJitterY =
-			 * rand.nextInt((max - min) + 1) + min;
-			 */
-
-			// this.position.x += randomJitterX;
-			// this.position.y += randomJitterY;
-
-			this.orientation = weaponObj.orientation;
+			
+			/* TODO REMOVE
+			//Add a but of random gun jitter so all bullets arn't the same
+			Random rand = new Random();
+			int min = jitter-(jitter/2), max = jitter+(jitter/2);
+		    this.position.x += rand.nextInt((max - min) + 1) + min;;
+		    this.position.y += rand.nextInt((max - min) + 1) + min;;
+		    */
+			
+		    //Change projectile direction
+			this.orientation = (weaponObj.orientation-180);
 
 			// when it hits something
 			if (terrainObj.isPixelSolid(this.position.x, this.position.y)) {
@@ -88,6 +91,8 @@ public class Projectile extends Sprite {
 				this.position.y = this.position.y;
 				terrainObj.deformCircle(this.position.x, this.position.y,
 						ammoDamange);
+				
+				//Change projectile status to hit something
 				setHitSomething();
 			}
 		}
@@ -179,5 +184,12 @@ public class Projectile extends Sprite {
 	 */
 	public void setAmmoDamange(int ammoDamange) {
 		this.ammoDamange = ammoDamange;
+	}
+	
+	/**
+	 * Get the deform radius (ammoDamange)
+	 */
+	public int getAmmoDamangeRaduis(){
+		return this.ammoDamange;
 	}
 }

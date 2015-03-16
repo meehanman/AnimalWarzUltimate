@@ -15,6 +15,7 @@ import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.GameObjectText;
 import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.weapon.BaseballBat;
 import com.threeml.awu.world.gameobject.weapon.Bazooka;
 import com.threeml.awu.world.gameobject.weapon.Hand;
 import com.threeml.awu.world.gameobject.weapon.MiniGun;
@@ -476,9 +477,27 @@ public class Player extends Sprite {
 		} else if (weaponName == "Bazooka") {
 			mCurrentWeapon = new Bazooka(this, mGameScreen);
 		} else if (weaponName == "Baseball Bat") {
-			// mCurrentWeapon = new MiniGun(this,mGameScreen);
+			mCurrentWeapon = new BaseballBat(this,mGameScreen);
 		} else {
 		}
 	}
 
+	/**
+	 * If the player is caught up in an explosion
+	 * move them a bit to simulate an explosion
+	 */
+	public void moveFromPoint(Vector2 source,int radius){
+		Vector2 direction = new Vector2(this.position.x - source.x,
+				this.position.y - source.y);
+		direction.normalise();
+		
+		//Do some damanage to the player
+		doDamage(radius/2);
+		
+		//Change position
+		this.velocity.x += direction.x * (radius*1.5);
+		double yDirection = (direction.y * (radius*2));
+		this.velocity.y += yDirection<0?-yDirection:yDirection;
+	}
+	
 }

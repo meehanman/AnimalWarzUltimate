@@ -11,6 +11,7 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.GameCountDownTimer;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.BoundingBox;
+import com.threeml.awu.util.CollisionDetector;
 import com.threeml.awu.util.InGameText;
 import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
@@ -23,11 +24,9 @@ import com.threeml.awu.world.gameobject.droppable.Healthkit;
 import com.threeml.awu.world.gameobject.map.Background;
 import com.threeml.awu.world.gameobject.map.Map;
 import com.threeml.awu.world.gameobject.map.Terrain;
-import com.threeml.awu.world.gameobject.map.Water;
 import com.threeml.awu.world.gameobject.player.Player;
 import com.threeml.awu.world.gameobject.player.Team;
 import com.threeml.awu.world.gameobject.player.TeamManager;
-import com.threeml.awu.world.gameobject.weapon.MiniGun;
 import com.threeml.awu.world.gameobject.weapon.Projectile;
 
 /**
@@ -494,8 +493,14 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				//Check they dont hit any other players
 				for(Projectile proj: getActivePlayer().getCurrentWeapon().getProjectiles()){
 					//If so kill or damange the player
+					//If the player is directly hit by the projectile
 					if(p.getBound().intersects(proj.getBound())){
 						p.doDamage(proj.getAmmoDamange());
+					//If the player is close to the projectiles explosion
+					}else if(CollisionDetector.intersect(proj.position,proj.getAmmoDamangeRaduis(),p.getBound())){
+						p.moveFromPoint(proj.position,proj.getAmmoDamange());
+						
+
 					}else if(p.getHealth() <= 0){
 						p.kill();
 					}
@@ -509,13 +514,15 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			 * WEAPON SELECTION MENU TOUCH EVENTS
 			 */
 			for(Control weaponControl: mWeaponSelection){
-				//if(mMainMenu.isTouched() && weaponControl.isActivated()){
 				if(weaponControl.isActivated()){
 					//Set the activePlayers weapon
 					getActivePlayer().changeWeapon(weaponControl.getName());
 				}
 			}
 			
+			/**
+			 * PLAYER UPDATE CLASS
+			 * */
 		getActivePlayer().update(elapsedTime, 
 				mMoveLeftButton.isActivated(),
 				mMoveRightButton.isActivated(),
@@ -546,8 +553,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			}
 		}
 
-		// TODO DM - More work needed to collect used up items
-		// Garbage Collection to remove objects from screen not being used
 		Iterator<Healthkit> healthpackList = healthPacks.listIterator();
 		while (healthpackList.hasNext()) {
 			// If the healthkit is NOT active
