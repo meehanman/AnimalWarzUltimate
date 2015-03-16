@@ -26,7 +26,7 @@ public class Projectile extends Sprite {
 	 * **/
 	private int mStatus = 0;
 	private Sound shotSound;
-
+	private int ammoDamange;
 	private Vector2 mDirection;
 
 	// private TeamManager mTeamManager;
@@ -54,8 +54,7 @@ public class Projectile extends Sprite {
 	 * @param player
 	 *            Player that will have the projectile assigned to it.
 	 */
-	public void update(ElapsedTime elapsedTime, Player player,
-			Vector2 playerPos, Target targetPos, Terrain terrainObj) {
+	public void update(ElapsedTime elapsedTime,Terrain terrainObj) {
 		super.update(elapsedTime);
 
 		//Collision detection from 
@@ -89,9 +88,9 @@ public class Projectile extends Sprite {
 	 * @param speed
 	 *            speed with which the projectile will fire
 	 */
-	public void shootProjectile(Vector2 initialPosition,
-			Vector2 targetPos) {
-		
+	public void shootProjectile(Player initialPosition,
+			Target targetPos) {
+				
 		//Play sound
 		shotSound.play();
 		
@@ -100,11 +99,11 @@ public class Projectile extends Sprite {
 		 * playerPos. (If targetPos was a vector as opposed to Target object the
 		 * target would not display)
 		 */
-		mDirection = new Vector2(targetPos.x - initialPosition.x,
-				targetPos.y - initialPosition.y);
+		mDirection = new Vector2(targetPos.position.x - initialPosition.position.x,
+				targetPos.position.y - initialPosition.position.y);
 		mDirection.normalise();
 		
-		Log.v("slope",mDirection+" > Direction SHOT");
+		Log.v("slope",mDirection.x+" > Direction SHOT");
 		
 		//Projectil Status
 		setInTheAir();
@@ -144,6 +143,20 @@ public class Projectile extends Sprite {
 	}
 	public void setHitSomething(){
 		mStatus = 2;
+	}
+
+	/**
+	 * @return the ammoDamange
+	 */
+	public int getAmmoDamange() {
+		return ammoDamange;
+	}
+
+	/**
+	 * @param ammoDamange the ammoDamange to set
+	 */
+	public void setAmmoDamange(int ammoDamange) {
+		this.ammoDamange = ammoDamange;
 	}
 
 }

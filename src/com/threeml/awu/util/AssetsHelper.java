@@ -54,7 +54,11 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("Grenade", "img/weapons/grenade.png");
 		assetManager.loadAndAddBitmap("Rocket", "img/weapons/rocket.png");
 		assetManager.loadAndAddBitmap("Bat", "img/weapons/bat.png");
+		
+		//Weapon and Projectile images
 		assetManager.loadAndAddBitmap("Projectile", "img/weapons/Projectile.png");
+		assetManager.loadAndAddBitmap("BazookaSingle", "img/weapons/BazookaSingle.png");
+		assetManager.loadAndAddBitmap("Bazooka", "img/weapons/Bazooka.png");
 		assetManager.loadAndAddBitmap("Bullet", "img/weapons/Bullet.png");
 		assetManager.loadAndAddSound("Bullet_SFX", "sfx/ShotGunFire.wav");
 		
@@ -62,7 +66,6 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("Crosshair", "img/weapons/crshairrSingle.png");
 		//assetManager.loadAndAddBitmap("Bat", "img/weapons/crshairr.png");
 		
-		//Weapon and Projectile images
 
 		//Main Menu Items
 		//Load in BG Image and assets
@@ -101,6 +104,7 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("smallMapImage", "img/TerrainImages/small/"+MapName+"Map.png");
 		assetManager.loadAndAddBitmap("TerrainImage", "img/TerrainImages/large/"+MapName+"Map.png",true);
 		assetManager.loadAndAddBitmap("TerrainBackground", "img/TerrainImages/background/MapBackgroundDefault.png");
+		assetManager.loadAndAddBitmap("TerrainWater", "img/TerrainImages/water.png");
 		
 		//TODO - Find Backgrounds to Match Other Images
 		//assetManager.loadAndAddBitmap("TerrainImage", "img/TerrainImages/background/"+MapName+".png",true);
