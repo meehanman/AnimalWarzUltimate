@@ -43,7 +43,7 @@ public class BannerNotification extends OnScreenText {
 	 *            Gamescreen to which player belongs
 	 */
 	public BannerNotification(float x, float y, GameScreen gameScreen) {
-		super(x, y, gameScreen, "0", 150);
+		super(x, y, gameScreen, "0", 150,"White");
 
 	}
 

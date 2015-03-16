@@ -112,7 +112,7 @@ public class TeamSelectionScreen extends GameScreen {
 		mIncreaseButton = new Control("Increase Button", x, y, width, height,
 				"LeftArrow", this);
 
-		numbers = new OnScreenText(x, y, this, "" + mNoOfPlayers, 240);
+		numbers = new OnScreenText(x, y, this, "" + mNoOfPlayers, 240,"White");
 		y = screenHeightCell * 50;
 		x = screenWidthCell * 80;
 		mDecreaseButton = new Control("Decrease Button", x, y, width, height,

@@ -63,13 +63,12 @@ public class BitmapFont extends Sprite {
 	 * @param str
 	 *            Text to display
 	 */
-	public BitmapFont(float x, float y, GameScreen gameScreen, String str) {
+	public BitmapFont(float x, float y, GameScreen gameScreen, String str, String fontColor) {
 		super(x, y, (MAX_CHARS * mTextCellwidth), mTextCellheight, mFont,
 				gameScreen);
 		// super(x, y, 200, 20, mFont, gameScreen);
 		try {
-
-			mFont = gameScreen.getGame().getAssetManager().getBitmap("Font");
+			changeFontColor(fontColor,gameScreen);
 			mFontSize = mTextCellheight;
 			// Create a default string
 			mFrameHandler = new SpritesheetHandler(mFont, 2, 53);
@@ -96,13 +95,12 @@ public class BitmapFont extends Sprite {
 	 *            Determines size of text on screen
 	 */
 	public BitmapFont(float x, float y, GameScreen gameScreen, String str,
-			int fontSize) {
+			int fontSize, String fontColor) {
 		super(x, y, (MAX_CHARS * (int) (fontSize * 0.75)), fontSize, mFont,
 				gameScreen);
 		// super(x, y, 200, 20, mFont, gameScreen);
 		try {
-
-			mFont = gameScreen.getGame().getAssetManager().getBitmap("Font");
+			changeFontColor(fontColor,gameScreen);
 			mFontSize = fontSize;
 			// Create a default string
 			mFrameHandler = new SpritesheetHandler(mFont, 2, 53);
@@ -349,6 +347,24 @@ public class BitmapFont extends Sprite {
 	public void updateText(String str) {
 		mText = buildString(str);
 		createNewTextBitmap();
+	}
+	
+	/**
+	 * Change font color
+	 * Font color must be 
+	 * Blue Pink Purple Red White
+	 * 
+	 */
+	public void changeFontColor(String colourName, GameScreen gameScreen){
+		if(	colourName == "Blue" || 	
+			colourName == "Pink" || 
+			colourName == "Purple" || 
+			colourName == "Red" || 
+			colourName == "White"){
+				mFont = gameScreen.getGame().getAssetManager().getBitmap("Font"+colourName);
+		}else{
+				mFont = gameScreen.getGame().getAssetManager().getBitmap("FontWhite");
+		}
 	}
 
 }

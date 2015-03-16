@@ -42,8 +42,8 @@ public class OnScreenText extends BitmapFont {
 	 *            Determines size of text on screen
 	 */
 	public OnScreenText(float x, float y, GameScreen gameScreen, String str,
-			int fontSize) {
-		super(x, y, gameScreen, str, fontSize);
+			int fontSize, String fontColour) {
+		super(x, y, gameScreen, str, fontSize, fontColour);
 		mVisible = true;
 	}
 

@@ -119,11 +119,10 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		// NoOfPlayers parameter
 		// to determine number of players per team
 		mTeamManager = new TeamManager();
-		mTeamManager.createNewTeam("Threeml", noOfPlayers, mCurrentMap, mGame,
-				this);
-		mTeamManager.createNewTeam("This shit is BANANAS", noOfPlayers,
-				mCurrentMap, mGame, this);
-
+		mTeamManager.createNewTeam("Threeml", noOfPlayers, mCurrentMap, mGame, this);
+		mTeamManager.createNewTeam("This shit is BANANAS", noOfPlayers, mCurrentMap, mGame, this);
+		//Reset static colours for teams
+		Team.resetColours();
 		// Get Camera/Screen Width and Height
 		int screenWidth = game.getScreenWidth();
 		int screenHeight = game.getScreenHeight();
@@ -302,20 +301,20 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mNotification = new BannerNotification(x, y, this);
 		x = screenWidthCell * 100.0f;
 		y = (screenHeight - 200.0f);
-		mDashboardTimer = new OnScreenText(x, y, this, "0", 250);
+		mDashboardTimer = new OnScreenText(x, y, this, "0", 250,"White");
 
 		x = screenWidthCell * 100.0f;
 		mTeamHealthText = new ArrayList<OnScreenText>();
 		for (Team t : mTeamManager.getTeams()) {
 
 			mTeamHealthText.add(new OnScreenText(x, y, this, t.getTeamName()
-					+ " : " + t.getCollectiveHealth(), 150));
+					+ " : " + t.getCollectiveHealth(), 150,t.getTeamColour()));
 			y -= 100;
 		}
 
 		x = screenWidthCell * 30.0f;
 		y = (screenHeight - (screenHeightCell * 150f));
-		mNonBannerText = new OnScreenText(x, y, this, "0", 150);
+		mNonBannerText = new OnScreenText(x, y, this, "0", 150,"White");
 		mNonBannerText.setVisible(false);
 	}
 
