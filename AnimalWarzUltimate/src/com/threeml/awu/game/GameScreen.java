@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import com.threeml.awu.Game;
 
 /**
- * Main GameScreen
- * Extends Game (mGame Fragment) to key in 
- * the app interface.
+ * Main GameScreen Extends Game (mGame Fragment) to key in the app interface.
  * 
  * Upon running will open the menu screen
  * 
@@ -57,11 +55,12 @@ public class GameScreen extends Game {
 	@Override
 	public boolean onBackPressed() {
 		// If we are already at the menu screen then exit
-		if(mScreenManager.getCurrentScreen().getName().equals("MenuScreen"))
+		if (mScreenManager.getCurrentScreen().getName().equals("MenuScreen"))
 			return false;
-		
+
 		// Go back to the menu screen
-		getScreenManager().removeScreen(mScreenManager.getCurrentScreen().getName());		
+		getScreenManager().removeScreen(
+				mScreenManager.getCurrentScreen().getName());
 		MenuScreen menuScreen = new MenuScreen(this);
 		getScreenManager().addScreen(menuScreen);
 		return true;

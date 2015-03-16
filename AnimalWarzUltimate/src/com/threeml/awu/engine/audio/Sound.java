@@ -1,7 +1,5 @@
 package com.threeml.awu.engine.audio;
 
-import com.threeml.awu.util.PreferenceStore;
-
 import android.media.SoundPool;
 
 /**
@@ -19,7 +17,7 @@ public class Sound {
 	 * Maximum number of sounds that can be played concurrently
 	 */
 	public static final int MAX_CONCURRENT_SOUNDS = 20;
-		
+
 	/**
 	 * Sound Id of this effect
 	 */
@@ -34,8 +32,6 @@ public class Sound {
 	 * Play back volume of this sound effect
 	 */
 	private float mVolume;
-
-
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -104,19 +100,22 @@ public class Sound {
 	public void dispose() {
 		mSoundPool.unload(mSoundId);
 	}
-	
+
 	/**
 	 * Mutes all music
+	 * 
 	 * @author Dean
 	 */
-	public void mute(){
+	public void mute() {
 		setVolume(0);
 	}
+
 	/**
 	 * Unmutes all music
+	 * 
 	 * @author Dean
 	 */
-	public void unmute(){
+	public void unmute() {
 		setVolume(100);
 	}
 }

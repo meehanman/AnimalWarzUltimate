@@ -3,13 +3,9 @@
  */
 package com.threeml.awu.world.gameobject.weapon;
 
-import android.util.Log;
-
 import com.threeml.awu.engine.ElapsedTime;
-import com.threeml.awu.util.Vector2;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
-import com.threeml.awu.world.gameobject.map.Terrain;
 import com.threeml.awu.world.gameobject.player.Player;
 
 /**

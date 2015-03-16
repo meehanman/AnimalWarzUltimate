@@ -1,7 +1,5 @@
 package com.threeml.awu.world.gameobject.weapon;
 
-import android.graphics.Bitmap;
-
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.gameobject.player.Player;
 

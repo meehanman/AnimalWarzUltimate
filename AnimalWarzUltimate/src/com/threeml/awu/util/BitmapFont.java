@@ -24,11 +24,11 @@ import com.threeml.awu.world.Sprite;
  */
 
 public class BitmapFont extends Sprite {
-	
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
-	
+
 	/** SpritesheetHandler used to handle the font spritesheet */
 	SpritesheetHandler mFrameHandler;
 	/** Image used to represent this object */
@@ -47,59 +47,59 @@ public class BitmapFont extends Sprite {
 	private static Bitmap mFont;
 	/** Max number of characters allowed in text */
 	private final static int MAX_CHARS = 20;
-	
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
-	// /////////////////////////////////////////////////////////////////////////	
+	// /////////////////////////////////////////////////////////////////////////
 	/**
 	 * Creates new BitmapFont object
 	 * 
 	 * @param x
-	 * 				X position of text
+	 *            X position of text
 	 * @param y
-	 * 				Y position of text
+	 *            Y position of text
 	 * @param gameScreen
-	 * 				Gamescreen to which text belongs
+	 *            Gamescreen to which text belongs
 	 * @param str
-	 *				Text to display 
+	 *            Text to display
 	 */
 	public BitmapFont(float x, float y, GameScreen gameScreen, String str) {
-		super(x, y, (MAX_CHARS * mTextCellwidth),
-				mTextCellheight, mFont, gameScreen);
-		//super(x, y, 200, 20, mFont, gameScreen);
+		super(x, y, (MAX_CHARS * mTextCellwidth), mTextCellheight, mFont,
+				gameScreen);
+		// super(x, y, 200, 20, mFont, gameScreen);
 		try {
-			
+
 			mFont = gameScreen.getGame().getAssetManager().getBitmap("Font");
 			mFontSize = mTextCellheight;
 			// Create a default string
 			mFrameHandler = new SpritesheetHandler(mFont, 2, 53);
 			mText = buildString(str);
 			createNewTextBitmap();
-			
+
 		} catch (Exception e) {
-			 Log.e("Text Error", "BitmapFont constructor error : " + e);
+			Log.e("Text Error", "BitmapFont constructor error : " + e);
 		}
 	}
-	
+
 	/**
 	 * Creates new BitmapFont object
 	 * 
 	 * @param x
-	 * 				X position of text
+	 *            X position of text
 	 * @param y
-	 * 				Y position of text
+	 *            Y position of text
 	 * @param gameScreen
-	 * 				Gamescreen to which text belongs
+	 *            Gamescreen to which text belongs
 	 * @param str
-	 *				Text to display 
+	 *            Text to display
 	 * @param fontSize
-	 * 				Determines size of text on screen
+	 *            Determines size of text on screen
 	 */
 	public BitmapFont(float x, float y, GameScreen gameScreen, String str,
 			int fontSize) {
-		super(x, y, (MAX_CHARS * (int)(fontSize * 0.75)),
-				fontSize, mFont, gameScreen);
-		//super(x, y, 200, 20, mFont, gameScreen);
+		super(x, y, (MAX_CHARS * (int) (fontSize * 0.75)), fontSize, mFont,
+				gameScreen);
+		// super(x, y, 200, 20, mFont, gameScreen);
 		try {
 
 			mFont = gameScreen.getGame().getAssetManager().getBitmap("Font");
@@ -109,29 +109,29 @@ public class BitmapFont extends Sprite {
 			mText = buildString(str);
 			createNewTextBitmap();
 		} catch (Exception e) {
-			 Log.e("Text Error", "BitmapFont constructor error : " + e);
+			Log.e("Text Error", "BitmapFont constructor error : " + e);
 		}
 	}
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
 	/**
-	 * Used the centralise the text and cut text more than 20 characters
-	 * (MJ) Temporary solution because I can't get the text to position correctly above game objects
+	 * Used the centralise the text and cut text more than 20 characters (MJ)
+	 * Temporary solution because I can't get the text to position correctly
+	 * above game objects
 	 * 
 	 * @param str
-	 * 				String to be displayed
-	 * @return
-	 * 				String
+	 *            String to be displayed
+	 * @return String
 	 */
 	protected String buildString(String str) {
 		String buffer = "";
-		if(str.length() > MAX_CHARS){
+		if (str.length() > MAX_CHARS) {
 			str = str.substring(0, 19);
-		}
-		else if(str.length() < MAX_CHARS) {
-			int difference =  (MAX_CHARS - str.length());
-			for(int i = 0; i < (difference/2); i ++){
+		} else if (str.length() < MAX_CHARS) {
+			int difference = (MAX_CHARS - str.length());
+			for (int i = 0; i < (difference / 2); i++) {
 				buffer += " ";
 			}
 		}
@@ -141,42 +141,42 @@ public class BitmapFont extends Sprite {
 		sb.append(buffer);
 		return sb.toString();
 	}
-	
+
 	/**
-	 * Creates a new Bitmap that is mutable then calls method 
-	 * to create the bitmap that will represent this object
+	 * Creates a new Bitmap that is mutable then calls method to create the
+	 * bitmap that will represent this object
 	 */
-	protected void createNewTextBitmap(){
-		mTextImage = Bitmap.createBitmap((int)(mText.length() * mTextCellwidth),
-				mTextCellheight, Bitmap.Config.ARGB_8888);
+	protected void createNewTextBitmap() {
+		mTextImage = Bitmap.createBitmap(
+				(int) (mText.length() * mTextCellwidth), mTextCellheight,
+				Bitmap.Config.ARGB_8888);
 		getTextAsImage();
 	}
-	 
-	 /**
-	  * Creates a bitmap of the text
-	  * 
-	  * @return
-	  * 			Bitmap text
-	  */
+
+	/**
+	 * Creates a bitmap of the text
+	 * 
+	 * @return Bitmap text
+	 */
 	protected Bitmap getTextAsImage() {
 		try {
 			updateString();
-			
+
 			Canvas canvas = new Canvas(mTextImage);
 			int count = 0;
 			for (Bitmap b : BitmapList) {
-				canvas.drawBitmap(b, (int)(count * mTextCellwidth), 0, null);
+				canvas.drawBitmap(b, (int) (count * mTextCellwidth), 0, null);
 				count++;
 			}
 			// mTextImage.getWidth() + ", " + mTextImage.getHeight());
 		} catch (Exception e) {
-			 Log.e("Text Error", "BitmapFont getTextAsImage error : " + e);
+			Log.e("Text Error", "BitmapFont getTextAsImage error : " + e);
 		}
 		return mTextImage;
 	}
 
 	/**
-	 *  Creates an array of bitmaps to be drawn from the string
+	 * Creates an array of bitmaps to be drawn from the string
 	 */
 	public void updateString() {
 		try {
@@ -187,18 +187,17 @@ public class BitmapFont extends Sprite {
 
 			}
 		} catch (Exception e) {
-			 Log.e("Text Error", "BitmapFont updateString error : " + e);
+			Log.e("Text Error", "BitmapFont updateString error : " + e);
 		}
 
 	}
-	
+
 	/**
 	 * Creates a bitmap of an individual character
 	 * 
 	 * @param ch
-	 * 				Character to create bitmap of
-	 * @return
-	 * 				Bitmap
+	 *            Character to create bitmap of
+	 * @return Bitmap
 	 */
 	private Bitmap getLetterBitmap(char ch) {
 		try {
@@ -222,67 +221,67 @@ public class BitmapFont extends Sprite {
 				c = ((int) ch - 65) + 27;
 				r = 0;
 			} else if (ch >= '0' && ch <= '9') { // 48-57
-				if(ch == '0'){
+				if (ch == '0') {
 					c = 9;
-				}else {
+				} else {
 					c = (int) ch - 49;
 				}
 				r = 1;
-			} else if (ch >= 33 && ch <= 64){
+			} else if (ch >= 33 && ch <= 64) {
 				r = 1;
-				switch(ch){
-				case 46 :
+				switch (ch) {
+				case 46:
 					c = 10;
 					break;
-				case 58 :
+				case 58:
 					c = 11;
 					break;
-				case 44 :
+				case 44:
 					c = 12;
 					break;
-				case 59 :
+				case 59:
 					c = 13;
 					break;
-				case 39 :
+				case 39:
 					c = 15;
 					break;
-				case 34 :
+				case 34:
 					c = 17;
 					break;
-				case 40 :
+				case 40:
 					c = 19;
 					break;
-				case 33 :
+				case 33:
 					c = 20;
 					break;
-				case 63 :
+				case 63:
 					c = 21;
 					break;
-				case 41 :
+				case 41:
 					c = 22;
 					break;
-				case 43 :
+				case 43:
 					c = 24;
 					break;
-				case 45 :
+				case 45:
 					c = 25;
 					break;
-				case 42 :
+				case 42:
 					c = 26;
 					break;
-				case 47 :
+				case 47:
 					c = 27;
 					break;
-				case 61 :
+				case 61:
 					c = 28;
 					break;
-					default :
-						c = 26;
-						r = 0;
-						break;
+				default:
+					c = 26;
+					r = 0;
+					break;
 				}
-				
-			}else {
+
+			} else {
 				boolean found = false;
 				/*
 				 * for(int i = 0;i<special.length;i++){ if(special[i]==ch){
@@ -297,7 +296,7 @@ public class BitmapFont extends Sprite {
 			}
 			mFrameHandler.setFrame(r, c);
 		} catch (Exception e) {
-			 Log.e("Text Error", "BitmapFont getLetterBitmap error : " + e);
+			Log.e("Text Error", "BitmapFont getLetterBitmap error : " + e);
 		}
 
 		return mFrameHandler.getFrameImage();
@@ -328,24 +327,26 @@ public class BitmapFont extends Sprite {
 						/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
 				drawMatrix.postTranslate(drawScreenRect.left,
 						drawScreenRect.top);
-				
+
 				// Draw the image
 				graphics2D.drawBitmap(mTextImage, drawMatrix, null);
 			}
 		} catch (Exception e) {
-			// Turned off this error log because it's always being hit and I'm not sure why
-			// so to save logcat is temporarily switched off until the problem can be solved
+			// Turned off this error log because it's always being hit and I'm
+			// not sure why
+			// so to save logcat is temporarily switched off until the problem
+			// can be solved
 			// Log.e("Text Error", "BitmapFont draw error : " + e);
 		}
 	}
-	
+
 	/**
 	 * Change the string of text and update bitmap to reflect the changes
 	 * 
 	 * @param str
-	 * 				New string
+	 *            New string
 	 */
-	public void updateText(String str){
+	public void updateText(String str) {
 		mText = buildString(str);
 		createNewTextBitmap();
 	}

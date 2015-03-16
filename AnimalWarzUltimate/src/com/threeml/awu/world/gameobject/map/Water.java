@@ -1,8 +1,6 @@
 package com.threeml.awu.world.gameobject.map;
 
 import android.graphics.Bitmap;
-import android.util.Log;
-
 import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.util.GraphicsHelper;
