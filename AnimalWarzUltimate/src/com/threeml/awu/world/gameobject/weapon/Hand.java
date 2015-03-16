@@ -11,34 +11,33 @@ import com.threeml.awu.world.gameobject.player.Player;
  * (Default weapon for worms)
  * 
  * @author Dean
- *
+ * 
  */
 public class Hand extends Weapon {
 
-
-	// ///////////////////////////////////////////////////////////////////////// 
-	// Constructors 
+	// /////////////////////////////////////////////////////////////////////////
+	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
 	/**
 	 * 
 	 * @param x
-	 * 				Centre x location of the control
+	 *            Centre x location of the control
 	 * @param y
-	 * 				Centre y location of the control
+	 *            Centre y location of the control
 	 * @param bitmap
-	 * 				Bitmap used to represent this control
+	 *            Bitmap used to represent this control
 	 * @param gameScreen
-	 * 				Gamescreen to which this control belongs
+	 *            Gamescreen to which this control belongs
 	 */
-	public Hand(Player player, GameScreen gameScreen){
-		super(	"Hand", 	//Name
-				0, 			//Ammo
-				600,		//Reload Time (Seconds)
-				0,			//Projectile Damage
-				false,		//Requires Aiming
-				player, 	//Owner of the Gun
-				gameScreen, 
-				gameScreen.getGame().getAssetManager().getBitmap("Hand"));
+	public Hand(Player player, GameScreen gameScreen) {
+		super("Hand", // Name
+				0, // Ammo
+				600, // Reload Time (Seconds)
+				0, // Projectile Damage
+				false, // Requires Aiming
+				player, // Owner of the Gun
+				gameScreen, gameScreen.getGame().getAssetManager()
+						.getBitmap("Hand"));
 	}
 
 }

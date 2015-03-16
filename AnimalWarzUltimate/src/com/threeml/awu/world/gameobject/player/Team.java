@@ -47,7 +47,7 @@ public class Team {
 	// /////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Returns the value of the all health of all players in the team
+	 * Returns the value of all the health of all the players in the team
 	 * 
 	 * @return collectiveHealth
 	 */
@@ -70,51 +70,52 @@ public class Team {
 		} else {
 			try {
 				if (mPlayers.indexOf(mLastActivePlayer) < (mPlayers.size() - 1)) {
-					if(getAlivePlayers() != null && getAlivePlayers().size() > 0){
+					if (getAlivePlayers() != null
+							&& getAlivePlayers().size() > 0) {
 						mLastActivePlayer = mPlayers.get(mPlayers
 								.indexOf(mLastActivePlayer) + 1);
-					}
-					else {
+					} else {
 						return null;
 					}
 				} else {
 					mLastActivePlayer = mPlayers.get(0);
 				}
 			} catch (Exception e) {
-				Log.e("TeamError", "Error in Team changeActivePlayer : "
-						+ e);
+				Log.e("TeamError", "Error in Team changeActivePlayer : " + e);
 			}
 		}
 		return mLastActivePlayer;
 	}
+
 	/**
 	 * Get all the Players whose Alive status is true
 	 * 
 	 * @return list of alive players
 	 */
-	public List<Player> getAlivePlayers(){
+	public List<Player> getAlivePlayers() {
 		List<Player> players = new ArrayList<Player>();
-		for(Player p : mPlayers){
-			if(p.isAlive()){
+		for (Player p : mPlayers) {
+			if (p.isAlive()) {
 				players.add(p);
 			}
 		}
 		return players;
 	}
+
 	/**
 	 * Get if the team contains any Alive Players
 	 * 
 	 * @return if team has any Alive Players
 	 */
-	public boolean hasAlivePlayers(){
+	public boolean hasAlivePlayers() {
 		return (getAlivePlayers().size() > 0);
 	}
-	
+
 	/**
 	 * Adds a new player to the team
 	 * 
 	 * @param p
-	 * 			Player
+	 *            Player
 	 */
 	public void addNewPlayer(Player p) {
 		mPlayers.add(p);

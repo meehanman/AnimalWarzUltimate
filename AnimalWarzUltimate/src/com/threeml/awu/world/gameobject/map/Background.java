@@ -4,16 +4,16 @@ import android.graphics.Bitmap;
 
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.Sprite;
+
 /**
- * Background is the full screen image behind the terrain
- * The player does not interact with the background in
- * any way
+ * Background is the full screen image behind the terrain The player does not
+ * interact with the background in any way
  * 
  * Extends Sprite
- *
+ * 
  */
 public class Background extends Sprite {
-	
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -34,10 +34,11 @@ public class Background extends Sprite {
 	 * @param gameScreen
 	 *            Gamescreen to which this object belongs
 	 */
-	public Background(float x, float y, float width, float height, Bitmap bitmap, GameScreen gameScreen){
+	public Background(float x, float y, float width, float height,
+			Bitmap bitmap, GameScreen gameScreen) {
 		super(x, y, width, height, bitmap, gameScreen);
 		mGameScreen = gameScreen;
-		
+
 		mBound.x = x;
 		mBound.y = y;
 		mBound.halfWidth = bitmap.getWidth() / 2.0f;

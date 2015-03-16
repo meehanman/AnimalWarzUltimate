@@ -57,7 +57,7 @@ public class Target extends Sprite {
 		/**
 		 * Conditional if statements to make the target move up or down
 		 * according to the boolean parameter passed and also the current
-		 * direction the player is facing in. Not incremental at this stage
+		 * direction the player is facing in.
 		 */
 		// Angles are in format 1.8 = (180)^o
 		if (aimUp == true) {
@@ -66,19 +66,13 @@ public class Target extends Sprite {
 			aimAngle += (0.10 * playerDirection);
 
 		}
-		
-		orientation = (float) aimAngle*60;
 
-		/*
-		 * //If direction changes if(PrevPDirection < playerDirection){// -->
-		 * aimAngle = .9+(1.8-(aimAngle+0.9)); }else if(PrevPDirection <
-		 * playerDirection){// <-- aimAngle = .9-(1.8-(aimAngle-0.9)); }
-		 */
+		orientation = (float) aimAngle * 60; // Iniatilizing the orientation
 
+		// Setting the position of the target
 		this.position.set(
 				(float) (player.getX() - radius * Math.cos(aimAngle)),
 				(float) (player.getY() + radius * Math.sin(aimAngle)));
-
 
 	}
 }
