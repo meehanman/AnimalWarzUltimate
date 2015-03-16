@@ -60,8 +60,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	private Map mCurrentMap;
 	/** Background image */
 	private Background mBackground;
-	/** Water Image **/
-	private Water mWater;
 	/** Terrain image, all game objects interact with this object */
 	private Terrain mTerrain;
 	/**
@@ -199,7 +197,6 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		// Set Terrain and Background Objects
 		mTerrain = mCurrentMap.getTerrain();
 		mBackground = mCurrentMap.getBackground();
-		mWater = mCurrentMap.getWater();
 
 		// Create the objects
 
@@ -400,7 +397,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
-
+		mCurrentMap.getWater().update(elapsedTime);
 		hideNotifications();
 		if(!mGameOver){
 		if(getActivePlayer().isAlive()){
@@ -658,7 +655,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				mScreenViewport);
 		mTerrain.draw(elapsedTime, graphics2D, mBackgroundViewport,
 				mScreenViewport);
-		mWater.draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
+		mCurrentMap.getWater().draw(elapsedTime, graphics2D, mBackgroundViewport, mScreenViewport);
 
 		for (Player p : mTeamManager.getAllNotActivePlayers()) {
 			// for(Player p : mPlayers){
