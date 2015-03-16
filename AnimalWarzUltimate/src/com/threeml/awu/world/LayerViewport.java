@@ -38,8 +38,8 @@ public class LayerViewport {
 		this.y = 160;
 		this.halfWidth = 240;
 		this.halfHeight = 160;
-	}	
-	
+	}
+
 	/**
 	 * Create a layer viewport of the specified dimensions
 	 * 
@@ -58,10 +58,11 @@ public class LayerViewport {
 		this.halfWidth = halfWidth;
 		this.halfHeight = halfHeight;
 	}
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Set the layer viewport of the specified dimensions
 	 * 
@@ -79,8 +80,8 @@ public class LayerViewport {
 		this.y = y;
 		this.halfHeight = halfHeight;
 		this.halfWidth = halfWidth;
-	}	
-	
+	}
+
 	/**
 	 * Return the width of the viewport
 	 * 
@@ -105,36 +106,36 @@ public class LayerViewport {
 	 * @return left side location of the viewport
 	 */
 	public float getLeft() {
-		return x - halfWidth;				
+		return x - halfWidth;
 	}
-	
+
 	/**
 	 * Return the right bound
 	 * 
 	 * @return right side location of the viewport
 	 */
 	public float getRight() {
-		return x + halfWidth;				
+		return x + halfWidth;
 	}
-	
+
 	/**
 	 * Return the top bound
 	 * 
 	 * @return top side location of the viewport
 	 */
 	public float getTop() {
-		return y + halfHeight;				
+		return y + halfHeight;
 	}
-	
+
 	/**
 	 * Return the bottom bound
 	 * 
 	 * @return bottom side location of the viewport
 	 */
 	public float getBottom() {
-		return y - halfHeight;				
+		return y - halfHeight;
 	}
-	
+
 	/**
 	 * Determine if the viewport contains the specified point
 	 * 
@@ -146,8 +147,8 @@ public class LayerViewport {
 	 *         otherwise false
 	 */
 	public boolean contains(float x, float y) {
-		return (x - halfWidth < x && x + halfWidth > x 
-				&& y - halfHeight < y && y + halfHeight > y);
+		return (x - halfWidth < x && x + halfWidth > x && y - halfHeight < y && y
+				+ halfHeight > y);
 	}
 
 	/**
@@ -158,9 +159,9 @@ public class LayerViewport {
 	 * @return boolean true if the box is within the viewport, otherwise false
 	 */
 	public boolean intersects(BoundingBox bound) {
-		return (x - halfWidth < bound.x + bound.halfWidth && 
-				x + halfWidth > bound.x - bound.halfWidth && 
-				y - halfHeight < bound.y + bound.halfHeight && 
-				y + halfHeight > bound.y - bound.halfHeight);
+		return (x - halfWidth < bound.x + bound.halfWidth
+				&& x + halfWidth > bound.x - bound.halfWidth
+				&& y - halfHeight < bound.y + bound.halfHeight && y
+				+ halfHeight > bound.y - bound.halfHeight);
 	}
 }

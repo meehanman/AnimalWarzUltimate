@@ -33,7 +33,7 @@ public class ScreenViewport {
 
 	/** Private Rect representation of this viewport */
 	private Rect rect = new Rect();
-	
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ public class ScreenViewport {
 		width = right - left;
 		height = bottom - top;
 	}
-	
+
 	/**
 	 * Create a screen viewport of the specified dimensions
 	 * 
@@ -74,10 +74,11 @@ public class ScreenViewport {
 		width = right - left;
 		height = bottom - top;
 	}
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Set the viewport using the specified dimensions
 	 * 
@@ -100,7 +101,7 @@ public class ScreenViewport {
 		width = right - left;
 		height = bottom - top;
 	}
-		
+
 	/**
 	 * Get the centre x-location of the screen viewport
 	 * 
@@ -152,7 +153,7 @@ public class ScreenViewport {
 				&& this.left <= left && this.top <= top && this.right >= right
 				&& this.bottom >= bottom;
 	}
-	
+
 	/**
 	 * Return a Rect representation of this viewport
 	 * 

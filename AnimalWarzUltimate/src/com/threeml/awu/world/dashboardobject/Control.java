@@ -13,8 +13,8 @@ import com.threeml.awu.world.ScreenViewport;
 /**
  * Simple control that can detected if a touch event falls on it.
  * 
- * Important: It is assumed that the control is defined in terms
- * of screen coordinates (not layer coordinates).
+ * Important: It is assumed that the control is defined in terms of screen
+ * coordinates (not layer coordinates).
  * 
  * Extends GameObject
  * 
@@ -22,10 +22,11 @@ import com.threeml.awu.world.ScreenViewport;
  * @version 1.0
  */
 public class Control extends GameObject {
-
+	/** String name of the control */
 	private String name = "";
 	/** Boolean to release the weapons menu upon selection */
 	private boolean wasSelected = false;
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
@@ -52,7 +53,7 @@ public class Control extends GameObject {
 			String bitmapName, GameScreen gameScreen) {
 		super(x, y, width, height, gameScreen.getGame().getAssetManager()
 				.getBitmap(bitmapName), gameScreen);
-		
+
 		this.name = name;
 	}
 
@@ -63,8 +64,7 @@ public class Control extends GameObject {
 	/**
 	 * Determine if this control has been activated (touched).
 	 * 
-	 * @return boolean 
-	 * 				true if the control has been touched, false otherwise
+	 * @return boolean true if the control has been touched, false otherwise
 	 */
 	public boolean isActivated() {
 
@@ -83,51 +83,50 @@ public class Control extends GameObject {
 		}
 		return false;
 	}
-	
-	
+
 	/**
 	 * 
-	 * Returns true if the string entered
-	 * matches the controls name
+	 * Returns true if the string entered matches the controls name
 	 * 
 	 * @return
 	 * @author Dean
 	 */
-	public boolean nameEquils(String n){
-		if(this.name == n){
+	public boolean nameEquals(String n) {
+		if (this.name == n) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Returns the name
+	 * 
 	 * @return
 	 */
-	public String getName(){
+	public String getName() {
 		return this.name;
 	}
-	
+
 	public boolean isTouched() {
 		// Consider any touch events occurring in this update
-				Input input = mGameScreen.getGame().getInput();
+		Input input = mGameScreen.getGame().getInput();
 
-				// Check if any of the touch events were on this control
-				BoundingBox bound = getBound();
-				for (int idx = 0; idx < TouchHandler.MAX_TOUCHPOINTS; idx++) {
-					if (input.existsTouch(idx)) {
-						if (bound.contains(input.getTouchX(idx), input.getTouchY(idx))) {
-							wasSelected = true;
-						}
-					}
+		// Check if any of the touch events were on this control
+		BoundingBox bound = getBound();
+		for (int idx = 0; idx < TouchHandler.MAX_TOUCHPOINTS; idx++) {
+			if (input.existsTouch(idx)) {
+				if (bound.contains(input.getTouchX(idx), input.getTouchY(idx))) {
+					wasSelected = true;
 				}
-				return wasSelected;
+			}
+		}
+		return wasSelected;
 	}
-	
+
 	/**
-	 * Overrides the draw method from GameObject class
-	 * 				Draws Control object on the game screen
+	 * Overrides the draw method from GameObject class Draws Control object on
+	 * the game screen
 	 * 
 	 * @param elapsedTime
 	 *            Elapsed time information
@@ -149,6 +148,6 @@ public class Control extends GameObject {
 				(int) (position.y + mBound.halfHeight));
 
 		graphics2D.drawBitmap(mBitmap, null, drawScreenRect, null);
-		
+
 	}
 }

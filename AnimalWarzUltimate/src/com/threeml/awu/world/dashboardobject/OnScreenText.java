@@ -9,75 +9,76 @@ import com.threeml.awu.util.GraphicsHelper;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
+
 /**
  * Used for text not attached to game objects
  * 
  * @author Mary-Jane
- *
+ * 
  */
-public class OnScreenText extends BitmapFont{
-	
+public class OnScreenText extends BitmapFont {
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Attributes
 	// /////////////////////////////////////////////////////////////////////////
 	private boolean mVisible;
-	
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
 	// /////////////////////////////////////////////////////////////////////////
-	
-	/** 
+
+	/**
 	 * Creates new on screen text object
 	 * 
 	 * @param x
-	 * 				X position of text
+	 *            X position of text
 	 * @param y
-	 * 				Y position of text
+	 *            Y position of text
 	 * @param gameScreen
-	 * 				Gamescreen to which text belongs
+	 *            Gamescreen to which text belongs
 	 * @param str
-	 *				Text to display 
+	 *            Text to display
 	 * @param fontSize
-	 * 				Determines size of text on screen
+	 *            Determines size of text on screen
 	 */
 	public OnScreenText(float x, float y, GameScreen gameScreen, String str,
-			int fontSize){
+			int fontSize) {
 		super(x, y, gameScreen, str, fontSize);
 		mVisible = true;
 	}
-	
+
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
 	/**
 	 * Overrides the BitmapFont buildString method to take de-centralise text
-	 * @return
-	 * 			string
+	 * 
+	 * @return string
 	 */
 	@Override
 	protected String buildString(String str) {
 		return str;
 	}
-	
+
 	/**
 	 * Set if notification is visible
 	 * 
 	 * @param vis
-	 * 				Visibility of notification
+	 *            Visibility of notification
 	 */
 	public void setVisible(boolean vis) {
 		this.mVisible = vis;
 	}
-	
+
 	/**
 	 * Returns if text is set to visible
 	 * 
 	 * @return visible
 	 */
-	public boolean isVisible(){
+	public boolean isVisible() {
 		return mVisible;
 	}
-	
+
 	/**
 	 * Draws the banner if visible set to true
 	 * 
@@ -93,7 +94,7 @@ public class OnScreenText extends BitmapFont{
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
-		if(isVisible()){
+		if (isVisible()) {
 			try {
 				if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 						screenViewport, drawSourceRect, drawScreenRect)) {
@@ -106,25 +107,27 @@ public class OnScreenText extends BitmapFont{
 					// Build an appropriate transformation matrix
 					drawMatrix.reset();
 					drawMatrix.postScale(scaleX, scaleY);
-					drawMatrix.postRotate(orientation, scaleX * mBitmap.getWidth()
-							/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
+					drawMatrix.postRotate(orientation,
+							scaleX * mBitmap.getWidth() / 2.0f, scaleY
+									* mBitmap.getHeight() / 2.0f);
 					drawMatrix.postTranslate(drawScreenRect.left,
 							drawScreenRect.top);
-					
+
 					// Draw the image
 					graphics2D.drawBitmap(mTextImage, drawMatrix, null);
 				}
 			} catch (Exception e) {
-				
+
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the bitmap text image
+	 * 
 	 * @return text image
 	 */
-	public Bitmap getTextImage(){
+	public Bitmap getTextImage() {
 		return mTextImage;
 	}
 }

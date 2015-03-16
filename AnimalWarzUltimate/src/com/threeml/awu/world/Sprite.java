@@ -51,15 +51,15 @@ public class Sprite extends GameObject {
 	public Vector2 velocity = new Vector2();
 	/** Acceleration of Sprite */
 	public Vector2 acceleration = new Vector2();
-	
+
 	/** Max Acceleration of Sprite */
 	public float maxAcceleration = DEFAULT_MAX_ACCELERATION;
 	/** Max Velocity of Sprite */
 	public float maxVelocity = DEFAULT_MAX_VELOCITY;
-	
-	/** Strength of gravity to apply along the y-axis*/
+
+	/** Strength of gravity to apply along the y-axis */
 	public float GRAVITY = -400.0f;
-	
+
 	/*
 	 * Orientation alongside angular velocity and acceleration, with maximum
 	 * values.
@@ -75,10 +75,10 @@ public class Sprite extends GameObject {
 	public float maxAngularAcceleration = DEFAULT_MAX_ANGULAR_ACCELERATION;
 	/** Max Angular Velocity of Sprite */
 	public float maxAngularVelocity = DEFAULT_MAX_ANGULAR_VELOCITY;
-	
+
 	/** Previous Position used for Collision Detection **/
 	public Vector2 mPreviousPosition = position;
-	
+
 	/**
 	 * Internal matrix use to support draw requests
 	 */
@@ -139,43 +139,44 @@ public class Sprite extends GameObject {
 	// /////////////////////////////////////////////////////////////////////////
 	// Methods
 	// /////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * 
 	 * @param TerrainObj
-	 * 				Terrain Object that the sprite is checked against
-	 * @return collisionResolved
-	 * 				Returns if a collision was resolved
+	 *            Terrain Object that the sprite is checked against
+	 * @return collisionResolved Returns if a collision was resolved
 	 * 
 	 * @author Dean
 	 */
 	public void checkForAndResolveTerrainCollisions(Terrain TerrainObj) {
 	}
+
 	/**
 	 * Method can be used to determine if the player should move left or right
 	 * checks if the pixel below it is solid (so cant move while in the air)
 	 * 
 	 * @return
 	 */
-	public boolean canMove(Terrain TerrainObj){
-		return TerrainObj.isPixelSolid(getX(),getY()-getBound().halfHeight);
+	public boolean canMove(Terrain TerrainObj) {
+		return TerrainObj.isPixelSolid(getX(), getY() - getBound().halfHeight);
 	}
 
 	/**
 	 * Updates the sprite
 	 * 
 	 * @param elapsedTime
-	 * 				Elapsed time information
+	 *            Elapsed time information
 	 */
-	//@Override
+	// @Override
 	public void update(ElapsedTime elapsedTime, Terrain TerrainObj) {
-		
-		//If there should be a yCollision, do it now!
-		if(TerrainObj.isPixelSolid(position.x,position.y+(getBound().halfHeight*(int)Math.signum(velocity.y)))){
+
+		// If there should be a yCollision, do it now!
+		if (TerrainObj.isPixelSolid(position.x, position.y
+				+ (getBound().halfHeight * (int) Math.signum(velocity.y)))) {
 			this.position = new Vector2(position.x, mPreviousPosition.y);
 			velocity.y = 0;
 		}
-		
+
 		float dt = (float) elapsedTime.stepTime;
 
 		// Ensure the maximum acceleration isn't exceeded
@@ -183,11 +184,11 @@ public class Sprite extends GameObject {
 			acceleration.normalise();
 			acceleration.multiply(maxAcceleration);
 		}
-		
+
 		// Update the velocity using the acceleration and ensure the
-		// maximum velocity has not been exceeded		
+		// maximum velocity has not been exceeded
 		velocity.add(acceleration.x * dt, acceleration.y * dt);
-		
+
 		if (velocity.lengthSquared() > maxVelocity * maxVelocity) {
 			velocity.normalise();
 			velocity.multiply(maxVelocity);
@@ -195,16 +196,16 @@ public class Sprite extends GameObject {
 
 		// Update the position using the velocity
 		position.add(velocity.x * dt, velocity.y * dt);
-		
+
 		// Ensure the maximum angular acceleration isn't exceeded
 		if (angularAcceleration < -maxAngularAcceleration
 				|| angularAcceleration > maxAngularAcceleration) {
 			angularAcceleration = Math.signum(angularAcceleration)
 					* maxAngularAcceleration;
 		}
-		
-		// Update the angular velocity using the angular acceleration and 
-		// ensure the maximum angular velocity has not been exceeded		
+
+		// Update the angular velocity using the angular acceleration and
+		// ensure the maximum angular velocity has not been exceeded
 		angularVelocity += angularAcceleration * dt;
 
 		if (angularVelocity < -maxAngularVelocity
@@ -218,8 +219,9 @@ public class Sprite extends GameObject {
 	}
 
 	/**
-	 * Overrides the draw method from GameObject class
-	 * 				Draws Sprite object on the game screen
+	 * Overrides the draw method from GameObject class Draws Sprite object on
+	 * the game screen
+	 * 
 	 * @param elapsedTime
 	 *            Elapsed time information
 	 * @param graphics2D
@@ -236,67 +238,67 @@ public class Sprite extends GameObject {
 		if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 				screenViewport, drawSourceRect, drawScreenRect)) {
 
-			float scaleX = 
-					(float) drawScreenRect.width() 
-						/ (float) drawSourceRect.width();
-			float scaleY = 
-					(float) drawScreenRect.height() 
-						/ (float) drawSourceRect.height();
+			float scaleX = (float) drawScreenRect.width()
+					/ (float) drawSourceRect.width();
+			float scaleY = (float) drawScreenRect.height()
+					/ (float) drawSourceRect.height();
 
 			// Build an appropriate transformation matrix
 			drawMatrix.reset();
 			drawMatrix.postScale(scaleX, scaleY);
-			
+
 			drawMatrix.postRotate(orientation, scaleX * mBitmap.getWidth()
 					/ 2.0f, scaleY * mBitmap.getHeight() / 2.0f);
 			drawMatrix.postTranslate(drawScreenRect.left, drawScreenRect.top);
-			
+
 			// Draw the image
 			graphics2D.drawBitmap(mBitmap, drawMatrix, null);
 		}
 	}
-	
+
 	/*
 	 * Gets the X position of the sprint bound
 	 * 
 	 * Used in Collision Detection
-	 * */
+	 */
 	/**
 	 * Get the x position
 	 * 
 	 * @return x position
 	 */
-	public float getX(){
+	public float getX() {
 		return this.position.x;
 	}
+
 	/**
 	 * set x position
 	 * 
 	 * @param x
 	 */
-	public void setX(float x){
+	public void setX(float x) {
 		this.position.x = x;
 	}
-	
+
 	/*
 	 * Gets the Y position of the sprint bound
 	 * 
 	 * Used in Collision Detection
-	 * */
+	 */
 	/**
 	 * Get the y position
 	 * 
 	 * @return y position
 	 */
-	public float getY(){
+	public float getY() {
 		return this.position.y;
 	}
+
 	/**
 	 * set y position
 	 * 
 	 * @param y
 	 */
-	public void setY(float y){
+	public void setY(float y) {
 		this.position.y = y;
 	}
 }
