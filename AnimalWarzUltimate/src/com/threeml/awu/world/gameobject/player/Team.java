@@ -2,6 +2,7 @@ package com.threeml.awu.world.gameobject.player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.util.Log;
 
@@ -24,6 +25,11 @@ public class Team {
 	private String mTeamName;
 	/** Last player active in the team */
 	private Player mLastActivePlayer;
+	/** Teams Colour **/
+	private String mTeamColour;
+	
+	/** Possible Team Colours */
+	private static String[] colours = {"Blue","Pink","Purple","Red","White"};
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -40,6 +46,7 @@ public class Team {
 	public Team(List<Player> players, String teamName) {
 		mPlayers = players;
 		mTeamName = teamName;
+		mTeamColour = setRandomTeamColour();
 	}
 
 	// /////////////////////////////////////////////////////////////////////////
@@ -164,6 +171,53 @@ public class Team {
 	 */
 	public void setName(String teamName) {
 		mTeamName = teamName;
+	}
+
+	/**
+	 * @return Gets the team colour
+	 * 
+	 * @author Dean
+	 */
+	public String getTeamColour() {
+		return mTeamColour;
+	}
+	
+	/**
+	 * Returns a random color
+	 * @author Dean
+	 */
+	public static String setRandomTeamColour(){
+		
+		//Get a random item from array
+		int idx = new Random().nextInt(colours.length);
+		String randColour = (colours[idx]);
+		//Loop
+		while(true){
+			//If the colours white, got for it
+			if(randColour=="White"){
+				break;
+			//If the color is 
+			}
+			
+			//If its blank get another colour
+			if(randColour==""){
+				idx = new Random().nextInt(colours.length);
+				randColour = (colours[idx]);
+			}else{
+				colours[idx]="";
+				break;
+			}
+		}
+		//Return a random team colour
+		return randColour;
+		
+	}
+	public static void resetColours(){
+		colours[0] = "Blue";
+		colours[1] = "Pink";
+		colours[2] = "Purple";
+		colours[3] = "Red";
+		colours[4] = "White";
 	}
 
 }

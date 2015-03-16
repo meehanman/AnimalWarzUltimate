@@ -77,6 +77,9 @@ public class Player extends Sprite {
 
 	/** Boolean value determines whether Player is alive or dead */
 	private boolean mAlive;
+	
+	/** Team Colour **/
+	private String mTeamColour;
 
 	// /////////////////////////////////////////////////////////////////////////
 	// Constructors
@@ -99,19 +102,20 @@ public class Player extends Sprite {
 	 *            Gamescreen to which player belongs
 	 */
 	public Player(float startX, float startY, int columns, int rows,
-			Bitmap bitmap, GameScreen gameScreen, String name) {
+			Bitmap bitmap, GameScreen gameScreen, String name, String teamColour) {
 		super(startX, startY, 20.0f, 20.0f, bitmap, gameScreen);
 		mFullImage = bitmap;
 		try {
 			mName = name; // Set the players name
 			mHealth = MAX_HEALTH; // Set the players health
+			this.mTeamColour = teamColour;
 			// Create a new health text object
 			mHealthText = new GameObjectText(gameScreen,
 					Integer.toString(mHealth), this,
-					(int) this.getBound().halfHeight);
+					(int) this.getBound().halfHeight,mTeamColour);
 			// Create a new name text object
 			mNameText = new GameObjectText(gameScreen, mName, this,
-					(int) this.getBound().halfHeight + 10);
+					(int) this.getBound().halfHeight + 10,mTeamColour);
 			setAlive(true);
 		} catch (Exception e) {
 			// Move on, Nothing to see here
@@ -390,6 +394,20 @@ public class Player extends Sprite {
 		} else {
 			this.playerDirection = 0;
 		}
+	}
+
+	/**
+	 * @return the mTeamColour
+	 */
+	public String getTeamColour() {
+		return mTeamColour;
+	}
+
+	/**
+	 * @param mTeamColour the mTeamColour to set
+	 */
+	public void setTeamColour(String mTeamColour) {
+		this.mTeamColour = mTeamColour;
 	}
 
 	private void checkForAndResolveHorozontalCollisions(Terrain TerrainObj) {

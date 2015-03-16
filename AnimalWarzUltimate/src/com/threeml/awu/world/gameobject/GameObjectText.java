@@ -44,9 +44,9 @@ public class GameObjectText extends BitmapFont {
 	 *            text
 	 */
 	public GameObjectText(GameScreen gameScreen, String str,
-			GameObject gameObj, int heightFromObject) {
+			GameObject gameObj, int heightFromObject, String fontColour) {
 		super(gameObj.getBound().x, gameObj.getBound().y + heightFromObject,
-				gameScreen, str);
+				gameScreen, str, fontColour);
 
 		mGameObj = gameObj;
 		mHeightFromObject = heightFromObject;

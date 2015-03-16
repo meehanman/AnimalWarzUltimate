@@ -166,13 +166,17 @@ public class TeamManager {
 			GameScreen gameScreen) {
 		try {
 			List<Player> players = new ArrayList<Player>();
+			
+			Team t = new Team(players, n);
 			for (int i = 0; i < numPlayers; i++) {
 				Vector2 spawnLocation = map.getUniqueSpawnLocation();
-				players.add(new Player(spawnLocation.x, spawnLocation.y, 1, 15,
+				Player p = new Player(spawnLocation.x, spawnLocation.y, 1, 15,
 						game.getAssetManager().getBitmap("PlayerWalk"),
-						gameScreen, threeml[i]));
+						gameScreen, threeml[i],t.getTeamColour());
+				players.add(p);
+						
 			}
-			mTeams.add(new Team(players, n));
+			mTeams.add(t);
 			mActiveTeam = mTeams.get(0);
 			mActivePlayer = mTeams.get(0).getPlayers().get(0);
 		} catch (Exception e) {
@@ -202,7 +206,7 @@ public class TeamManager {
 			int columns, int rows, Bitmap bitmap, GameScreen gameScreen) {
 		mTeams.get(teamIndex).addNewPlayer(
 				new Player(startX, startY, columns, rows, bitmap, gameScreen,
-						"Default"));
+						"Default",mTeams.get(teamIndex).getTeamColour()));
 	}
 
 	/**

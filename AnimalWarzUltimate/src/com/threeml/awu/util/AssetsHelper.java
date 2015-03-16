@@ -31,12 +31,10 @@ public class AssetsHelper {
 		assetManager.loadAndAddBitmap("PlayerFall", "img/player/wfall.png");
 		assetManager.loadAndAddBitmap("PlayerDie", "img/player/wdie.png");
 		assetManager.loadAndAddBitmap("PlayerGrave", "img/player/grave1.png");
-
-		// Game Objects
-		assetManager
-				.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
-		assetManager.loadAndAddBitmap("Font",
-				"img/fonts/bitmapfont-VCR-OSD-Mono.png");
+		
+		//Game Objects
+		assetManager.loadAndAddBitmap("Health", "img/gameObject/healthpack.png");
+		assetManager.loadAndAddBitmap("FontWhite", "img/fonts/bitmapfont-VCR-OSD-Mono.png");
 		assetManager.loadAndAddBitmap("FontBlue", "img/fonts/fontBlue.png");
 		assetManager.loadAndAddBitmap("FontPink", "img/fonts/fontPink.png");
 		assetManager.loadAndAddBitmap("FontPurple", "img/fonts/fontPurple.png");
