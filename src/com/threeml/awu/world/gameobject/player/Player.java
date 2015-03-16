@@ -16,6 +16,7 @@ import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.GameObjectText;
 import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.weapon.Bazooka;
 import com.threeml.awu.world.gameobject.weapon.Projectile;
 import com.threeml.awu.world.gameobject.weapon.Target;
 import com.threeml.awu.world.gameobject.weapon.Weapon;
@@ -76,23 +77,7 @@ public class Player extends Sprite {
 	/** The current Direction the Player is Facing **/
 	/* All players spawn facing left(-1)*/
 	private float playerDirection = -1;
-	
-	/** The Players Target Indicator **/
-	private Target playerTarget;
-	
-	private Projectile mProjectile;
-	
-	/**
-	 * Returns the player Target
-	 * @return the playerTarget
-	 */
-	public Target getPlayerTarget() {
-		return this.playerTarget;
-	}
-	
-	public Projectile getProjectile() {
-		return this.mProjectile;
-	}
+
 	/** Boolean value determines whether Player is alive or dead */
 	/*DM - What if ghosts say "Boo" because they only haunt people they don't like, and all they do is 
 	"Boo" them from the afterlife. So its not to scare you, its to show that they think you suck*/
@@ -128,9 +113,12 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			mNameText = new GameObjectText(gameScreen, mName, this, (int)this.getBound().halfHeight + 10);
 			setAlive(true);
 			
-			//Setup Crosshair
-			playerTarget = new Target(this,	gameScreen);
-			mProjectile = new Projectile(this, gameScreen);
+			//	WEAPON
+			//Need to try
+			//mCurrentWeapon = new Bazooka(this,gameScreen);
+			mCurrentWeapon = new Weapon(this,gameScreen);
+			
+			Log.v("slope","Current Weapon "+mCurrentWeapon.getName());
 		}
 		catch(Exception e){
 			//Move on, Nothing to see here
@@ -163,7 +151,8 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	public void update(ElapsedTime elapsedTime, boolean moveLeft,
 			boolean moveRight, boolean jumpLeft, boolean jumpRight,
 			boolean aimUp, boolean aimDown,
-			boolean weaponSelect, Terrain TerrainObj) {
+			boolean weaponSelect, 
+			boolean mShootButton, Terrain TerrainObj) {
 		//if Player health is not full depleted
 		if(mHealth > 0){
 			// Depending upon the left and right movement touch controls
@@ -205,6 +194,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 				velocity.y = GRAVITY;
 			}
 			
+			if(mShootButton){
+				shootWeapon();
+			}
+			
 		
 	
 		// Call the sprite's update method to apply the defined 
@@ -219,10 +212,10 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			kill();
 		}
 		
+		//Update the weapon
+		mCurrentWeapon.update(elapsedTime, TerrainObj, aimUp, aimDown);
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
-		playerTarget.update(elapsedTime, aimUp, aimDown);
-		mProjectile.update(elapsedTime, this, this.position, playerTarget,  TerrainObj);
 		
 		//Keep previous Position
 		//Save this position to be used as the previous position
@@ -298,8 +291,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		mNameText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		if(active){
-			playerTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
-			mProjectile.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+		mCurrentWeapon.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		}
 	}
 	
@@ -432,6 +424,24 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			}
 		}
 		/** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+	}
+	
+	/**
+	 * Player shoot method
+	 */
+	public void shootWeapon(){
+		this.mCurrentWeapon.shoot();
+	}
+	
+	/**
+	 * 
+	 * Returns the players Game
+	 * @return
+	 * 
+	 * @author Dean
+	 */
+	public GameScreen getGameScreen(){
+		return this.mGameScreen;
 	}
 	
 }
