@@ -420,6 +420,13 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					mBackgroundViewport.y -= mBackgroundViewport.getBottom();
 				else if (mBackgroundViewport.getTop() > LEVEL_HEIGHT)
 					mBackgroundViewport.y -= (mBackgroundViewport.getTop() - LEVEL_HEIGHT);
+				
+				//if player lands in water, kill them!!!!
+				if (getActivePlayer().getBound().intersects(
+						mCurrentMap.getWater().getBound())) {
+					getActivePlayer().killByWater();
+				}
+				
 			} else {
 				Log.v("Error",
 						"Error occurred in AnimalWarzPlayScreen: update method. No active player");
@@ -479,9 +486,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 						h.setActive(false);
 					}
 				}
-				if(p.position.y >= mBottomOfScreen){
-					Log.v("PlayerDeath", p.getName() + " died in water. Much tragedy. Wow.");
-					p.setHealth(0);
+				if (p.getBound().intersects(mCurrentMap.getWater().getBound())) {
 					p.killByWater();
 				}
 

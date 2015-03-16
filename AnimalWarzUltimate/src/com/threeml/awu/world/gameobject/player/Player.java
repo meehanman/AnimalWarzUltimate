@@ -210,6 +210,7 @@ public class Player extends Sprite {
 
 		// Update the weapon
 		mCurrentWeapon.update(elapsedTime, TerrainObj, this, aimUp, aimDown);
+		this.mHealthText.updateText(mHealth+"");
 		mHealthText.update(elapsedTime);
 		mNameText.update(elapsedTime);
 
@@ -237,7 +238,6 @@ public class Player extends Sprite {
 	 * to false
 	 */
 	public void killByWater() {
-		Log.v("PlayerDeath", "Death by water triggered");
 		velocity = new Vector2(0, 0);
 		setAlive(false);
 		mFullImage = Bitmap.createBitmap((int) this.getBound().getWidth(),
@@ -245,6 +245,7 @@ public class Player extends Sprite {
 		mSpritesheetHandler.setFullImage(mFullImage);
 		mSpritesheetHandler.setRows(1);
 		setPlayerDirection("0");
+		doDamage(getHealth());
 	}
 
 	/**
@@ -281,7 +282,6 @@ public class Player extends Sprite {
 			if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 					screenViewport, drawSourceRect, drawScreenRect)) {
 
-				// Draw the image
 				graphics2D.drawBitmap(mSpritesheetHandler.getFrameImage(),
 						drawSourceRect, drawScreenRect, null);
 			}
