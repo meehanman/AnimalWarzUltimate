@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.threeml.awu.Game;
 import com.threeml.awu.engine.AssetStore;
@@ -15,17 +14,14 @@ import com.threeml.awu.engine.ElapsedTime;
 import com.threeml.awu.engine.graphics.IGraphics2D;
 import com.threeml.awu.engine.input.Input;
 import com.threeml.awu.engine.input.TouchEvent;
-import com.threeml.awu.util.BitmapFont;
 import com.threeml.awu.util.PreferenceStore;
-import com.threeml.awu.util.SpritesheetHandler;
 import com.threeml.awu.world.GameScreen;
 import com.threeml.awu.world.LayerViewport;
 import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.dashboardobject.Control;
 import com.threeml.awu.world.dashboardobject.OnScreenText;
-import com.threeml.awu.world.gameobject.map.Map;
 import com.threeml.awu.world.gameobject.map.MapHelper;
-import com.threeml.awu.world.gameobject.player.TeamManager;
+import com.threeml.awu.util.TeamManager;
 
 /**
  * Team Selection Menu allowing user to choose settings before 
