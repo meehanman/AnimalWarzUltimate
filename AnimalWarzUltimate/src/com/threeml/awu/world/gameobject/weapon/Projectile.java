@@ -1,5 +1,7 @@
 package com.threeml.awu.world.gameobject.weapon;
 
+import java.util.Random;
+
 import android.util.Log;
 
 import com.threeml.awu.engine.ElapsedTime;
@@ -63,6 +65,17 @@ public class Projectile extends Sprite {
 			this.position.x += mDirection.x * projSpeed;
 			this.position.y += mDirection.y * projSpeed;
 			
+			//Add a but of random gun jitter
+			Random rand = new Random();
+			int min = -5, max = 5;
+		    // nextInt is normally exclusive of the top value,
+		    // so add 1 to make it inclusive
+		    int randomJitterX = rand.nextInt((max - min) + 1) + min;
+		    int randomJitterY = rand.nextInt((max - min) + 1) + min;
+			
+		    this.position.x += randomJitterX;
+		    this.position.y += randomJitterY;
+		    
 			this.orientation = weaponObj.orientation;
 
 			//when it hits something
