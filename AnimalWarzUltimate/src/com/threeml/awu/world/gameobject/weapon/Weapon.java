@@ -108,10 +108,6 @@ public class Weapon extends Sprite {
 			mTarget = null;
 		}
 		
-		//Add Projectiles we need? could be done at shoot screen! :)
-		//mProjectiles.add(new Projectile(this,gameScreen));
-		//this.mProjectiles = new Projectile(this,gameScreen);
-		
 	}
 	/**
 	 * Default Constructor to be used by extends
@@ -156,22 +152,9 @@ public class Weapon extends Sprite {
 		//Update whether or not the weapon currently can shoot
 		if(currentTime < (mLastTime + reloadTime)){
 			canShoot = false;
-			Log.v("deanLog","canShoot = false / Time Remaining is "+(currentTime - (mLastTime + reloadTime)));
 		}else{
 			canShoot = true;
-			Log.v("deanLog","canShoot = true; / Time elapsed is "+(currentTime - (mLastTime + reloadTime)));
 		}
-		
-		//Update all the projectiles
-		/*
-		if(mProjectiles!=null){
-			for(Projectile proj: mProjectiles){
-				proj.update(elapsedTime, mOwner, mOwner.position, mTarget, terrainObj);
-			}
-		}else{
-			Log.v("slope","Weapon=>Proj.update==null");
-		}
-		*/
 		
 		for(Projectile proj: mProjectiles){
 			proj.update(elapsedTime, mOwner, mOwner.position, mTarget, terrainObj);
@@ -201,16 +184,6 @@ public class Weapon extends Sprite {
 
 			
 			mTarget.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
-			
-			/*
-			if(mProjectiles!=null){
-				for(Projectile proj: mProjectiles){
-					proj.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
-				}
-			}else{
-				Log.v("slope","Weapon=>Proj.draw==null");
-			}
-			*/
 		
 			for(Projectile proj: mProjectiles){
 				proj.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
@@ -235,7 +208,7 @@ public class Weapon extends Sprite {
 			//Shoot a bullet from the mag!
 			for(Projectile proj: mProjectiles){
 				if(proj.inBarrel()){
-					proj.shootProjectile(mOwner.position, this.position);
+					proj.shootProjectile(mOwner.position, mTarget.position);
 				}
 			}
 			
