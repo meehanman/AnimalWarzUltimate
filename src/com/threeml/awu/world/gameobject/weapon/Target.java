@@ -23,22 +23,17 @@ import com.threeml.awu.world.gameobject.player.Player;
 public class Target extends Sprite {
 
 	// Aiming
-	private Terrain mTerrain;
-	private Vector2 targetDirection;
 	private double aimAngle = 0.0d;
 	private static int radius = 20;
 	private Player player;
 	private float playerDirection;
-	private float PrevPDirection;
 
 	public Target(Player player, GameScreen gameScreen) {
 		super(player.position.x + radius, player.position.y, 10, 10, gameScreen
 				.getGame().getAssetManager().getBitmap("Crosshair"), gameScreen);
 
-		this.targetDirection = new Vector2(1, 0.0);
 		this.player = player;
 		this.playerDirection = player.getPlayerDirection();
-		this.PrevPDirection = player.getPlayerDirection();
 
 	}
 
@@ -71,6 +66,8 @@ public class Target extends Sprite {
 			aimAngle += (0.10 * playerDirection);
 
 		}
+		
+		orientation = (float) aimAngle*60;
 
 		/*
 		 * //If direction changes if(PrevPDirection < playerDirection){// -->
@@ -82,7 +79,6 @@ public class Target extends Sprite {
 				(float) (player.getX() - radius * Math.cos(aimAngle)),
 				(float) (player.getY() + radius * Math.sin(aimAngle)));
 
-		PrevPDirection = playerDirection;
 
 	}
 }

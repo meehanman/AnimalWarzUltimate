@@ -111,13 +111,13 @@ public class TeamSelectionScreen extends GameScreen {
 		x = screenWidthCell * 63;
 		y = screenHeightCell * 50;
 		
-		mIncreaseButton = new Control(x, y, width, height, "LeftArrow", this);
+		mIncreaseButton = new Control("Increase Button",x, y, width, height, "LeftArrow", this);
 		
 		
 		numbers = new OnScreenText(x, y, this, "" + mNoOfPlayers, 240);
 		y = screenHeightCell * 50;
 		x = screenWidthCell * 80;
-		mDecreaseButton = new Control(x, y, width, height, "RightArrow", this);
+		mDecreaseButton = new Control("Decrease Button", x, y, width, height, "RightArrow", this);
 		
 		//Initialise initial variables
 		int left, top, right, bottom, scaling;

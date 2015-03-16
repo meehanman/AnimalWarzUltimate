@@ -54,9 +54,8 @@ public class Map {
 		//Adding water
 		Bitmap waterBitmap = mGame.getAssetManager().getBitmap("TerrainWater");
 		
-		this.MapWaterObject = new Water(LEVEL_WIDTH / 2.0f,0,LEVEL_WIDTH*4,
-				(waterBitmap.getHeight()*(LEVEL_HEIGHT/LEVEL_WIDTH))/5,
-				waterBitmap, mGameScreen);	
+		this.MapWaterObject = new Water(LEVEL_WIDTH / 2.0f,0,waterBitmap.getHeight(),
+				waterBitmap.getHeight()/12,waterBitmap, mGameScreen);	
 		}
 
 	/**

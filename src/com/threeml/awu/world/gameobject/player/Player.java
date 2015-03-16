@@ -15,6 +15,9 @@ import com.threeml.awu.world.ScreenViewport;
 import com.threeml.awu.world.Sprite;
 import com.threeml.awu.world.gameobject.GameObjectText;
 import com.threeml.awu.world.gameobject.map.Terrain;
+import com.threeml.awu.world.gameobject.weapon.Bazooka;
+import com.threeml.awu.world.gameobject.weapon.Hand;
+import com.threeml.awu.world.gameobject.weapon.MiniGun;
 import com.threeml.awu.world.gameobject.weapon.Weapon;
 
 
@@ -75,8 +78,6 @@ public class Player extends Sprite {
 	private float playerDirection = -1;
 
 	/** Boolean value determines whether Player is alive or dead */
-	/*DM - What if ghosts say "Boo" because they only haunt people they don't like, and all they do is 
-	"Boo" them from the afterlife. So its not to scare you, its to show that they think you suck*/
 	private boolean mAlive;
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -108,18 +109,14 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 			mHealthText = new GameObjectText(gameScreen, Integer.toString(mHealth), this, (int)this.getBound().halfHeight);
 			mNameText = new GameObjectText(gameScreen, mName, this, (int)this.getBound().halfHeight + 10);
 			setAlive(true);
-			
-			//	WEAPON
-			//Need to try
-			//mCurrentWeapon = new Bazooka(this,gameScreen);
-			mCurrentWeapon = new Weapon(this,gameScreen);
-			
-			Log.v("slope","Current Weapon "+mCurrentWeapon.getName());
 		}
 		catch(Exception e){
 			//Move on, Nothing to see here
 			Log.e("Text Error", "Player constructor error : " + e);
 		}
+		
+		//Create a new default weapon
+		mCurrentWeapon = new Hand(this,gameScreen);
 		
 		mSpritesheetHandler = new SpritesheetHandler(mFullImage, rows, columns);
 }
@@ -285,7 +282,7 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 		mHealthText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		mNameText.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		if(active){
-		mCurrentWeapon.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
+			mCurrentWeapon.draw(elapsedTime, graphics2D, layerViewport, screenViewport);
 		}
 	}
 	
@@ -436,6 +433,21 @@ public Player(float startX, float startY, int columns, int rows, Bitmap bitmap, 
 	 */
 	public GameScreen getGameScreen(){
 		return this.mGameScreen;
+	}
+	
+	/**
+	 * Change the players weapon
+	 */
+	public void changeWeapon(String weaponName){
+		if(weaponName=="Uzi"){
+			mCurrentWeapon = new MiniGun(this,mGameScreen);
+		}else if(weaponName=="Grenade"){
+			//mCurrentWeapon = new MiniGun(this,mGameScreen);
+		}else if(weaponName=="Bazooka"){
+			mCurrentWeapon = new Bazooka(this,mGameScreen);
+		}else if(weaponName=="Baseball Bat"){
+			//mCurrentWeapon = new MiniGun(this,mGameScreen);
+		}else{}
 	}
 	
 }

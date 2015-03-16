@@ -168,7 +168,7 @@ public class Sprite extends GameObject {
 	 * 				Elapsed time information
 	 */
 	//@Override
-	public void update(ElapsedTime elapsedTime,String s, Terrain TerrainObj) {
+	public void update(ElapsedTime elapsedTime, Terrain TerrainObj) {
 		
 		//If there should be a yCollision, do it now!
 		if(TerrainObj.isPixelSolid(position.x,position.y+(getBound().halfHeight*(int)Math.signum(velocity.y)))){
@@ -216,14 +216,6 @@ public class Sprite extends GameObject {
 		orientation += angularVelocity * dt;
 
 	}
-	
-	//DM - update method that takes in TerrainObject to resolve collisions
-	public void update(ElapsedTime elapsedTime, Terrain TerrainObj) {
-		
-		//Update
-		update(elapsedTime,"",TerrainObj);
-
-	}
 
 	/**
 	 * Overrides the draw method from GameObject class
@@ -240,7 +232,7 @@ public class Sprite extends GameObject {
 	@Override
 	public void draw(ElapsedTime elapsedTime, IGraphics2D graphics2D,
 			LayerViewport layerViewport, ScreenViewport screenViewport) {
-		
+
 		if (GraphicsHelper.getSourceAndScreenRect(this, layerViewport,
 				screenViewport, drawSourceRect, drawScreenRect)) {
 
