@@ -30,9 +30,11 @@ import com.threeml.awu.util.TeamManager;
 import com.threeml.awu.world.gameobject.weapon.Projectile;
 
 /**
- * Simple steering game world
+ * Animal Warz Game Screen
  * 
- * @version 1.0
+ * @author Dean
+ * @author Mark
+ * @author Mary-Jane
  */
 public class AnimalWarzPlayScreen extends GameScreen {
 
@@ -154,11 +156,15 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					240.0f * mScreenViewport.height / mScreenViewport.width,
 					240);
 		}
-
+		// Creates all game objects
 		CreateGameObjects(screenHeight, screenWidth);
+
+		// Initialise countdowntimers using timers from Game
 		mCountDownTimer = game.getPlayerCountDown();
 		mNotificationTimer = game.getNotificationTimer();
 		mNotification2Timer = game.getNotification2Timer();
+
+		// start active player change count down timer
 		mCountDownTimer.start();
 	}
 
@@ -177,22 +183,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mTerrain = mCurrentMap.getTerrain();
 		mBackground = mCurrentMap.getBackground();
 
-		// Create the objects
-
-		// TODO - Add recursive loop to add players setting first player active
-		// to coincide with
-		// TODO - Add random spawn locations
-		// Create the objects
-		/*
-		 * mPlayer1 = new Player(700, 400, 14, 1,
-		 * getGame().getAssetManager().getBitmap("Player"), this, 0);
-		 * mPlayer1.setActive(true); mPlayers.add(mPlayer1);
-		 * 
-		 * mPlayer2 = new Player(600, 400, 14, 1,
-		 * getGame().getAssetManager().getBitmap("Player"), this, 1);
-		 * mPlayers.add(mPlayer2);
-		 */
-
+		// TODO - need a system to handle droppables better
 		healthPacks.add(new Healthkit(-100, 750, 100, getGame()
 				.getAssetManager().getBitmap("Health"), this));
 
@@ -205,6 +196,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		height = screenWidthCell * 6f;
 		width = height * 2f;
 
+		// Initialise controls
 		x = screenWidthCell * 10;
 		y = (screenHeight - (screenHeightCell * 21));
 		mMoveLeftButton = new Control("Move Left", x, y, width, height,
@@ -265,13 +257,14 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		float WEAPON_WIDTH = getGame().getScreenWidth() / 5f;
 		/** Length of the weapon icon */
 		float WEAPON_HEIGHT = getGame().getScreenHeight() / 5f;
-
+		
+		// Main Menu button only appears when game is over
 		mMainMenu = new Control("Weapon Selection Menu", getGame()
 				.getScreenWidth() / 2f, getGame().getScreenHeight() / 2f,
 				WEAPON_WIDTH, WEAPON_HEIGHT, "MainMenu", this);
 
 		/**
-		 * Weapons added
+		 * Initialise weapons and add to Weapon Selection list
 		 */
 		// Uzi
 		mWeaponSelection.add(new Control("Uzi",
@@ -293,9 +286,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				.getScreenWidth() / 1.20f, getGame().getScreenHeight() / 3f,
 				WEAPON_WIDTH, WEAPON_HEIGHT, "Bat", this));
 
-		/**
-		 * Notification Code to position notification icons on the screen
-		 */
+		// Initialise text objects
+		// Notification Code to position notification icons on the screen
 		x = screenWidthCell * 10.0f;
 		y = (screenHeight - 300.0f);
 		mNotification = new BannerNotification(x, y, this);
@@ -323,19 +315,19 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	// /////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Return the active player
+	 * Return the active player from the Team Manager object
 	 * 
 	 * @return Player Active player object
 	 */
 	private Player getActivePlayer() {
 		return mTeamManager.getActivePlayer();
-		/*
-		 * for(Player p : mPlayers){ if(p.getActive()){ return p; } } return
-		 * null;
-		 */
 	}
 
-	// MJ ~
+	/**
+	 * Changes the active player using the Team Manager object As active player
+	 * is changed, the timer is stopped and restarted and a notification appears
+	 * for the user
+	 */
 	private void changeActivePlayer() {
 		mTeamManager.changeActivePlayer();
 		displayNotificationWithBanner(InGameText
@@ -345,7 +337,8 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	}
 
 	/**
-	 * Displays a notification for the user
+	 * Displays a notication with a background on the top of the screen for the
+	 * user, also starts the notification timer
 	 * 
 	 * @param text
 	 *            Text to be displayed
@@ -356,6 +349,13 @@ public class AnimalWarzPlayScreen extends GameScreen {
 		mNotificationTimer.start();
 	}
 
+	/**
+	 * Displays a notication with no background on the bottom of the screen for
+	 * the user, also starts the notification 2 timer
+	 * 
+	 * @param text
+	 *            Text to be displayed
+	 */
 	private void displayNotificationWithoutBanner(String text) {
 		mNonBannerText.updateText(text);
 		mNonBannerText.setVisible(true);
@@ -364,7 +364,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	}
 
 	/**
-	 * Hides the notification for the user
+	 * Hides all the notifications for the user if the respective timers are up
 	 */
 	private void hideNotifications() {
 		if (mNotificationTimer.hasFinished()) {
@@ -387,8 +387,12 @@ public class AnimalWarzPlayScreen extends GameScreen {
 	 */
 	@Override
 	public void update(ElapsedTime elapsedTime) {
+		// updates the water at the bottom of the map
 		mCurrentMap.getWater().update(elapsedTime);
+		// hides notifications if the timers are up
 		hideNotifications();
+		
+		// Updates to make if the game is not over
 		if (!mGameOver) {
 			if (getActivePlayer().isAlive()) {
 				// Rotate players after timers finished
@@ -509,6 +513,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 							proj.getAmmoDamangeRaduis(), p.getBound())) {
 						p.moveFromPoint(proj.position, proj.getAmmoDamange());
 
+						//if health is depleted, kill the worm
 					} else if (p.getHealth() <= 0) {
 						p.kill();
 					}
@@ -565,6 +570,10 @@ public class AnimalWarzPlayScreen extends GameScreen {
 					healthpackList.remove(); // Remove
 				}
 			}
+			/**
+			 * Handles text on screen updates
+			 */
+			
 			try {
 				mDashboardTimer.updateText(Long.toString(mCountDownTimer
 						.getCountDownInSeconds()));
@@ -615,10 +624,16 @@ public class AnimalWarzPlayScreen extends GameScreen {
 			}
 		}
 
-	}
 
+	}
+	
+	/**
+	 * Display game over notification & set game over boolean to true
+	 * @param surrender
+	 * 				is the game over because of team surrender
+	 */
 	private void gameOver(boolean surrender) {
-		Log.v("PlayerDeath", "Game over!");
+		//TODO - add different notification for if team surrenders
 		if (!surrender) {
 			displayNotificationWithBanner(InGameText
 					.generateWinText(mTeamManager.getWinningTeam()
@@ -692,6 +707,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 						mScreenViewport);
 			}
 		}
+		//Repositions notifications to align center of the screen
 		mNotification.position = new Vector2((getGame().getScreenWidth() / 2)
 				- (mNotification.getBitmap().getWidth()),
 				mNotification.position.y);
@@ -703,6 +719,7 @@ public class AnimalWarzPlayScreen extends GameScreen {
 				mNonBannerText.position.y);
 		mNonBannerText.draw(elapsedTime, graphics2D, mDashboardViewport,
 				mScreenViewport);
+		//if game over, then display main menu button
 		if (mGameOver) {
 			mMainMenu.draw(elapsedTime, graphics2D, mDashboardViewport,
 					mScreenViewport);
